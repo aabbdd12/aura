@@ -332,7 +332,7 @@
       <div class="pillar">
         <span class="tag">Python</span>
         <h3>Python-native &amp; reproducible</h3>
-        <p>pandas, statsmodels and scipy under the hood. Scripts re-run end to end; results carry design-based standard errors; your own commands are plain <span class="cap" style="color:var(--gold)">.auru</span> modules.</p>
+        <p>pandas, statsmodels and scipy under the hood. Scripts re-run end to end; results carry design-based standard errors; your own commands are plain <span class="cap" style="color:var(--gold)">.auru</span> modules — and when a one-off needs it, drop into raw Python or matplotlib mid-script.</p>
       </div>
       <div class="pillar">
         <span class="tag">DAAP included</span>
@@ -430,6 +430,27 @@
       <figure class="winshot"><img src="images/lorenz.jpg" alt="Lorenz curves for Rural and Urban populations with 95% confidence bands, against the 45-degree equality line."></figure>
     </div>
     <figure class="winshot dipov-fig"><img src="images/dipov-results.jpg" alt="AURA dipov output: the FGT poverty difference between 1994 and 1998 in Burkina Faso, by sex, residential area and socio-economic group, with estimates, differences, standard errors, t-statistics, p-values and 95 percent confidence intervals, followed by the statistical test."><figcaption>A real result — the change in FGT poverty from 1994 to 1998, broken out by sex, area and socio-economic group. Every difference carries its design-based standard error, <em>t</em>-statistic, p-value and 95% interval — with the formal test underneath.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= AI AUTHORING SHOWCASE ================= -->
+<section id="authoring" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">New — extend AURA with AI</p>
+      <h2>Write new commands with an AI — checked against your data.</h2>
+    </div>
+    <div class="showcase">
+      <div>
+        <p>Describe a method in plain language and AURA's assistant drafts the command, its help and its tests — grounded on the project's own rules. It doesn't stop at &ldquo;it runs&rdquo;: the module is verified against <b>your</b> reference numbers, and the loop keeps correcting until they match.</p>
+        <p>Prefer your own tools? Open the project in <b>Claude Code</b>, <b>Cursor</b> or <b>Gemini</b> — same rules, same ground truth. Then publish it as a package others install with <span class="k">pkg install</span>.</p>
+        <div class="chips">
+          <span class="chip on">describe</span><span class="chip on">draft</span><span class="chip">test vs your data</span>
+          <span class="chip">iterate</span><span class="chip on">publish</span>
+        </div>
+      </div>
+      <figure class="winshot"><img src="images/ai-authoring.jpg" alt="The AURA Module Editor with the AI Assistant panel open: the dstats project tree with its docs rules, out files and AGENTS.md, the module's Python code, and the assistant that drafts and verifies new commands."></figure>
+    </div>
   </div>
 </section>
 
