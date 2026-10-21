@@ -56,6 +56,31 @@
     <p class="sub">Additions and corrections in each release. The latest installer is always on the <a href="index.html#get">download page</a>; earlier installers stay on <a href="https://github.com/aabbdd12/aura/releases">GitHub</a>.</p>
   </section>
 
+  <article class="release" id="v1.02">
+    <div class="rel-head">
+      <h2>AURA 1.02</h2>
+      <span class="rel-date">Released 21/10/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.02">Download 1.02 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>Help &rarr; Check for Updates&hellip;</b> (also in Help &rarr; About) tells you whether a newer AURA is available and offers to open its download page. AURA contacts GitHub only when you click; nothing is downloaded or installed automatically.</li>
+    </ul>
+
+    <h3>Corrected</h3>
+    <ul>
+      <li><code>summarize</code> with a weight: the standard deviation is now reported; the stored results <code>r()</code> are the weighted values shown in the table (they were unweighted); <code>detail</code> now honours the weight (it was ignored). <code>r(sum_w)</code> is always stored, and with <code>detail</code> also <code>r(p1)</code>&hellip;<code>r(p99)</code>, <code>r(skewness)</code> and <code>r(kurtosis)</code>. The formulas for each weight type are in <code>help summarize</code>; frequency weights give the results of the data with each row repeated.</li>
+      <li><code>egen pctile()</code> accepted a weight and ignored it; the weight is now applied.</li>
+      <li><code>collapse</code> and <code>egen</code>: weighted standard deviations, variances and percentiles follow the same conventions as <code>summarize</code> (a frequency-weighted standard deviation now equals that of the repeated data).</li>
+      <li>Weights that cannot be used are refused with a message: negative frequency or analytic weights, non-integer frequency weights.</li>
+      <li>Tables: two-way <code>tabulate</code> (its row, column and cell percentages now carry totals), <code>describe</code>, <code>range</code> and <code>compare</code> use the same table layout as the rest of AURA, and <code>codebook</code>, <code>svydes</code>, <code>inspect</code> and <code>help</code> draw continuous rules. Survey tables (<code>svy:</code>) no longer show a stray blank header line.</li>
+      <li>DAAP: the <em>t</em> column is shown with 4 decimals, and the &ldquo;Statistical Inferences&rdquo; block of <code>test()</code> is drawn like the tables above it.</li>
+    </ul>
+
+    <p class="change"><b>Behaviour change:</b> the percentiles of <code>summarize, detail</code> now come from the empirical distribution (with 20 observations, the 1% percentile is the smallest value, without interpolation), and the skewness and kurtosis are the moment ratios, without small-sample correction; the kurtosis equals 3 for a normal distribution (it was the excess kurtosis). The percentiles of <code>egen pctile()</code>, <code>egen iqr()</code> and <code>collapse (p#)</code> use the same definition; medians do not change.</p>
+  </article>
+
   <article class="release" id="v1.01">
     <div class="rel-head">
       <h2>AURA 1.01</h2>
