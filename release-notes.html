@@ -56,6 +56,43 @@
     <p class="sub">Additions and corrections in each release. The latest installer is always on the <a href="index.html#get">download page</a>; earlier installers stay on <a href="https://github.com/aabbdd12/aura/releases">GitHub</a>.</p>
   </section>
 
+  <article class="release" id="v1.1">
+    <div class="rel-head">
+      <h2>AURA 1.1</h2>
+      <span class="rel-date">Released 26/10/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.1">Download 1.1 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>Edit a graph where it is.</b> Each 2-D graph window has a <b>Start Graph Editor</b> button: the window gives way to the graph&rsquo;s editor, at the same place and size; close the editor and the edited graph comes back in its window. Each window keeps its own graph, on the data it was drawn from, whatever changes in the dataset afterwards. <code>graph save</code> writes the current graph with its edits, and <code>clear all</code> closes every graph. Edited graphs keep AURA&rsquo;s look (light grid, open frame).</li>
+      <li><b>Help examples that build on each other.</b> Clicking an example first replays, silently, the examples above it in its group, so <code>predict</code> after <code>logit</code> or <code>restore</code> after <code>preserve</code> works on its own; a <code>py:</code> block or a <code>forvalues</code> loop runs as a whole. The replay never runs a command that touches your files or the system. 51 more help pages now carry sample data, so their examples can be run.</li>
+      <li><b>Faster start-up:</b> the window is ready in about 2.4&nbsp;s (3.4&nbsp;s for 1.02 on the same machine). The statistical and graphics libraries are loaded when they are first needed, so the first estimation of a session takes about a second longer.</li>
+      <li><b>Updated foundations:</b> Python 3.13.17; pandas 3.1, NumPy 2.5, SciPy 1.18, statsmodels 0.15, linearmodels 7.1, matplotlib 3.11, Plotly 7.1, Qt 6.12 (PySide6, with Chromium 140 for the 3-D viewer).</li>
+    </ul>
+
+    <h3>Corrected</h3>
+    <ul>
+      <li><code>ivregress</code>: the Durbin test of endogeneity was computed with a first stage on the excluded instruments only; it now uses all the instruments.</li>
+      <li>DAAP <code>ipov</code> with a poverty line derived from the distribution (<code>opl()</code>): the standard errors left out the variability of the estimated line; they now include it and equal DASP&rsquo;s. <code>bip</code>: the standard errors use the exact derivative with respect to the boundary. DAAP now computes in double precision throughout, so a single-precision weight (as stored in some <code>.dta</code> files) no longer changes the results.</li>
+      <li>Conditions: with <code>count</code>, <code>summarize</code>, <code>keep</code>, <code>drop</code>, <code>list</code> and many other commands, <code>if x != 0</code> counted the observations where <code>x</code> is missing, and <code>missing(x)</code>, <code>!missing(x)</code>, <code>x == .</code> or a scalar in the condition failed. Every command now reads its condition as <code>generate</code> does: a missing result leaves the observation out. <code>drop if missing(x)</code> and <code>drop in a/b</code> now work, and <code>recode</code> honours <code>in</code>.</li>
+      <li>Text in commands: a quoted text containing <code>in</code> or <code>if</code> (<code>gen a = "come in 2 days"</code>) was read as a qualifier &mdash; only observation 2 was filled, without an error; several spaces in a text were merged; <code>!</code>, <code>^</code> or <code>== .</code> inside a text were rewritten (<code>"Hi!"</code> was stored as <code>Hi~</code>). Texts are now kept as written.</li>
+      <li><code>substr()</code>, <code>word()</code>, <code>strpos()</code>, <code>subinstr()</code>, <code>abbrev()</code>, <code>regexm()</code> and <code>regexr()</code> accept arguments that vary by observation, such as <code>substr(email, strpos(email, "@") + 1, 99)</code>; <code>substr()</code> without a length runs to the end of the text.</li>
+      <li><code>quietly</code> and <code>capture</code> in front of <code>local</code> now work, and commands that read their own text (<code>timer</code>, <code>note</code>, <code>set</code>&hellip;) no longer see these prefixes.</li>
+      <li>Exported <code>.dta</code> files open in Stata SE and BE: they were written in format 119, which only Stata/MP reads. <b>File &rarr; Export &rarr; Stata</b> asks for a file name (it wrote <code>stata.dta</code> without asking).</li>
+      <li>The 3-D viewer ended with a crash each time its window was closed (Windows recorded an application error); it now closes cleanly, and a 3-D graph drawn just after closing it no longer needs a second click.</li>
+      <li>Windows: a graph drawn from a help example now opens in front of the help window (it opened behind it); <b>Help &rarr; About</b> no longer opens a second window when asked again; the start-up screen no longer jumps to another size and place while AURA loads.</li>
+    </ul>
+
+    <div class="change"><b>Behaviour changes:</b>
+      <ul>
+        <li><code>in</code> counts the observations of the whole dataset, before <code>if</code>: <code>list x if region == 1 in 1/100</code> lists the observations of region 1 among the first 100 (it listed the first 100 observations of region 1).</li>
+        <li>One rule for the type of a variable in <code>replace</code>, <code>generate &hellip; if</code> and <code>recode</code>: numbers widen (an integer variable that receives 1.5 becomes decimal), true/false values become 0/1, and text and numbers do not mix &mdash; such a command is refused with a <em>type mismatch</em> error, where it used to create a column mixing both. The text targets of <code>recode</code> are stored without their quotes.</li>
+        <li>CSV import reads decimal numbers exactly: a file holding <code>0.30000000000000004</code> gives that value, not 0.3.</li>
+      </ul>
+    </div>
+  </article>
+
   <article class="release" id="v1.02">
     <div class="rel-head">
       <h2>AURA 1.02</h2>
