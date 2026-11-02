@@ -56,6 +56,22 @@
     <p class="sub">Additions and corrections in each release. The latest installer is always on the <a href="index.html#get">download page</a>; earlier installers stay on <a href="https://github.com/aabbdd12/aura/releases">GitHub</a>.</p>
   </section>
 
+  <article class="release" id="v1.41">
+    <div class="rel-head">
+      <h2>AURA 1.41</h2>
+      <span class="rel-date">Released 02/11/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.41">Download 1.41 &rarr;</a>
+    </div>
+    <p>A corrective release of 1.4.</p>
+
+    <h3>Fixed</h3>
+    <ul>
+      <li><b>The main window opened twice at launch</b> (1.4): it appeared for a moment at a default size, then again at the size you left it. It now appears once, at its size; the AURA logo stays its icon.</li>
+      <li><b><code>if</code> or <code>in</code> written after the comma was ignored without a word:</b> in <code>summarize wage, detail if female == 1</code> the condition was read as an option, which no command reads, and the command ran on every observation. It is now refused, r(198): a condition or a range comes before the options.</li>
+      <li><b><code>capture twoway (&hellip;)</code> let an error through</b> (and <code>quietly twoway (&hellip;)</code> was not quiet): the prefixes of a layered graph were lost. <code>_rc</code> now holds the error's number, as for any command.</li>
+    </ul>
+  </article>
+
   <article class="release" id="v1.4">
     <div class="rel-head">
       <h2>AURA 1.4</h2>
