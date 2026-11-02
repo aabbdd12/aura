@@ -56,6 +56,47 @@
     <p class="sub">Additions and corrections in each release. The latest installer is always on the <a href="index.html#get">download page</a>; earlier installers stay on <a href="https://github.com/aabbdd12/aura/releases">GitHub</a>.</p>
   </section>
 
+  <article class="release" id="v1.4">
+    <div class="rel-head">
+      <h2>AURA 1.4</h2>
+      <span class="rel-date">Released 01/11/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.4">Download 1.4 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>One rule for <code>if</code> and <code>in</code>.</b> The selection written with a command is evaluated once, on the whole dataset, before the command runs, and every command that takes <code>if</code>/<code>in</code> uses it. A condition with an unknown name stops every command the same way: <code>if: variable zz not found</code>, r(111).</li>
+      <li><b>Survey estimation on a subpopulation.</b> <code>svy: mean</code>, <code>total</code>, <code>ratio</code>, <code>proportion</code>, <code>regress</code> and <code>nlexp</code> with <code>if</code>/<code>in</code> estimate on the subpopulation: the whole design is kept, the observations outside count for nothing (combined with <code>subpop()</code> when both are given). The header shows the population size of the whole sample, then the subpopulation's number of observations and size.</li>
+      <li><b>Strata with a single sampling unit</b> are treated as certainty units (they add nothing to the variance), and a note under the table says how many there are &mdash; for <code>svy:</code> and for the distributive-analysis commands.</li>
+      <li><b>Paste several lines</b> into the command window: each complete line runs in order, as if typed and followed by Enter; a <code>{ &hellip; }</code> block runs whole, a <code>local</code> is seen by the next line, and what follows the last line break stays in the box.</li>
+      <li><b>Faster:</b> distributive-analysis curves with a confidence band, 2 to 4 times (<code>cdomc</code> 1.4&nbsp;s &rarr; 0.3&nbsp;s, <code>clorenz</code>, <code>cfgt</code>, <code>itargetg</code>, <code>itargetc</code>&hellip;); <code>collapse</code> and <code>egen &hellip; by()</code> with weights, and <code>egen &hellip; by()</code> without, in one pass over all the groups (100&nbsp;000 observations in 10&nbsp;000 groups: 2.2&nbsp;s &rarr; 0.01&nbsp;s); <code>cpropoord, smooth(yes)</code>, 16 to 50 times; <code>efgtid</code> and <code>efgtgd</code>, about 1.5 times.</li>
+      <li><b>The AURA logo</b> is the main window's icon from the start (the window showed a feather until another window opened).</li>
+      <li><b>Smaller installer:</b> 245&nbsp;MB. Chromium's translations (AURA's interface is in English), Qt's translations, Chromium's developer tools and V8's debug snapshot are no longer shipped.</li>
+    </ul>
+
+    <h3>Fixed &mdash; results that change</h3>
+    <ul>
+      <li><b><code>if</code> and <code>in</code> were ignored without a word by about 90 commands</b>, which then worked on every observation. Among them: the <code>svy:</code> estimators, <code>svydes</code>, <code>predict</code> (now only the selected observations get a prediction), <code>linfit</code>, <code>encode</code>, <code>decode</code>, and <code>bootstrap: cmd if &hellip;</code> (the draws are now made among the selected observations).</li>
+      <li><b>An option after a condition holding a comma was lost</b> by several commands: in <code>ci x if mod(_n, 2) == 1, level(90)</code> the <code>level(90)</code> was ignored (also <code>collapse</code>, <code>decode</code>, <code>egen</code>, <code>encode</code>, <code>recode</code>, <code>reshape</code>, <code>tostring</code>&hellip;).</li>
+      <li><b><code>cpropoord, smooth(yes)</code>:</b> an observation far from all the others (the largest expenditure of a survey, for instance) received a missing smoothed value; it now receives its own value, the rule already used when the local regression cannot be solved.</li>
+    </ul>
+
+    <h3>Changes to know</h3>
+    <ul>
+      <li><b>A command that does not use <code>if</code> or <code>in</code> now refuses them</b> &mdash; r(101) &ldquo;if not allowed with &hellip;&rdquo; &mdash; instead of ignoring them: <code>describe</code>, <code>sort</code>, <code>display</code>, <code>margins</code>, <code>test</code>, <code>lincom</code>, <code>nlcom</code>, <code>estimates</code>, <code>export</code>, <code>use</code>, <code>svyset</code>, <code>xtset</code>&hellip; A script that relied on the condition being ignored stops there.</li>
+      <li><b>The distributive-analysis commands take no <code>if</code> or <code>in</code>, by design:</b> <code>hgroup()</code> gives the results by group, and the commands comparing two distributions take <code>cond1()</code> and <code>cond2()</code>. The refusal says so.</li>
+      <li><b><code>svy: &hellip; if</code> is a subpopulation, not a selection of rows.</b> To estimate on the selected rows alone, as a separate sample, use <code>keep if &hellip;</code> first.</li>
+      <li><code>ipov</code> and <code>dimean</code> exist in one version only, the distributive-analysis one (same results).</li>
+      <li>The <code>egen</code> message counts the values created.</li>
+    </ul>
+
+    <h3>For developers</h3>
+    <ul>
+      <li>A command receives its selection in <b><code>parsed.sample</code></b> (a boolean Series over the whole dataset); <code>core.qualifiers.TAKES_IFIN</code> lists AURA's commands that take <code>if</code>/<code>in</code>. A module from outside AURA that is given <code>if</code>/<code>in</code> and does not read them gets an error instead of its results.</li>
+      <li>Statistics by group in one pass: <code>core.summary_stats.grouped</code>; compiled kernels <code>core.fastmath.local_poly</code> and <code>core.fastmath.group_percentile</code>; DAAP's variance uses <code>core.fastmath.psu_cov</code>.</li>
+    </ul>
+  </article>
+
   <article class="release" id="v1.3">
     <div class="rel-head">
       <h2>AURA 1.3</h2>
