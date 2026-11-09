@@ -56,6 +56,80 @@
     <p class="sub">Additions and corrections in each release. The latest installer is always on the <a href="index.html#get">download page</a>; earlier installers stay on <a href="https://github.com/aabbdd12/aura/releases">GitHub</a>.</p>
   </section>
 
+  <article class="release" id="v1.5">
+    <div class="rel-head">
+      <h2>AURA 1.5</h2>
+      <span class="rel-date">Released 09/11/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.5">Download 1.5 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>Tables of several models: <code>eststo</code>, <code>esttab</code>, <code>estadd</code>, <code>estpost</code>.</b> Store models, then write them side by side in the Results window or in a file (text, CSV, LaTeX, HTML, RTF for Word, Markdown): stars, standard errors or t, statistics, labels, groups of models, <code>cells()</code>, matrices. <code>estpost</code> turns <code>summarize</code>, <code>tabulate</code>, <code>ttest</code> and <code>correlate</code> into tables of the same kind.</li>
+      <li><b><code>by</code> and <code>bysort</code>:</b> repeat a command for each group (<code>bysort zone: summarize size</code>); <code>_n</code> and <code>_N</code> count within the group in <code>generate</code> and <code>replace</code>.</li>
+      <li><b><code>total</code>:</b> totals and their standard errors, by group (<code>over()</code>), with weights or clusters.</li>
+      <li><b><code>tabstat</code>:</b> a table of statistics for several variables, for the whole sample or by group.</li>
+      <li><b>The reference level of a factor:</b> <code>ib3.x</code> (level 3), <code>ib(first).x</code>, <code>ib(last).x</code>, <code>ib(#2).x</code>, <code>ib(freq).x</code> (the most frequent level, counted with the weights on the rows the model uses), in every estimator. <b><code>baselevels</code></b> shows the reference as a row <code>0 (base)</code>; <code>set showbaselevels on</code> does it for every table.</li>
+      <li><b>Lists of variables:</b> <code>x*</code>, <code>x?y</code>, <code>a-b</code>, <code>q1..q20</code>, <code>_num</code>, <code>_str</code>, and <code>x* !x3</code> to leave one out, in the estimators, the summaries and the data commands. <code>rename</code> in groups: <code>rename (a b) (b a)</code>, <code>rename x* y*</code>.</li>
+      <li><b>A log with the graphs:</b> <code>log using "results.hlog"</code> keeps the text of the Results window and every graph drawn while it is open, under the command that drew it. <b>Tools &rarr; AURA Viewer</b> opens it.</li>
+      <li><b>Scripts and macros:</b>
+        <ul>
+          <li><code>continue</code>, <code>continue, break</code>, <code>if</code> on one line, <code>else</code> and <code>else if</code>, <code>foreach … in / of global / of newlist / of numlist / of levels</code>, <code>noisily</code>;</li>
+          <li>counters <code>`++i'</code>, <code>`*'</code>, <code>c()</code>, <code>$S_DATE</code>, <code>$S_TIME</code>, and more macro functions (<code>: list</code>, <code>: piece</code>, <code>: display</code>, <code>subinstr</code>&hellip;);</li>
+          <li><code>display</code> with formats (<code>%9.2f</code>), columns, colours and layout tags;</li>
+          <li>three ways to write a text: <code>"…"</code>, <code>`"…"'</code> (may contain <code>"</code>), and <code>¨…¨</code>, taken exactly as written;</li>
+          <li><code>gettoken</code>, <code>tokenize</code>, <code>unab</code>, <code>numlist</code>, <code>confirm</code>, <code>levelsof</code>, <code>ds</code>, <code>lookfor</code>, <code>error</code>;</li>
+          <li>modules: <code>namelist</code>, <code>name</code> and <code>anything</code> in <code>syntax</code>, and <code>aura.local()</code>.</li>
+        </ul></li>
+      <li><b><code>set showcmd off</code></b> hides the command lines in the Results window; <b><code>set showline on</code></b> starts each result of a script with its line number.</li>
+      <li><b>Do-files run with fewer changes:</b>
+        <ul>
+          <li><code>save name</code> writes <code>name.aura</code>, and <code>use name</code> reads <code>name.aura</code>, else <code>name.dta</code>;</li>
+          <li><code>append using file</code> adds a file to the active dataset;</li>
+          <li>options abbreviate as far as they stay distinct (<code>sum x, d</code>, <code>tab g, m</code>, <code>reg y x, r</code>, <code>vce(cl psu)</code>);</li>
+          <li><code>tab g, generate(g)</code> creates one indicator per level;</li>
+          <li><code>#delimit;</code> without a space;</li>
+          <li>the <code>unicode</code> lines of a do-file run (<code>unicode convertfile</code> converts a file's encoding).</li>
+        </ul></li>
+      <li><b><code>use "https://…"</code></b> reads a dataset from a web address.</li>
+    </ul>
+
+    <h3>Fixed &mdash; results that change</h3>
+    <ul>
+      <li><b>Collinear variables are left out</b> of <code>regress</code>, <code>logit</code>, <code>probit</code>, <code>poisson</code>, <code>svy: regress</code>, <code>xtreg</code> and <code>ivregress</code>: a note says so and the table shows the variable at 0, <i>(omitted)</i>. Before, <code>regress</code> gave one solution among many (other coefficients, other stars, without a word), the maximum-likelihood models gave no standard errors, and the others stopped on an error.</li>
+      <li><b>Robust and clustered standard errors of <code>regress</code>:</b> p-values and intervals now use Student's t, with clusters − 1 degrees of freedom for <code>vce(cluster)</code>; before, the normal law gave intervals too narrow, most with few clusters.</li>
+      <li><b><code>logit</code>, <code>probit</code>, <code>poisson</code> with <code>[pweight=]</code>: the standard errors were too small</b>, by a factor of 1.7 to 1.9 in our checks; they are now computed with the weight squared in the robust formula. The factors of <code>vce(robust)</code> and <code>vce(cluster)</code> were also corrected, and a weighted <code>probit</code> uses the observed information.</li>
+      <li><b>Frequency weights:</b> <code>regress … [fw=]</code> counts the copies of each row (N, degrees of freedom, standard errors); <code>logit</code>, <code>probit</code>, <code>poisson</code> report N as the sum of the weights.</li>
+      <li><b><code>svy: regress</code></b> reports the adjusted Wald test, F(k, d − k + 1), and an uncentred R² without a constant.</li>
+      <li><b><code>xtreg</code>:</b> fixed effects report a constant; robust and clustered standard errors, t and degrees of freedom, <code>pw</code>, <code>fw</code>, the overall test and the three R² were corrected.</li>
+      <li><b><code>ivregress gmm</code></b> reports robust standard errors by default; a negative R² is left missing.</li>
+      <li><b><code>noconstant</code></b> with dummies that add up to one no longer counts a hidden constant.</li>
+      <li><b>The Print button of the installed AURA</b> opened AURA again instead of the print dialog; it now prints.</li>
+      <li><b>Help:</b> every command opens a page (<code>help more</code>, <code>help connected</code>, <code>help tempname</code>&hellip;), <code>help set</code> documents <code>set more</code> and <code>set pagesize</code>, and no link of a page leads nowhere.</li>
+      <li><b>Comparisons with a missing value:</b> <code>x &lt; 5</code> is missing where <code>x</code> is missing, also for a constant or a macro; <code>x &lt; .</code> is refused, with a hint to write <code>!missing(x)</code>.</li>
+    </ul>
+
+    <h3>Changes to know</h3>
+    <ul>
+      <li><b><code>e(b)</code> and <code>e(V)</code> hold the base level of each factor, at 0</b> (the order of <code>e(names)</code> changes): a script that reads <code>e(b)</code> by position must take it into account; reading by name (<code>_b[2.zone]</code>) is not affected.</li>
+      <li><b>A level of a factor absent from the estimation sample no longer appears</b>; a base level the sample does not have (<code>ib7.g</code>) is refused, r(175).</li>
+      <li><b>A script of the editor stops at its first error</b>; <code>capture</code> lets it go on. A <code>local</code> typed at the console stays for the next commands.</li>
+      <li><b>A <code>"</code> never closed is refused</b>, r(198), and <code>label variable x "a" "b"</code> too.</li>
+      <li><b><code>append</code></b> with a file, or with a single name, adds to the active dataset in place; with several names of the Workspace it still builds a new dataset.</li>
+      <li><b><code>save x.dta</code></b> writes a real Stata-format file.</li>
+      <li><b><code>tabulate</code>'s shortest form is now <code>tabu</code></b>, since <code>tabstat</code> begins the same way; <code>tab</code> still works.</li>
+      <li><b>The window of each tool</b> (script editor, module editor, data editor, variables manager, AI settings) opens once, at its size.</li>
+      <li><b>AURA loads its libraries when it starts</b>, and the start-up screen names each one (statsmodels, SciPy, matplotlib, numba): the start takes a second or two longer, and the first estimation or graph no longer waits.</li>
+    </ul>
+
+    <h3>For developers</h3>
+    <ul>
+      <li>Shared estimation helpers in <code>core/estimation.py</code>: <code>collinear_columns</code>, <code>omitted_note</code>, <code>cov_rank</code>, <code>set_covariance</code>, <code>bases_shown</code>, <code>zero_row</code>; <code>core.factor_vars.build_design(…, keep_base=True)</code> and <code>usable_rows</code>.</li>
+      <li>Option abbreviations are declared in <code>core.option_guard.ABBREVIATIONS</code>.</li>
+      <li>New in modules: <code>namelist()</code>, <code>name()</code>, <code>anything()</code> in <code>args()</code>, and <code>aura.local()</code>.</li>
+    </ul>
+  </article>
+
   <article class="release" id="v1.41">
     <div class="rel-head">
       <h2>AURA 1.41</h2>
