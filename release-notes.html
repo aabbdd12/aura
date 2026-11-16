@@ -56,6 +56,84 @@
     <p class="sub">Additions and corrections in each release. The latest installer is always on the <a href="index.html#get">download page</a>; earlier installers stay on <a href="https://github.com/aabbdd12/aura/releases">GitHub</a>.</p>
   </section>
 
+  <article class="release" id="v1.6">
+    <div class="rel-head">
+      <h2>AURA 1.6</h2>
+      <span class="rel-date">Released 16/11/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.6">Download 1.6 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>SUBSIM: the impact of a price reform.</b> A package of AURA (<b>Statistics &rarr; SUBSIM</b>) to simulate the effects of changing the prices of goods and their subsidies on households:
+        <ul>
+          <li>price schedules by blocks — increasing or volume-differentiated, a structure per block, a fee, a schedule per group — declared with <code>pschset</code> and described or drawn with <code>pschdes</code> (the tariffs, the cost of a quantity, the average price);</li>
+          <li><code>subsim</code>: for each item and scenario, the change in well-being, poverty, inequality, quantities and the government's revenue, by group; the tables, a summary with the transfer that keeps poverty at its level (to everyone or to a group), ten figures, and an Excel workbook;</li>
+          <li>the indirect effects of price shocks through an input-output table (<code>pciom</code>, and <code>subsim</code> with the shocks of each scenario), in the short or the long run;</li>
+          <li>the measures of well-being: first order, second order (consumer surplus, equivalent and compensating variations, with matrices of price and income elasticities), and the exact equivalent and compensating variations of a Cobb-Douglas or CES model;</li>
+          <li>dialog boxes, and a user manual (<code>subsimmanual</code>).</li>
+        </ul></li>
+      <li><b>The Graph Editor works with the mouse.</b> On the graph, a part — a title, the legend, an axis, the plot region, a curve, a bar, a slice — is selected with a click and moved by dragging (Shift: back to a standard place); the plot region is resized by its edges. A double-click opens the part's own window, rich in options, which writes at once and puts things back on Cancel. The <b>Objects</b> tree lists every part, and a grey row adds one that is not drawn yet. The toolbar adds <b>texts, lines and arrows</b> at points of the data, and <b>Insert Symbol</b> composes Greek letters and formulas. A colour left empty shows the colour drawn. Every gesture is written in the graph's command, so an edited graph is reproducible.</li>
+      <li><b>Many new graph options</b>, on the command line and in the editor:
+        <ul>
+          <li>texts: <code>title("&hellip;", size() color() pos() at() box font() angle() &hellip;)</code>, two lines <code>title("a" "b")</code>, and math notation between dollars (<code>$\beta_1$</code>);</li>
+          <li>the legend: <code>order()</code>, <code>ring()</code>, <code>at()</code>, <code>cols()</code>, <code>rows()</code>, <code>region()</code>, <code>title()</code>, gaps and keys;</li>
+          <li>the axes: <code>reverse</code>, <code>alt</code>, <code>noline</code>, <code>xlabel(#n &hellip;)</code> or labels with their texts, <code>format()</code>, <code>labcolor()</code>, ticks, grid lines, minor ticks;</li>
+          <li>the regions: <code>margin(l r b t)</code>, fill opacity, outline;</li>
+          <li>each plot type: <code>area</code> (<code>color()</code>, <code>cmissing()</code>, <code>horizontal</code>), x-y <code>bar</code> (<code>base()</code>, <code>barwidth()</code>, <code>horizontal</code>, <code>place()</code>), <code>lfit</code>/<code>qfit</code> (<code>range()</code>, <code>n()</code>, <code>atobs</code>, <code>estopts(noconstant)</code>), the range plots (<code>horizontal</code>), <code>scatter</code> (point labels' place, angle and format, <code>jitter()</code>), <code>line</code> (<code>connect(J)</code>, <code>cmissing()</code>), <code>histogram</code> (<code>discrete</code>, <code>gap()</code>, <code>addlabels</code>, <code>horizontal</code>), <code>graph bar</code> (<code>bargap()</code>, <code>outergap()</code>, value labels' format, size, colour and place), <code>pie</code> (<code>sort</code>, <code>plabel()</code>, each slice's intensity and outline);</li>
+          <li>objects added: <code>text()</code>, <code>addline()</code>, <code>addarrow()</code>.</li>
+        </ul></li>
+      <li><b>The graphs of the session:</b> <code>set wingraph on</code> puts the graphs in one window, one under the other; <code>graph list</code>, <code>graph mem on</code>, <code>graph clear</code>; <b><code>graphmerge</code></b> draws several graphs in one figure, sized for a page, and a merged figure can be merged again; a right click copies a graph as a picture (PNG, JPEG), a vector drawing (SVG, or EMF for Word and PowerPoint) or the commands that draw it; <code>graph export "fig.emf"</code>.</li>
+      <li><b>Graph preferences:</b> <code>set scheme</code>, <code>set graphfont</code>, <code>set graphtextsize</code>, <code>set graphsize</code> (<code>, permanently</code> keeps them), and <b>Graphics &rarr; Graph Preferences...</b>.</li>
+      <li><b>Estimation:</b>
+        <ul>
+          <li>the header of <code>regress</code>, and of <code>logit</code>, <code>probit</code> and <code>poisson</code>, in fixed columns: the analysis of variance and the statistics, the chi2 test, the pseudo R² and the log likelihood;</li>
+          <li><code>xtreg, be</code> (between effects, <code>wls</code>), <code>theta</code> with random effects, and under the table <code>sigma_u</code>, <code>sigma_e</code>, <code>rho</code> and, with fixed effects, the F test that all unit effects are zero;</li>
+          <li><b><code>hausman</code></b>: fixed against random effects, on two stored <code>xtreg</code> estimations;</li>
+          <li><code>2.race</code>: the indicator of one level, shown with its value label;</li>
+          <li><code>uniform()</code> as the former name of <code>runiform()</code>; an unknown function stops with r(133).</li>
+        </ul></li>
+      <li><b>Printing:</b> a print preview (zoom, pages, orientation, page setup) before printing the Results window, the help window and the <b>AURA Viewer</b>: a log, an html log with its graphs, a help page, a manual. The AURA Viewer also has a <b>Find</b> field with a match counter.</li>
+      <li><b>File &rarr; View</b> has two entries: a text log or a help file (the help window), or an html log with its graphs (the AURA Viewer).</li>
+      <li><b>Numbers in tables:</b> a number keeps its column's format when it fits in 10 characters; a longer one gets fewer decimals, then scientific notation with three digits (<code>5.99e+15</code>, <code>1.30e-09</code>), so the columns never move.</li>
+    </ul>
+
+    <h3>Fixed &mdash; results that change</h3>
+    <ul>
+      <li><b><code>predict</code> after a <code>sort</code> wrote the predictions on the wrong rows</b>, without a word, and after a <code>keep</code> it stopped with an unreadable error. <code>predict</code> now computes each prediction from the data in memory, with the model's coefficients.</li>
+      <li><b><code>c.age#c.age</code> was dropped without a word</b> from every estimation (<code>regress</code>, <code>logit</code>, <code>probit</code>, <code>poisson</code>, <code>xtreg</code>, <code>ivregress</code>, <code>svy: regress</code>): the square of age now enters the model, and <code>c.age##c.age</code> gives age and its square.</li>
+      <li><b>A perfect fit in <code>regress</code></b> (residuals that are only rounding) reports a residual sum of squares of 0, a Root MSE of 0, and missing F, standard errors, t, p and intervals, instead of immense numbers.</li>
+      <li><b><code>xtreg</code> ignored an option it did not know</b> (<code>be</code> gave fixed effects, <code>vce(hc3)</code> the conventional variance): any other option is now refused.</li>
+      <li><b>Graphs:</b>
+        <ul>
+          <li>a legend in the plot (<code>ring(0)</code>) now sits at the corner or side its clock position points to (11 was the top centre, 2 the middle of the right side);</li>
+          <li>a legend is painted whole, on white: it was 80 % opaque, so the curves and colours behind it showed through;</li>
+          <li>histograms and scatter plots kept an empty band at the top and on the right (labels beyond the axis, never drawn, were counted);</li>
+          <li>a title with sub-options (<code>title("Wages", size(small))</code>) showed them as text;</li>
+          <li>a note or a caption no longer overlaps the title of the x axis;</li>
+          <li><code>twoway scatter y x</code> (without parentheses) showed no curve in the editor.</li>
+        </ul></li>
+      <li><b>AURA Viewer:</b> Ctrl+F, Ctrl+R, F9 and Ctrl+Tab did nothing (each was declared twice).</li>
+    </ul>
+
+    <h3>Changes to know</h3>
+    <ul>
+      <li><b><code>xtreg</code> estimates random effects by default</b> (it estimated fixed effects when neither <code>fe</code> nor <code>re</code> was given).</li>
+      <li><b><code>predict</code> predicts every observation whose regressors are known</b>, in the estimation sample or not; <code>if</code> and <code>in</code> restrict it. Residuals are computed where the dependent variable is known.</li>
+      <li><b>The tables of <code>logit</code>, <code>probit</code> and <code>poisson</code></b> write the labels as <code>regress</code> does, the constant last.</li>
+      <li><b>A point label</b> (<code>mlabel()</code>) is written with the format <code>%9.0g</code> by default: <code>2016</code>, no longer <code>2016.0</code>.</li>
+      <li><b>The editors' Quick Options panel</b> follows the component windows and the mouse; the regions' options moved to their window (double-click the region).</li>
+      <li><b>The capitals of the help pages' syntax lines</b> now show each command's real minimal abbreviation (some had grown longer with new commands: <code>date</code> for <code>datest</code>).</li>
+    </ul>
+
+    <h3>For developers</h3>
+    <ul>
+      <li>The graph engine names each part it draws (<code>set_gid</code>): <code>text:title</code>, <code>legend</code>, <code>axis:x</code>, <code>plotregion</code>, <code>graphregion</code>, <code>curve:&lt;n&gt;</code>, <code>added:text:&lt;k&gt;</code>; the editor's mouse layer (<code>gui/graph_pick.py</code>) and the component windows (<code>gui/*_props.py</code>) work on these names, and write through <code>RecipeEditor.write_text</code>, <code>write_legend</code>, <code>write_options</code>, <code>write_curve</code>, <code>write_added</code>.</li>
+      <li><code>gui.qt_print.launch(text, title)</code> prints a text through the preview from any Tk window.</li>
+      <li><code>tools/mark_aurh_abbrev.py</code> puts right a syntax line whose capitals no longer match the abbreviation, and a test checks every page. Free software under the GNU General Public License v3.0-or-later.</li>
+    </ul>
+  </article>
+
   <article class="release" id="v1.5">
     <div class="rel-head">
       <h2>AURA 1.5</h2>
