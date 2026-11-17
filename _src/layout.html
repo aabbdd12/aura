@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{root}}assets/site.css">
+{{head}}
+</head>
+<body>
+
+<div class="announce" id="announce">
+  <div class="wrap">
+    <span class="long"><b>AURA {{version}}</b> — {{announce}}</span>
+    <span class="short"><b>AURA {{version}}</b> is out.</span>
+    <a href="{{root}}release-notes.html#v{{version}}">See what's new &rarr;</a>
+    <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="{{root}}index.html"><span class="mark">A</span><b>AURA</b></a>
+    <nav class="main" id="menu" aria-label="Main">
+      <ul>
+        <li><a class="top-link{{on:features}}" href="{{root}}features.html">Features</a>
+          <div class="drop">
+            <a href="{{root}}features.html#data">Data management<small>Workspace, merge, reshape, by groups</small></a>
+            <a href="{{root}}features.html#estimation">Estimation<small>Regression, panel, IV, post-estimation</small></a>
+            <a href="{{root}}features.html#tables">Tables of results<small>esttab: screen, LaTeX, Word, HTML</small></a>
+            <a href="{{root}}features.html#survey">Survey data<small>Designs and their standard errors</small></a>
+            <a href="{{root}}features.html#graphics">Graphics<small>The Graph Editor, merged figures, 3-D</small></a>
+            <a href="{{root}}features.html#scripts">Scripts and reproducibility<small>Loops, macros, logs with graphs</small></a>
+            <a href="{{root}}features.html#extend">Extend AURA<small>Modules, dialog boxes, AI assistant</small></a>
+          </div></li>
+        <li><a class="top-link{{on:packages}}" href="{{root}}packages.html">Packages</a>
+          <div class="drop">
+            <a href="{{root}}packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
+            <a href="{{root}}packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="{{root}}packages.html#more">More packages<small>Install, update, publish your own</small></a>
+          </div></li>
+        <li><a class="top-link{{on:learn}}" href="{{root}}learn.html">Learn</a>
+          <div class="drop">
+            <a href="{{root}}commands.html">Command reference<small>Every command, searchable</small></a>
+            <a href="{{root}}learn.html#guides">User and Developer guides<small>Read them online</small></a>
+            <a href="{{root}}learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="{{root}}release-notes.html">Release notes</a>
+          </div></li>
+        <li><a class="top-link{{on:download}}" href="{{root}}download.html">Download</a></li>
+        <li><a class="top-link{{on:about}}" href="{{root}}about.html">About</a>
+          <div class="drop">
+            <a href="{{root}}about.html">The project</a>
+            <a href="{{root}}about.html#cite">How to cite</a>
+            <a href="{{root}}about.html#licence">Licence</a>
+            <a href="{{root}}about.html#contact">Report a problem</a>
+          </div></li>
+      </ul>
+    </nav>
+    <button class="burger" type="button" aria-label="Menu" aria-controls="menu"
+            onclick="document.getElementById('menu').classList.toggle('open')">&#9776;</button>
+    <a class="btn btn-gold btn-small" href="{{root}}download.html">Download</a>
+  </div>
+</header>
+
+<main>
+{{body}}
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div style="max-width:22em">
+        <a class="brand" href="{{root}}index.html"><span class="mark">A</span><b>AURA</b></a>
+        <p>An open, Python-native environment for statistics, econometrics, distributive analysis and price-reform simulation. By Dr. Abdelkrim Araar.</p>
+      </div>
+      <div><h5>Product</h5><a href="{{root}}features.html">Features</a><a href="{{root}}packages.html">Packages</a><a href="{{root}}download.html">Download</a></div>
+      <div><h5>Learn</h5><a href="{{root}}commands.html">Command reference</a><a href="{{root}}learn.html#guides">Guides</a><a href="{{root}}learn.html#manuals">Manuals</a><a href="{{root}}release-notes.html">Release notes</a></div>
+      <div><h5>Project</h5><a href="{{root}}about.html">About</a><a href="{{root}}about.html#cite">How to cite</a><a href="https://www.gnu.org/licenses/gpl-3.0.html">Licence — GPLv3</a><a href="https://github.com/aabbdd12/aura/issues">Report a problem</a></div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
+      <span>AURA {{version}} · <a href="{{root}}release-notes.html">release notes</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function hideAnnounce() {
+    document.getElementById("announce").classList.add("gone");
+    try { localStorage.setItem("aura-announce-hidden", "{{version}}"); } catch (e) {}
+  }
+  try {
+    if (localStorage.getItem("aura-announce-hidden") === "{{version}}") {
+      document.getElementById("announce").classList.add("gone");
+    }
+  } catch (e) {}
+</script>
+{{scripts}}
+</body>
+</html>

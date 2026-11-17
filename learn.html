@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learn — AURA</title>
+<meta name="description" content="Learn AURA: the command reference, the User and Developer guides, the DAAP and SUBSIM manuals, and the release notes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+
+</head>
+<body>
+
+<div class="announce" id="announce">
+  <div class="wrap">
+    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
+    <span class="short"><b>AURA 1.6</b> is out.</span>
+    <a href="release-notes.html#v1.6">See what's new &rarr;</a>
+    <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">A</span><b>AURA</b></a>
+    <nav class="main" id="menu" aria-label="Main">
+      <ul>
+        <li><a class="top-link" href="features.html">Features</a>
+          <div class="drop">
+            <a href="features.html#data">Data management<small>Workspace, merge, reshape, by groups</small></a>
+            <a href="features.html#estimation">Estimation<small>Regression, panel, IV, post-estimation</small></a>
+            <a href="features.html#tables">Tables of results<small>esttab: screen, LaTeX, Word, HTML</small></a>
+            <a href="features.html#survey">Survey data<small>Designs and their standard errors</small></a>
+            <a href="features.html#graphics">Graphics<small>The Graph Editor, merged figures, 3-D</small></a>
+            <a href="features.html#scripts">Scripts and reproducibility<small>Loops, macros, logs with graphs</small></a>
+            <a href="features.html#extend">Extend AURA<small>Modules, dialog boxes, AI assistant</small></a>
+          </div></li>
+        <li><a class="top-link" href="packages.html">Packages</a>
+          <div class="drop">
+            <a href="packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
+            <a href="packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="packages.html#more">More packages<small>Install, update, publish your own</small></a>
+          </div></li>
+        <li><a class="top-link on" href="learn.html">Learn</a>
+          <div class="drop">
+            <a href="commands.html">Command reference<small>Every command, searchable</small></a>
+            <a href="learn.html#guides">User and Developer guides<small>Read them online</small></a>
+            <a href="learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="release-notes.html">Release notes</a>
+          </div></li>
+        <li><a class="top-link" href="download.html">Download</a></li>
+        <li><a class="top-link" href="about.html">About</a>
+          <div class="drop">
+            <a href="about.html">The project</a>
+            <a href="about.html#cite">How to cite</a>
+            <a href="about.html#licence">Licence</a>
+            <a href="about.html#contact">Report a problem</a>
+          </div></li>
+      </ul>
+    </nav>
+    <button class="burger" type="button" aria-label="Menu" aria-controls="menu"
+            onclick="document.getElementById('menu').classList.toggle('open')">&#9776;</button>
+    <a class="btn btn-gold btn-small" href="download.html">Download</a>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Learn</p>
+    <h1>Guides, manuals and the reference of every command</h1>
+    <p>Everything that comes with AURA, to read here before you install it. Inside AURA, <span class="k">help</span> followed by a command opens its page, with examples you run with a click.</p>
+    <nav class="subnav" aria-label="Sections"><a href="commands.html">Command reference</a><a href="#guides">Guides</a><a href="#manuals">Manuals</a><a href="release-notes.html">Release notes</a></nav>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="cards">
+      <div class="card">
+        <h3>Command reference</h3>
+        <p>Every command of AURA and of its packages, with what it does — searchable, and grouped by subject.</p>
+        <a class="more" href="commands.html">Browse the commands &rarr;</a>
+      </div>
+      <div class="card">
+        <h3>Release notes</h3>
+        <p>What each version added and corrected, from the first release to AURA 1.6.</p>
+        <a class="more" href="release-notes.html">Read the release notes &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap split flip">
+    <div>
+      <p class="eyebrow">Inside AURA</p>
+      <h2>Help with examples you run with a click</h2>
+      <p>Type <span class="k">help</span> and a command: its page opens with the syntax, the options, and examples that load their own data and run with a click — in the command window, or in the command's dialog box, filled in. <b>Help → Getting Started</b> walks through a first session.</p>
+    </div>
+    <img src="images/help-demos.jpg" alt="The AURA help window: a command's page with examples that run with a click." loading="lazy">
+  </div>
+</section>
+
+<section class="block alt" id="guides">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Guides</p>
+      <h2>The User and Developer guides</h2>
+      <p>The same guides open in AURA from the Help menu.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <h3>User Guide</h3>
+        <p>The interface, the command language, data management, statistics and estimation, survey data, graphics and the Graph Editor, scripts, packages — with examples.</p>
+        <a class="more" href="docs/user-guide.html">Read the User Guide &rarr;</a>
+      </div>
+      <div class="card">
+        <h3>Developer Guide</h3>
+        <p>Write your own commands as Python modules: reading options, posting results, tables, help pages, dialog boxes, packages, and the AI-assisted workflow.</p>
+        <a class="more" href="docs/developer-guide.html">Read the Developer Guide &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="manuals">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Manuals</p>
+      <h2>The manuals of the packages</h2>
+      <p>The methods, their formulas and their commands, with worked examples. In AURA, <span class="k">daapmanual</span> and <span class="k">subsimmanual</span> open them.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <h3>DAAP manual</h3>
+        <p>Poverty, inequality, polarization, dominance, pro-poor growth and decompositions: the indices, their estimators and their standard errors.</p>
+        <a class="more" href="manuals/daap/daap_manual.html">Read the DAAP manual &rarr;</a>
+      </div>
+      <div class="card">
+        <h3>SUBSIM manual</h3>
+        <p>Price schedules, the direct and indirect effects of a reform, the measures of well-being, the dialog boxes and worked examples.</p>
+        <a class="more" href="manuals/subsim/subsim_manual.html">Read the SUBSIM manual &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div style="max-width:22em">
+        <a class="brand" href="index.html"><span class="mark">A</span><b>AURA</b></a>
+        <p>An open, Python-native environment for statistics, econometrics, distributive analysis and price-reform simulation. By Dr. Abdelkrim Araar.</p>
+      </div>
+      <div><h5>Product</h5><a href="features.html">Features</a><a href="packages.html">Packages</a><a href="download.html">Download</a></div>
+      <div><h5>Learn</h5><a href="commands.html">Command reference</a><a href="learn.html#guides">Guides</a><a href="learn.html#manuals">Manuals</a><a href="release-notes.html">Release notes</a></div>
+      <div><h5>Project</h5><a href="about.html">About</a><a href="about.html#cite">How to cite</a><a href="https://www.gnu.org/licenses/gpl-3.0.html">Licence — GPLv3</a><a href="https://github.com/aabbdd12/aura/issues">Report a problem</a></div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
+      <span>AURA 1.6 · <a href="release-notes.html">release notes</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function hideAnnounce() {
+    document.getElementById("announce").classList.add("gone");
+    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+  }
+  try {
+    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+      document.getElementById("announce").classList.add("gone");
+    }
+  } catch (e) {}
+</script>
+
+</body>
+</html>

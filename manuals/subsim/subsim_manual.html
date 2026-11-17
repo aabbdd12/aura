@@ -1,0 +1,2572 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SUBSIM for AURA — User Manual: Theory, Implementation and Practice</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <style>
+    :root { --ink:#1a2733; --muted:#5a6b7b; --accent:#1a4a6b; --line:#e2e8ee; --bg:#ffffff;
+            --toc-w:17rem; --toc-bg:#f7fafc; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { max-width: 820px; margin: 2.2rem auto 4rem; padding: 0 1.4rem;
+           font: 16px/1.62 "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+           color: var(--ink); background: var(--bg); }
+    h1 { font-size: 1.7rem; line-height:1.25; margin: .2rem 0 .3rem; color: var(--accent); }
+    h2 { font-size: 1.25rem; margin: 2.1rem 0 .6rem; padding-bottom:.25rem;
+         border-bottom: 2px solid var(--line); color: var(--accent); }
+    h3 { font-size: 1.05rem; margin: 1.3rem 0 .4rem; }
+    a { color: var(--accent); }
+    hr { border:0; border-top:1px solid var(--line); margin: 1.6rem 0; }
+    code { background:#f3f6fa; padding:.08em .38em; border-radius:4px; font-size:.9em;
+           font-family: "Cascadia Code", Consolas, monospace; }
+    pre { background:#f6f8fb; border:1px solid var(--line); border-radius:8px; padding:.7rem .9rem;
+          overflow-x:auto; white-space:pre; line-height:1.17; font-size:.8rem; }
+    /* the outputs of AURA as in its Results window: never wrapped (pandoc's code
+       style wraps), lines close enough for the box-drawing rules to join */
+    pre code { background:none; padding:0; white-space:pre; font-size:inherit; line-height:inherit;
+               font-family: Consolas, "Cascadia Mono", "Lucida Console", monospace; }
+    table { border-collapse: collapse; margin: 1rem 0; width:100%; font-size:.94em; }
+    th, td { border:1px solid var(--line); padding:.42rem .7rem; text-align:left; vertical-align:top; }
+    thead th { background:#eef3f8; color:var(--accent); }
+    tbody tr:nth-child(even) { background:#fafcfe; }
+    blockquote { border-left:3px solid var(--accent); margin:1rem 0; padding:.2rem 1rem; color:var(--muted); }
+    mjx-container { overflow-x:auto; overflow-y:hidden; }
+    /* clickable §X.Y cross-references (auto-wired at build) */
+    a.secref { color:var(--accent); text-decoration:none; border-bottom:1px dotted var(--accent); white-space:nowrap; }
+    a.secref:hover { background:#eef3f8; }
+    /* figures (authored SVG diagrams / embedded screenshots) */
+    figure { margin:1.6rem 0; text-align:center; }
+    figure svg, figure img { max-width:100%; height:auto; }
+    figure img { border:1px solid var(--line); border-radius:8px; }
+    figcaption { margin-top:.5rem; font-size:.88rem; color:var(--muted); }
+    figcaption b { color:var(--accent); }
+
+    /* Table of contents (inline; inside AURA's viewer the dockable TOC panel is used instead) */
+    nav#TOC { font-size:.92rem; background:var(--toc-bg); border:1px solid var(--line);
+              border-radius:8px; padding:.8rem 1.1rem; margin:1.2rem 0 1.8rem; }
+    nav#TOC::before { content:"Contents"; display:block; margin-bottom:.4rem;
+              font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+              color:var(--accent); }
+    nav#TOC ul { list-style:none; padding-left:1rem; margin:.2rem 0; }
+    nav#TOC > ul { padding-left:0; }
+    nav#TOC li { margin:.16rem 0; }
+    nav#TOC a { text-decoration:none; color:var(--muted); }
+    nav#TOC a:hover { color:var(--accent); text-decoration:underline; }
+  </style>
+  <script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg-full.js"></script>
+</head>
+<body><div style="font:500 14px/1.4 Inter,Segoe UI,sans-serif;background:#0b3d6e;color:#fff;padding:.55rem 1rem"><a href="../../index.html" style="color:#fff;font-weight:700;text-decoration:none">AURA</a> &nbsp;·&nbsp; <a href="../../learn.html#manuals" style="color:#fff">Guides and manuals</a></div>
+<header id="title-block-header">
+<h1 class="title">SUBSIM for AURA — User Manual: Theory, Implementation
+and Practice</h1>
+</header>
+<p><em>The subsidy simulation package of AURA</em></p>
+<h1 data-number="1" id="introduction"><span
+class="header-section-number">1</span> Introduction</h1>
+<p><strong>SUBSIM</strong> simulates the effects of a reform of prices
+and subsidies. On a household survey, it measures how a change in the
+prices of subsidized goods — energy, food, water, electricity — changes
+the <strong>well-being of households</strong>, the
+<strong>quantities</strong> they consume, <strong>government
+revenue</strong>, <strong>poverty</strong> and
+<strong>inequality</strong>, and which <strong>cash transfer</strong>
+would offset the rise of poverty. With an <strong>input-output
+table</strong>, it adds the <strong>indirect effects</strong>: the
+change in the price of an intermediate good (fuel, electricity) moves
+the prices of all the goods produced with it, and the households feel it
+through their whole consumption.</p>
+<p>The model was designed by Abdelkrim Araar and Paolo Verme for the
+World Bank (Araar and Verme 2012), as a toolkit for rapid distributional
+analyses of subsidy reforms. This manual describes the SUBSIM package of
+AURA: what it computes, exactly how it computes it, and how to use
+it.</p>
+<h2 data-number="1.1" id="what-subsim-does"><span
+class="header-section-number">1.1</span> What SUBSIM does</h2>
+<p>A simulation starts from a household survey that records, for each
+household, its total expenditure per person and its expenditure on each
+good concerned by the reform — an <strong>item</strong>. For each item,
+the user gives:</p>
+<ul>
+<li>the <strong>initial price schedule</strong>: a price (a
+<em>linear</em> price), or a schedule of blocks of quantity each with
+its own tariff (electricity, water, a quota of subsidized flour);</li>
+<li>the <strong>unit subsidy</strong> paid by the government on each
+unit, when it is known;</li>
+<li>the <strong>final price schedule</strong> after the reform, for one
+or several <strong>scenarios</strong>;</li>
+<li>the <strong>own-price elasticity</strong> of the demand for the
+item.</li>
+</ul>
+<p>SUBSIM turns each household’s expenditure into the quantity it buys,
+prices that quantity before and after the reform, and reports by group
+of households (by default the quintiles of expenditure per person):</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Result</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Expenditures and quantities</td>
+<td>who consumes the items, and how much</td>
+</tr>
+<tr>
+<td>Benefits of the subsidies</td>
+<td>who receives the subsidies, in money and as a share of their
+budget</td>
+</tr>
+<tr>
+<td>Impact on well-being</td>
+<td>the money-metric loss (or gain) of the households, per person and in
+%</td>
+</tr>
+<tr>
+<td>Impact on quantities</td>
+<td>how much less (or more) of each item is bought</td>
+</tr>
+<tr>
+<td>Impact on government revenue</td>
+<td>the fall of the subsidy bill</td>
+</tr>
+<tr>
+<td>Poverty and inequality</td>
+<td>the poverty headcount, the poverty gap and the Gini index, before
+and after</td>
+</tr>
+<tr>
+<td>Compensating transfer</td>
+<td>the cash transfer that brings poverty back to its level before the
+reform</td>
+</tr>
+</tbody>
+</table>
+<p>The results are tables (twenty-two of them, plus the main results)
+and ten graphs. The <strong>direct effect</strong> of a reform is the
+effect of the items’ own prices on the households that buy them. The
+<strong>indirect effect</strong> is the effect of the other prices that
+move because the items are inputs of other goods; SUBSIM computes it
+with an input-output price model and consumption aggregates that match
+the sectors of the table (Chapter 5).</p>
+<h2 data-number="1.2" id="subsim-in-aura"><span
+class="header-section-number">1.2</span> SUBSIM in AURA</h2>
+<p>SUBSIM is a package of AURA. It adds four commands and their dialog
+boxes, under <strong>Statistics ▸ SUBSIM</strong>:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Command</th>
+<th>Menu entry</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pschset</code></td>
+<td>Initialise the price schedule</td>
+<td>declares a price schedule (blocks, tariffs, subsidies,
+structure)</td>
+</tr>
+<tr>
+<td><code>pschdes</code></td>
+<td>Describe the price schedule</td>
+<td>describes one or several schedules, in a table and a graph</td>
+</tr>
+<tr>
+<td><code>subsim</code></td>
+<td>Automated simulator: direct and indirect effects</td>
+<td>the simulation</td>
+</tr>
+<tr>
+<td><code>pciom</code></td>
+<td>Input-output models and sectoral price changes</td>
+<td>the price changes of the sectors of an input-output table</td>
+</tr>
+</tbody>
+</table>
+<p>AURA brings to SUBSIM what it brings to every analysis:</p>
+<ul>
+<li><strong>The survey design is declared once.</strong>
+<code>svyset</code> declares the sampling weight, the strata and the
+primary sampling units; SUBSIM reads them, weights its statistics and
+gives design-based standard errors for the changes of poverty and
+inequality.</li>
+<li><strong>Several datasets at once.</strong> The input-output table is
+a dataset of the <strong>Workspace</strong>, kept in memory beside the
+household survey: no merging, no file paths in the command.</li>
+<li><strong>Commands and boxes.</strong> Every dialog box writes the
+command it runs, echoed in the <strong>Review</strong> panel; a
+simulation is a line that can be saved in a script and run again.</li>
+<li><strong>Help and examples.</strong> <code>help subsim</code>,
+<code>help pschset</code>, <code>help pschdes</code> and
+<code>help pciom</code> describe the syntax and give numbered examples
+that run on the example data, in the command window or in the dialog
+box, filled. <code>help subsim_tables</code> and
+<code>help subsim_graphs</code> list the tables and graphs with their
+codes.</li>
+<li><strong>Graphs of the session.</strong> Each SUBSIM graph can be
+edited in the graph editor, saved as an <code>.aurg</code> file (the
+graph and its data) and copied to Word as a vector picture.</li>
+<li><strong>Free and offline.</strong> AURA and SUBSIM are open source
+and run entirely on the local machine.</li>
+</ul>
+<h2 data-number="1.3" id="how-to-read"><span
+class="header-section-number">1.3</span> How to read this manual</h2>
+<p>Chapter 2 runs a first simulation from start to end. Chapter 3
+explains the price schedules, Chapter 4 the theory of the direct effect
+and the rules AURA applies, Chapter 5 the indirect effect. Chapter 6 is
+the reference of the <code>subsim</code> command (options, tables,
+graphs, stored results), Chapter 7 the dialog boxes, and Chapter 8 a set
+of worked examples. Chapter 9 is for the users of SUBSIM in Stata: it
+says where AURA reports more precise estimates.</p>
+<p>Equations use the notation of <a class="secref" href="#notation">§4.1</a>. Every number quoted in this
+manual comes from the example data shipped with AURA, and can be
+reproduced with the commands shown (the figures are drawn by
+<code>tools/build_subsim_figures.py</code>).</p>
+<h2 data-number="1.4" id="example-data"><span
+class="header-section-number">1.4</span> The example data</h2>
+<p>Three datasets come with AURA, in the folder of the help files
+(<code>data/</code>); the examples of the help pages load them:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subsim_example.dta</code></td>
+<td>SUBSIM’s example: 2,000 households, their expenditure per person
+(<code>pc_exp_tot</code>), the household size (<code>hhsize</code>), the
+poverty line (<code>pline</code>), their expenditure per person on
+eleven subsidized goods (<code>pc_exp_flour</code>,
+<code>pc_exp_sugar</code>, …), and, in its first rows, the table of the
+items (names, schedules, elasticities)</td>
+</tr>
+<tr>
+<td><code>egypt_sample.dta</code></td>
+<td>a sample of 1,848 households of Egypt’s household survey
+(expenditure per person <code>pcexp</code>, size, poverty line, group
+<code>Urbrur</code>), with, in its first rows, the table of 39
+consumption aggregates (their expenditure variables, names and matching
+sectors)</td>
+</tr>
+<tr>
+<td><code>IOM_EGY2015.dta</code></td>
+<td>Egypt’s input-output table of 2015: 90 sectors (one variable each,
+labelled with the sector’s name) and 91 rows, the last being the value
+added</td>
+</tr>
+</tbody>
+</table>
+<p>The tables of items and of aggregates follow SUBSIM’s convention:
+their variables are added <strong>at the top of the household
+data</strong>, one row per item, with missing values below. The options
+<code>nitems()</code> and <code>initems()</code> say how many rows to
+read (<a class="secref" href="#items-given-by-a-table-and-scenarios">§6.2</a>, <a class="secref" href="#from-sectors-to-consumption-aggregates">§5.3</a>).</p>
+<h1 data-number="2" id="first-simulation"><span
+class="header-section-number">2</span> A first simulation</h1>
+<p>This chapter simulates a reform of the price of sugar, step by step:
+from the data to the main results, with commands and then with the
+dialog box.</p>
+<h2 data-number="2.1" id="the-data-and-the-survey-design"><span
+class="header-section-number">2.1</span> The data and the survey
+design</h2>
+<pre><code>. use &quot;data/subsim_example.dta&quot;, clear
+. svyset [pweight = hh_coef], strata(area)</code></pre>
+<p>The survey design tells SUBSIM how to weight the households and how
+to compute standard errors. The example data already carry their design
+— a <code>.dta</code> file saved with its <code>svyset</code> keeps it,
+and AURA reads it when the file is opened — so the second line is only
+needed for data without one; <code>svydes</code> describes the design.
+Without a design, the households have equal weights and the sample is
+treated as a simple random sample. Every statistic of SUBSIM weights a
+household by its sampling weight times its size: the results are about
+persons.</p>
+<h2 data-number="2.2" id="one-item-a-linear-price"><span
+class="header-section-number">2.2</span> One item, a linear price</h2>
+<p>Sugar costs 0.25 a kilogram; the government pays a subsidy of 1.068
+on each kilogram; the reform raises the price to 0.5704, cutting the
+subsidy by 30% (0.25 + 0.3 × 1.068 = 0.5704). The households’
+expenditure per person on sugar is the variable
+<code>pc_exp_sugar</code>, and the own-price elasticity is taken at
+−0.5:</p>
+<pre><code>. subsim pc_exp_tot, hsize(hhsize) pline(pline) ///
+      item1(Sugar, var(pc_exp_sugar) unit(kg) initial(.25) subsidy(1.068) final(.5704) elasticity(-.5)) ///
+      tjobs(42 43 46 47) summary gjobs(off)</code></pre>
+<p>The first variable is the total expenditure per person — the living
+standard. <code>hsize()</code> is the household size and
+<code>pline()</code> the poverty line (a variable or a number). Each
+item is an option <code>item1()</code>, <code>item2()</code>, …: its
+name, then its expenditure variable, its unit, its initial price, its
+unit subsidy, its final price and its elasticity. <code>tjobs()</code>
+lists the tables to show (all of them by default), <code>summary</code>
+adds the main results, and <code>gjobs(off)</code> draws no graph (all
+of them are drawn by default).</p>
+<h2 data-number="2.3" id="reading-the-results"><span
+class="header-section-number">2.3</span> Reading the results</h2>
+<p>The tables are given by group of households — here the quintiles of
+expenditure per person. Table 4.2 is the impact on well-being per
+person, in money; table 4.3 the same in % of expenditure:</p>
+<pre><code>Table 4.2: The impact on the per capita well-being (in currency) : Scenario 1
+────────────┬─────────────────
+ Groups     │ Sugar    Total
+────────────┼─────────────────
+ Quintile 1 │ -12.38   -12.38
+ Quintile 2 │ -17.18   -17.18
+ Quintile 3 │ -23.03   -23.03
+ Quintile 4 │ -27.94   -27.94
+ Quintile 5 │ -38.85   -38.85
+────────────┼─────────────────
+ Total      │ -23.87   -23.87
+────────────┴─────────────────
+
+Table 4.3: The impact on well-being (in %) : Scenario 1
+────────────┬───────────────
+ Groups     │ Sugar   Total
+────────────┼───────────────
+ Quintile 1 │ -1.32   -1.32
+ Quintile 2 │ -1.24   -1.24
+ Quintile 3 │ -1.30   -1.30
+ Quintile 4 │ -1.20   -1.20
+ Quintile 5 │ -1.00   -1.00
+────────────┼───────────────
+ Total      │ -1.16   -1.16
+────────────┴───────────────</code></pre>
+<p>Each household loses, per person, the extra cost of the sugar it
+bought before the reform. The richest quintile loses three times as much
+as the poorest in money — it buys more sugar — but the poorest loses
+more as a share of its budget (1.32% against 1.00%): the subsidy was
+worth more to the poor than to the rich, relative to their living
+standard. The government saves 38.6 million (table 4.6), and the poverty
+headcount rises by 0.37 points, a change whose standard error (0.17)
+says that it is significant (table 4.7). The <strong>main
+results</strong> gather the essentials:</p>
+<pre><code>Main results : Scenario 1
+───────────────────────────────┬────────────────────────────────────
+ Component                     │ Pre-reform   Post-reform    Change
+───────────────────────────────┼────────────────────────────────────
+ Well-being                    │
+   Welfare (per capita)        │   2062.099      2038.232   -23.868
+   Poverty headcount (%)       │     11.502        11.875     0.373
+   Poverty gap (%)             │      2.194         2.332     0.139
+   Inequality, Gini (%)        │     28.493        28.561     0.068
+───────────────────────────────┼────────────────────────────────────
+ Budget                        │
+   Subsidies (in millions)     │     51.600        12.974   -38.626
+   Transfers (in millions) (*) │      0.000         7.527     7.527
+   Total budget (in millions)  │     51.600        20.502   -31.098
+───────────────────────────────┼────────────────────────────────────
+ Per capita                    │
+   Subsidy (per capita)        │     79.559        20.004   -59.554
+   Transfer (per capita)       │      0.000        11.606    11.606
+   Transfer (per beneficiary)  │      0.000        11.606    11.606
+───────────────────────────────┴────────────────────────────────────
+  Subsidy per capita after the reform = before - revenue gain per capita.
+  (*) The transfer that brings the poverty headcount back to its level before the reform,
+      paid to each person.</code></pre>
+<p>The reform cuts the subsidy bill from 51.6 to 13.0 million. A
+transfer of 11.61 to every person would bring the poverty headcount back
+to 11.50%, at a cost of 7.5 million: the budget still gains 31.1
+million. The subsidy after the reform is not zero: the households still
+buy sugar below its cost (0.5704 against 0.25 + 1.068 = 1.318), and they
+buy less of it (the elasticity), so the bill falls by more than 30% — by
+75%.</p>
+<h2 data-number="2.4" id="the-same-with-the-dialog-box"><span
+class="header-section-number">2.4</span> The same with the dialog
+box</h2>
+<p><strong>Statistics ▸ SUBSIM ▸ Automated simulator: direct and
+indirect effects</strong> (or <code>db subsim</code>) opens the box of
+Chapter 7. In the <strong>Main</strong> tab, give the expenditure per
+person, the household size and the poverty line; in <strong>Direct
+effect</strong>, one item, <em>Linear</em>, with its varname, initial
+price, subsidy, final price and elasticity; in <strong>Table
+options</strong>, the codes of the tables (or <strong>Select…</strong>
+to check them in a list) and <em>Produce the summary table</em>.
+<strong>OK</strong> runs the simulation and closes the box;
+<strong>Submit</strong> runs it and keeps the box open. The command the
+box writes appears in the Review panel. From <code>help subsim</code>,
+the link <em>run in dialog box</em> under an example opens the box
+filled with it.</p>
+<h1 data-number="3" id="price-schedules"><span
+class="header-section-number">3</span> Price schedules</h1>
+<p>A price is a number when every unit costs the same — a <strong>linear
+price</strong>. Many subsidized goods are priced otherwise: electricity
+and water by <strong>blocks</strong> of consumption, each with its own
+tariff; flour or bread by a <strong>quota</strong>, a quantity sold at
+the subsidized price and the rest at the market price. SUBSIM handles
+all of them with <strong>price schedules</strong>, declared by
+<code>pschset</code> and described by <code>pschdes</code>; a linear
+price is the schedule of one block.</p>
+<h2 data-number="3.1" id="linear-prices-quotas-and-blocks"><span
+class="header-section-number">3.1</span> Linear prices, quotas and
+blocks</h2>
+<p>A schedule cuts the quantity into <span
+class="math inline">\(B\)</span> blocks with upper bounds <span
+class="math inline">\(b_1 &lt; b_2 &lt; \dots &lt; b_{B-1}\)</span> (the
+last block is open: <span class="math inline">\(b_0 = 0\)</span>, <span
+class="math inline">\(b_B = \infty\)</span>). Block <span
+class="math inline">\(b\)</span> has a tariff <span
+class="math inline">\(p_b\)</span> and, optionally, a unit subsidy <span
+class="math inline">\(s_b\)</span> — what the government pays on each
+unit, so that the cost of a unit to the producer is <span
+class="math inline">\(p_b + s_b\)</span>. A <strong>quota</strong> of 36
+kg of flour per person at 0.09, with a subsidy of 0.94, the market price
+1.03 beyond, is the schedule of two blocks:</p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Tariff</th>
+<th>Subsidy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 – 36 kg</td>
+<td>0.09</td>
+<td>0.94</td>
+</tr>
+<tr>
+<td>36 kg and more</td>
+<td>1.03</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>From an economic point of view the quota and the blocks are the same
+thing: a quota is a schedule of two blocks.</p>
+<h2 data-number="3.2"
+id="tariff-structures-ibt-vdt-mixed-by-block"><span
+class="header-section-number">3.2</span> Tariff structures: IBT, VDT,
+mixed, by block</h2>
+<p>Two rules are common for the cost of a quantity:</p>
+<ul>
+<li><strong>Increasing block tariff (IBT)</strong>: each block’s tariff
+applies to the units within the block. A household that buys 250 units
+with blocks 0–100 at 0.10 and 100–300 at 0.20 pays <span
+class="math inline">\(100 \times 0.10 + 150 \times 0.20 =
+40\)</span>.</li>
+<li><strong>Volume-differentiated tariff (VDT)</strong>: the tariff of
+the block that the total quantity reaches applies to
+<strong>all</strong> the units. The same household pays <span
+class="math inline">\(250 \times 0.20 = 50\)</span>.</li>
+</ul>
+<p>Each block of a schedule can follow its own rule
+(<code>structure(ibt ibt vdt ibt)</code>); IBT for all the blocks, VDT
+for all the blocks and the <strong>mixed</strong> structure — IBT up to
+a block, VDT beyond — are particular cases. The cost of a quantity
+follows from one recursion. Let <span class="math inline">\(X_b\)</span>
+be the cost of the upper bound of block <span
+class="math inline">\(b\)</span>, by the block’s own rule:</p>
+<p><span class="math display">\[X_0 = 0, \qquad
+X_b = \begin{cases} X_{b-1} + (b_b - b_{b-1})\, p_b &amp; \text{block
+$b$ IBT} \\
+b_b\, p_b &amp; \text{block $b$ VDT.} \end{cases}\]</span></p>
+<p>A quantity <span class="math inline">\(q\)</span> in block <span
+class="math inline">\(b\)</span> (<span class="math inline">\(b_{b-1}
+&lt; q \le b_b\)</span>) costs</p>
+<p><span class="math display">\[C(q) = F + \begin{cases} X_{b-1} + (q -
+b_{b-1})\, p_b &amp; \text{block $b$ IBT} \\
+q\, p_b &amp; \text{block $b$ VDT,} \end{cases}\]</span></p>
+<p>where <span class="math inline">\(F\)</span> is the subscription fee
+(<a class="secref" href="#who-the-blocks-count-and-the-subscription-fee">§3.4</a>). Below an IBT block, the units cost the accumulated tariffs of
+the IBT blocks, up to the last VDT block below, whose tariff prices
+every unit up to its upper bound. With bounds 100, 200 and 300, tariffs
+1 to 4, and the structure IBT, IBT, VDT, IBT, a quantity of 350 costs
+<span class="math inline">\(X_3 + 50 \times 4 = 300 \times 3 + 200 =
+1100\)</span>.</p>
+<figure>
+<img src="figures/fig_cost.png" style="width:95.0%"
+alt="The cost of a quantity under the four structures, the same bounds and tariffs: pschdes A B C D, graph(cost) separate (<a class="secref" href="#pschdes">§3.6</a>). A VDT block makes the cost jump at its lower bound: one more unit is priced at the higher tariff for the whole quantity." />
+<figcaption aria-hidden="true">The cost of a quantity under the four
+structures, the same bounds and tariffs:
+<code>pschdes A B C D, graph(cost) separate</code> (<a class="secref" href="#pschdes">§3.6</a>). A VDT block
+makes the cost jump at its lower bound: one more unit is priced at the
+higher tariff for the whole quantity.</figcaption>
+</figure>
+<h2 data-number="3.3" id="from-expenditure-to-quantity"><span
+class="header-section-number">3.3</span> From expenditure to
+quantity</h2>
+<p>A survey records what a household spends on a good, not the quantity
+it buys. The schedule turns the expenditure <span
+class="math inline">\(e\)</span> into a quantity. Net of the fee, <span
+class="math inline">\(e - F\)</span> buys, block after block, the
+quantity whose cost it covers. The expenditure is spent in the last
+block whose lower bound costs less than it: the threshold of block <span
+class="math inline">\(b\)</span> is <span class="math inline">\(T_b =
+X_{b-1}\)</span> for an IBT block and <span class="math inline">\(T_b =
+b_{b-1}\,p_b\)</span> for a VDT block, and the block of the expenditure
+is <span class="math inline">\(h = \max\{b : T_b &lt; e - F\}\)</span>.
+Then</p>
+<p><span class="math display">\[q = \begin{cases} b_{h-1} + \dfrac{e - F
+- X_{h-1}}{p_h} &amp; \text{block $h$ IBT} \\[2mm]
+\dfrac{e - F}{p_h} &amp; \text{block $h$ VDT.} \end{cases}\]</span></p>
+<p>At the threshold of a VDT block the cost jumps (see the figure
+above). An expenditure that falls in the gap — more than the cost of the
+block below, less than the first unit of the VDT block — stays in the
+block below and is read at its tariff, as in SUBSIM. A household that
+spends nothing on the good buys nothing, and pays no fee.</p>
+<h2 data-number="3.4"
+id="who-the-blocks-count-and-the-subscription-fee"><span
+class="header-section-number">3.4</span> Who the blocks count, and the
+subscription fee</h2>
+<p>The blocks of a schedule count the quantity of the
+<strong>household</strong> (electricity, water: one meter per household)
+or of the <strong>individual</strong> (a quota per person): option
+<code>unit()</code>. The survey records the expenditure per person; with
+blocks per household, the schedule applies to the household’s quantity,
+the household size times the quantity per person, and every impact is
+then brought back per person.</p>
+<p>A <strong>subscription fee</strong> <span
+class="math inline">\(F\)</span> — the price of the meter or of the
+service — is paid on top of the tariffs by the households that buy the
+good (option <code>fee()</code>). It enters the cost of the quantity,
+the change of well-being and the change of the average price (Chapter
+4).</p>
+<h2 data-number="3.5" id="pschset"><span
+class="header-section-number">3.5</span> Declaring a schedule —
+<code>pschset</code></h2>
+<pre><code>pschset name, prices(numlist) [bounds(numlist) subsidies(numlist) structure() cut(#) unit() fee(#)]
+pschset name, from(var_bounds var_prices [var_subsidies]) nblock(#) [structure(varname) …]
+pschset name, by(varname) schedules(value = name [value = name …])
+pschset list | pschset drop name … | pschset clear</code></pre>
+<p><strong>By values.</strong> <code>prices()</code> gives one tariff
+per block, <code>bounds()</code> the upper bounds of all the blocks but
+the last, <code>subsidies()</code> one unit subsidy per block.
+<code>structure()</code> is <code>ibt</code> (the default),
+<code>vdt</code>, <code>mixed</code> with <code>cut(#)</code> the last
+IBT block, or one word per block. <code>unit()</code> is
+<code>household</code> (the default) or <code>individual</code>;
+<code>fee()</code> the subscription fee.</p>
+<pre><code>. pschset flour_i, bounds(36) prices(.09 1.03) subsidies(.94 0) unit(individual)
+. pschset elec_i, bounds(100 300) prices(.10 .20 .30) subsidies(.3 .2 .1)
+. pschset elec_f, bounds(100 300) prices(.15 .30 .45) fee(2)
+. pschset elec_b, bounds(100 200 300) prices(1 2 3 4) structure(ibt ibt vdt ibt)</code></pre>
+<p><strong>SUBSIM’s syntax.</strong> The do-files written for SUBSIM in
+Stata run as they are: <code>nblock(#)</code>, <code>mxb1()</code>
+<code>mxb2()</code> … (bounds), <code>tr1()</code> <code>tr2()</code> …
+(tariffs), <code>sub1()</code> … (subsidies), <code>bun(1|2)</code>
+(household or individual), <code>str(1|2|3)</code> (IBT, VDT, mixed),
+<code>bcut(#)</code>, <code>sfee(#)</code>:</p>
+<pre><code>. pschset elec_s, nblock(3) bun(1) str(1) mxb1(100) mxb2(300) tr1(.10) tr2(.20) tr3(.30) sub1(.3) sub2(.2) sub3(.1)</code></pre>
+<p>declares the same schedule as <code>elec_i</code>. Every value must
+be given: a missing tariff or bound is refused.</p>
+<p><strong>By variables.</strong> A schedule of many blocks is easier to
+prepare as a table: its variables are added at the top of the household
+data, one row per block — the maximum of the block, its tariff, its
+subsidy and its structure (<code>IBT</code> or <code>VDT</code>, or 1
+and 2) — with missing values below. <code>from()</code> names the
+variables, and <code>nblock(#)</code> how many rows to read: only the
+first # rows are read, so the household data can go on below, and there
+is no limit to the number of blocks. With the variables of the example
+data of <code>help pschset</code>,</p>
+<pre><code>. list spending bound tariff subsidy kind in 1/6
+───┬────────────────────────────────────────────
+   │ spending   bound   tariff   subsidy   kind
+───┼────────────────────────────────────────────
+ 1 │       45     100        1       0.4   IBT
+ 2 │       50     200        2       0.3   IBT
+ 3 │       55     300        3       0.2   VDT
+ 4 │       60     400        4       0.1   IBT
+ 5 │       65       .        .         .   .
+ 6 │       70       .        .         .   .
+───┴────────────────────────────────────────────
+. pschset elec_v, from(bound tariff subsidy) nblock(4) structure(kind)</code></pre>
+<p>declares exactly the schedule of
+<code>pschset elec_b, bounds(100 200 300) prices(1 2 3 4) subsidies(.4 .3 .2 .1) structure(ibt ibt vdt ibt)</code>
+(the maximum of the last block is not read).</p>
+<p><strong>By group.</strong> A price can depend on a group of
+households — a region, the sex of the head. Declare the schedule of each
+group, then the schedule by group (in the example data,
+<code>rururb</code> is 1 in urban areas and 2 in rural areas):</p>
+<pre><code>. pschset elec_urban, bounds(100 300) prices(.12 .24 .36)
+. pschset elec_rural, bounds(100 300) prices(.08 .16 .24)
+. pschset elec_g, by(rururb) schedules(1 = elec_urban 2 = elec_rural)</code></pre>
+<p>All the schedules of a group schedule must count the blocks the same
+way (<code>unit()</code>).</p>
+<p><strong>Keeping a schedule.</strong> A schedule lives in the session
+until <code>clear all</code>; declare it in the script that runs the
+simulation. <code>inisave(file)</code> also writes the schedule to a
+file (<code>.psc</code>) as a <code>pschset</code> command — for a
+schedule read from variables, the command that reads them — and
+<code>pschini file</code> opens the box of <code>pschset</code> filled
+with it (it also reads the <code>.psc</code> files written by SUBSIM in
+Stata). <code>pschset list</code> lists the schedules of the
+session.</p>
+<h2 data-number="3.6" id="pschdes"><span
+class="header-section-number">3.6</span> Describing a schedule —
+<code>pschdes</code></h2>
+<p><code>pschdes</code> shows the blocks of one or several schedules,
+and with <code>graph</code> draws their tariffs:</p>
+<pre><code>. pschdes before after
+Price schedule: before
+────────┬────────────────────────────────────
+ Number │    Block        Tariff    Subsidy
+────────┼────────────────────────────────────
+ 1      │ 0 - 100        0.100000   0.000000
+ 2      │ 100 - 300      0.200000   0.000000
+ 3      │ 300 and more   0.300000   0.000000
+────────┴────────────────────────────────────
+  Tariff structure: Increasing block tariff (IBT)
+  Blocks counted per household; subscription fee: 0
+Price schedule: after
+ …
+  Tariff structure: Volume-differentiated tariff (VDT)
+. pschdes before after, graph</code></pre>
+<figure>
+<img src="figures/fig_tariffs.png" style="width:90.0%"
+alt="A reform from an IBT schedule (solid) to a VDT schedule (dashed): pschdes before after, graph. The dotted lines show that the tariff of a VDT block applies from the first unit." />
+<figcaption aria-hidden="true">A reform from an IBT schedule (solid) to
+a VDT schedule (dashed): <code>pschdes before after, graph</code>. The
+dotted lines show that the tariff of a VDT block applies from the first
+unit.</figcaption>
+</figure>
+<p>Three graphs are offered:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Option</th>
+<th>The graph</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>graph</code>, <code>graph(tariff)</code></td>
+<td>the tariffs against the quantity, a step line per schedule</td>
+</tr>
+<tr>
+<td><code>graph(cost)</code></td>
+<td>the cost of a quantity, subscription fee included: a VDT block makes
+the cost jump at its lower bound, a fee at the first unit; the bounds of
+the blocks are dotted</td>
+</tr>
+<tr>
+<td><code>graph(average)</code></td>
+<td>the average price paid, the cost over the quantity — the price to
+which the quantities respond in SUBSIM (<a class="secref" href="#quantities">§4.4</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>The schedules are drawn in one graph, to compare them, or with
+<code>separate</code> one panel each, on the same scales, gathered in
+one figure (the figure of <a class="secref" href="#tariff-structures-ibt-vdt-mixed-by-block">§3.2</a>). The graph is a graph of the session: it
+opens in the graph editor, and takes the options of <code>twoway</code>
+(titles, axes, legend, <code>scheme()</code>, one pattern or colour per
+schedule with <code>lpattern(solid,dash)</code> …).
+<code>sgra(file)</code> saves it as an <code>.aurg</code> file and
+<code>egra(file)</code> as a picture.</p>
+<h1 data-number="4" id="direct-effect"><span
+class="header-section-number">4</span> The direct effect: theory and
+AURA’s rules</h1>
+<p>This chapter gives the formulas SUBSIM applies to each household and
+each item. They follow Araar and Verme (2012, 2016); for the users of
+SUBSIM in Stata, Chapter 9 sums up the rules behind the results.</p>
+<h2 data-number="4.1" id="notation"><span
+class="header-section-number">4.1</span> Notation</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(h\)</span></td>
+<td>a household; <span class="math inline">\(n_h\)</span> its size,
+<span class="math inline">\(\omega_h\)</span> its sampling weight</td>
+</tr>
+<tr>
+<td><span class="math inline">\(y_h\)</span></td>
+<td>its total expenditure per person (the living standard)</td>
+</tr>
+<tr>
+<td><span class="math inline">\(z\)</span></td>
+<td>the poverty line, per person</td>
+</tr>
+<tr>
+<td><span class="math inline">\(k = 1,\dots,K\)</span></td>
+<td>the items</td>
+</tr>
+<tr>
+<td><span class="math inline">\(e_{hk}\)</span></td>
+<td>the expenditure per person of household <span
+class="math inline">\(h\)</span> on item <span
+class="math inline">\(k\)</span> (subscription fee included)</td>
+</tr>
+<tr>
+<td><span class="math inline">\(C^0_k(q),\ C^1_k(q)\)</span></td>
+<td>the cost of a quantity <span class="math inline">\(q\)</span> before
+and after the reform (<a class="secref" href="#tariff-structures-ibt-vdt-mixed-by-block">§3.2</a>), fees <span
+class="math inline">\(F^0_k\)</span>, <span
+class="math inline">\(F^1_k\)</span> included</td>
+</tr>
+<tr>
+<td><span class="math inline">\(q^0_{hk}\)</span></td>
+<td>the quantity bought before the reform (<a class="secref" href="#from-expenditure-to-quantity">§3.3</a>)</td>
+</tr>
+<tr>
+<td><span class="math inline">\(p^0_j,\ p^1_j,\ s_j\)</span></td>
+<td>the initial and final tariffs and the initial unit subsidy of a
+segment <span class="math inline">\(j\)</span> (<a class="secref" href="#the-reform-on-the-joint-structure">§4.2</a>)</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\varepsilon_k\)</span></td>
+<td>the own-price elasticity of item <span
+class="math inline">\(k\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Every statistic weights household <span
+class="math inline">\(h\)</span> by <span class="math inline">\(\omega_h
+n_h\)</span>: it counts persons. The impacts are per person; when the
+blocks of a schedule count the household’s quantity, the schedule
+applies to <span class="math inline">\(n_h q\)</span> and the impact is
+divided by <span class="math inline">\(n_h\)</span>. To lighten the
+notation, the subscripts <span class="math inline">\(h\)</span> and
+<span class="math inline">\(k\)</span> are dropped when there is no
+ambiguity.</p>
+<h2 data-number="4.2" id="the-reform-on-the-joint-structure"><span
+class="header-section-number">4.2</span> The reform on the joint
+structure</h2>
+<p>The initial and final schedules may cut the quantity into different
+blocks. SUBSIM reads a reform on their <strong>joint structure</strong>:
+the union of the two lists of bounds. Each segment <span
+class="math inline">\(j\)</span> of it lies within one initial block and
+one final block, and carries their tariffs <span
+class="math inline">\(p^0_j\)</span> and <span
+class="math inline">\(p^1_j\)</span>, the initial subsidy <span
+class="math inline">\(s_j\)</span> and the structures (IBT or VDT) of
+the two blocks.</p>
+<p>The household’s expenditure, net of the fee, is spent in one segment
+— its <strong>class</strong> <span class="math inline">\(c\)</span> — by
+the rule of the initial schedule (<a class="secref" href="#from-expenditure-to-quantity">§3.3</a>). The class fixes the price of
+every unit. When the class lies in a VDT block, all the units take the
+price of the class; when it lies in an IBT block, each segment keeps its
+own price, except the segments up to the last VDT block below the class,
+which take that block’s price. The same reading, with the final
+structures, gives the final prices. With <span
+class="math inline">\(q_j\)</span> the initial quantity in segment <span
+class="math inline">\(j\)</span> — the whole width of the segment below
+the class, what is left of the quantity in the class — and <span
+class="math inline">\(\Delta p_j\)</span> the change of the price paid
+for its units,</p>
+<p><span class="math display">\[C^1(q^0) - C^0(q^0) \;=\; (F^1 - F^0) +
+\sum_j q_j\, \Delta p_j .\]</span></p>
+<p><strong>Example.</strong> A reform moves electricity from an IBT
+schedule to a VDT schedule (Araar and Verme’s guide, Annex 1):</p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Initial tariff (IBT)</th>
+<th>Final tariff (VDT)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 – 100</td>
+<td>0.10</td>
+<td>0.10</td>
+</tr>
+<tr>
+<td>100 – 300</td>
+<td>0.20</td>
+<td>0.30</td>
+</tr>
+<tr>
+<td>300 and more</td>
+<td>0.30</td>
+<td>0.40</td>
+</tr>
+</tbody>
+</table>
+<p>A household that consumes 250 units paid <span
+class="math inline">\(100 \times 0.10 + 150 \times 0.20 = 40\)</span>;
+it now pays <span class="math inline">\(250 \times 0.30 = 75\)</span>:
+its units of the first block are <span
+class="math inline">\(0.20\)</span> dearer and those of the second <span
+class="math inline">\(0.10\)</span> dearer, <span
+class="math inline">\(100 \times 0.20 + 150 \times 0.10 = 35\)</span>.
+At 350 units: <span class="math inline">\(65\)</span> before, <span
+class="math inline">\(350 \times 0.40 = 140\)</span> after, the three
+segments <span class="math inline">\(0.30\)</span>, <span
+class="math inline">\(0.20\)</span> and <span
+class="math inline">\(0.10\)</span> dearer.</p>
+<h2 data-number="4.3" id="welfare"><span
+class="header-section-number">4.3</span> The change of well-being</h2>
+<p><strong>The marginal approach.</strong> The money-metric change of
+well-being of a household is the change of the cost of its initial
+quantity, with a minus sign:</p>
+<p><span class="math display">\[\Delta w \;=\; -\big[C^1(q^0) -
+C^0(q^0)\big] \;=\; -(F^1 - F^0) - \sum_j q_j\, \Delta p_j
+.\]</span></p>
+<p>For a linear price, <span class="math inline">\(\Delta w =
+-q^0\,\Delta p = -e\, dp\)</span> with <span class="math inline">\(dp =
+\Delta p / p^0\)</span> the relative change of the price: the loss is
+the expenditure on the item times the relative rise of its price (Coady
+et al. 2006). It is a first-order approximation: for a small change of
+price, the household’s re-allocation of its budget among goods does not
+change its well-being to the first order (the envelope theorem),
+whatever its behavioural response. The fee is paid by the households
+that buy the good: a household that buys nothing loses nothing. For
+large price rises the marginal approach overstates the loss, because the
+household substitutes away from the dearer good; <a class="secref" href="#measures">§4.7</a> gives the measures
+that take it into account.</p>
+<p><strong>The interaction of the price and quantity changes.</strong>
+With <code>appr(2)</code>, SUBSIM adds the triangle under the demand
+curve:</p>
+<p><span class="math display">\[\Delta w \;=\; -\big[C^1(q^0) -
+C^0(q^0)\big] \;-\; \tfrac12\, \Delta q\, \Delta \bar p ,\]</span></p>
+<p>with <span class="math inline">\(\Delta q\)</span> the change of
+quantity of <a class="secref" href="#quantities">§4.4</a> and <span class="math inline">\(\Delta\bar p\)</span>
+the change of the average price paid for the initial quantity. It is the
+second-order Taylor approximation of the consumer surplus with the
+item’s own elasticity (<a class="secref" href="#measures">§4.7</a>); <code>appr(2)</code> is the same as
+<code>meas(2)</code>.</p>
+<p><strong>Cobb-Douglas preferences.</strong> With <code>wappr(2)</code>
+(the same as <code>meas(3) model(1)</code>), the change of well-being is
+the equivalent variation of a household with Cobb-Douglas preferences,
+calibrated on its budget shares:</p>
+<p><span class="math display">\[\Delta w \;=\; (y - F^1)\left(\frac{\bar
+p^0}{\bar p^1}\right)^{s} - (y - F^0),
+\qquad s = \frac{e - F^0}{y - F^0},\]</span></p>
+<p>where <span class="math inline">\(\bar p^0\)</span> is the average
+tariff the household paid and <span class="math inline">\(\bar
+p^1\)</span> the average price at which the same expenditure buys at the
+final tariffs: <span class="math inline">\(\bar p^0 / \bar p^1 =
+q^{1*}/q^0\)</span>, with <span class="math inline">\(q^{1*}\)</span>
+the quantity that <span class="math inline">\(e - F^0\)</span> buys
+under the final schedule (<a class="secref" href="#from-expenditure-to-quantity">§3.3</a>). For several items together, the price
+changes are combined in one price index (<a class="secref" href="#measures">§4.7</a>) — the total is not the
+sum of the items’ columns.</p>
+<h2 data-number="4.4" id="quantities"><span
+class="header-section-number">4.4</span> The change of quantities</h2>
+<p>The quantity bought changes with the price, through the own-price
+elasticity of the item:</p>
+<p><span class="math display">\[\Delta q \;=\; \varepsilon\, q^0\, d\bar
+p, \qquad
+d\bar p \;=\; \frac{C^1(q^0) - C^0(q^0)}{C^0(q^0)}, \qquad \Delta q \ge
+-q^0 .\]</span></p>
+<p><span class="math inline">\(d\bar p\)</span> is the change of the
+<strong>average price</strong> the household paid for its initial
+quantity, subscription fees included: the price per unit of what it
+bought, as if the seller showed no block structure. Households facing
+block tariffs respond to the average price rather than to the marginal
+tariff (Ito 2014). For a linear price, <span class="math inline">\(d\bar
+p = dp\)</span> and <span class="math inline">\(\Delta q = \varepsilon\,
+q^0\, dp\)</span>.</p>
+<p><img src="figures/fig_average.png" style="width:85.0%"
+alt="The average price paid under the two schedules of the example of <a class="secref" href="#the-reform-on-the-joint-structure">§4.2</a>: pschdes before after, graph(average). Under the IBT schedule it rises smoothly with the quantity; under the VDT schedule it jumps at each bound. A household that consumes 250 units sees its average price rise from 0.16 to 0.30." />
+The quantity never falls below zero: a quantity that would become
+negative is set to zero — but a zero in the tables of quantities is a
+sign that the elasticity is too large for the price change (<a class="secref" href="#elasticity">§4.5</a>).</p>
+<p>The units given up come off the top blocks first, and the units
+bought in addition go to the household’s block and the ones above: the
+units of a block schedule are consumed from the first block up. This
+matters for the revenue (<a class="secref" href="#revenue">§4.6</a>).</p>
+<p>The quantity always follows the elasticity given, whatever the
+measure of well-being. The elasticity enters neither the marginal change
+of well-being nor its Cobb-Douglas form: it moves the quantities and the
+revenue.</p>
+<h2 data-number="4.5" id="elasticity"><span
+class="header-section-number">4.5</span> Choosing the elasticity</h2>
+<p>The elasticity is the main assumption of a simulation, and a hard one
+to fix:</p>
+<ul>
+<li>When a single subsidized price applies to everyone, a cross-section
+survey shows no variation of price: the elasticity at the subsidized
+price cannot be estimated from it.</li>
+<li>The elasticities found in the literature are usually estimated at
+market prices. The elasticity at a subsidized price — far below the
+market price — can be very different, usually smaller: when a good is
+very cheap and much of it is bought, a small rise of its price changes
+the quantity little.</li>
+<li>The formula of <a class="secref" href="#quantities">§4.4</a> is a local one. When the subsidy is removed, the
+price may rise several fold; <span class="math inline">\(\varepsilon\,
+d\bar p\)</span> can then reach −1 and the quantity zero.</li>
+</ul>
+<p>With a linear demand curve, the elasticity at the initial price
+follows from the elasticity at the final price <span
+class="math inline">\(\varepsilon_f\)</span> and the relative change of
+the price <span class="math inline">\(dp\)</span>:</p>
+<p><span class="math display">\[\varepsilon_i \;=\;
+\frac{\varepsilon_f}{1 + dp\,(1 - \varepsilon_f)} .\]</span></p>
+<p>When the price triples (<span class="math inline">\(dp = 2\)</span>)
+and the elasticity at the market price is <span
+class="math inline">\(-0.3\)</span>, the elasticity to use is <span
+class="math inline">\(-0.3 / 3.6 \approx -0.08\)</span>. The most
+sensible course is often to run the simulation with several elasticities
+— from zero to the elasticity at the market price — and compare: with a
+table of items, each scenario has its own elasticities
+(<code>elas1()</code>, <code>elas2()</code>, …), and graph 6 draws the
+revenue against the elasticity.</p>
+<h2 data-number="4.6" id="revenue"><span
+class="header-section-number">4.6</span> Government revenue</h2>
+<p>The impact on government revenue is the fall of the <strong>subsidy
+bill</strong>. The bill before the reform is the subsidy on the initial
+units, <span class="math inline">\(S^0 = \sum_j q_j\, s_j\)</span>.
+After the reform the household buys <span class="math inline">\(q^1 =
+q^0 + \Delta q\)</span>, the units consumed from the first block up,
+<span class="math inline">\(q^1_j\)</span> in segment <span
+class="math inline">\(j\)</span>. The cost of a unit to the producer
+does not change — the reform passes entirely to the consumer price — so
+a unit’s subsidy after the reform is its cost, its initial price plus
+its initial subsidy, less its final price:</p>
+<p><span class="math display">\[s^1_j = p^0_j + s_j - p^1_j, \qquad S^1
+= \sum_j q^1_j\, s^1_j, \qquad \Delta R = S^0 - S^1 .\]</span></p>
+<p>A unit’s final subsidy can be negative: the unit is then taxed. When
+no subsidy is given for an item, its cost is taken as zero, and the
+revenue is the change of the producers’ sales, <span
+class="math inline">\(\Delta R = p^1 q^1 - p^0 q^0\)</span>.</p>
+<p>For sugar (Chapter 2), the subsidy of a kilogram falls from 1.068 to
+<span class="math inline">\(0.25 + 1.068 - 0.5704 = 0.7476\)</span>, and
+the households buy 64% less (<span class="math inline">\(-0.5 \times
+128\%\)</span>): the bill falls by <span class="math inline">\(1 - 0.36
+\times 0.7476 / 1.068 = 75\%\)</span>, from 51.6 to 13.0 million.</p>
+<h2 data-number="4.7" id="measures"><span
+class="header-section-number">4.7</span> The welfare measures</h2>
+<p>Beyond the marginal approach, SUBSIM offers the measures of Araar and
+Verme (2016), with the option <code>meas()</code>. For item <span
+class="math inline">\(k\)</span>, per person, let <span
+class="math inline">\(e_k\)</span> be the expenditure (fees included),
+<span class="math inline">\(w_k = e_k / y\)</span> its share in total
+expenditure, <span class="math inline">\(dp_k\)</span> the change of the
+average price paid for its initial quantity (<a class="secref" href="#quantities">§4.4</a>) and <span
+class="math inline">\(\ell_k = C^1_k(q^0_k) - C^0_k(q^0_k)\)</span> the
+marginal loss.</p>
+<p><strong>First order</strong> (<code>meas(1)</code>, the default;
+Laspeyres):</p>
+<p><span class="math display">\[\Delta w_k = -\ell_k .\]</span></p>
+<p><strong>Second-order Taylor approximation</strong>
+(<code>meas(2)</code>), with <code>sotm(1)</code> the consumer surplus,
+<code>sotm(2)</code> the equivalent variation, <code>sotm(3)</code> the
+compensating variation:</p>
+<p><span class="math display">\[\Delta w_k \;=\; -\ell_k - \tfrac12\,
+e_k \sum_j E_{kj}\, dp_k\, dp_j ,\qquad
+E_{kj} = \begin{cases} \varepsilon_{kj} &amp; \text{consumer surplus} \\
+\varepsilon_{kj} - w_j\,\eta_k &amp; \text{equivalent variation} \\
+\varepsilon_{kj} + w_j\,\eta_k &amp; \text{compensating variation,}
+\end{cases}\]</span></p>
+<p>where <span class="math inline">\(\varepsilon_{kj}\)</span> are the
+uncompensated price elasticities (the matrix of <code>matpel()</code>)
+and <span class="math inline">\(\eta_k\)</span> the income elasticities
+(the vector of <code>matiel()</code>). Without a matrix, the consumer
+surplus uses the items’ own elasticities, <span
+class="math inline">\(E_{kk} = \varepsilon_k\)</span>, the response
+<span class="math inline">\(\varepsilon_k\, dp_k\)</span> taken at −1 at
+most (the quantity does not fall below zero) — the triangle of
+<code>appr(2)</code>. The equivalent and compensating variations need
+both matrices.</p>
+<p><strong>Exact equivalent and compensating variations</strong>
+(<code>meas(3)</code>, <code>meas(4)</code>), for preferences calibrated
+on the budget shares — Cobb-Douglas (<code>model(1)</code>) or CES
+(<code>model(2)</code>, with <code>subs(σ)</code> the elasticity of
+substitution, 0.6 by default). With <span class="math inline">\(r_k =
+\bar p^1_k / \bar p^0_k\)</span> the ratio of the average prices at
+which the same spending buys (block schedules included), <span
+class="math inline">\(s_k\)</span> the share of the tariffs of item
+<span class="math inline">\(k\)</span> in the income net of the initial
+fees, <span class="math inline">\(Y = y - \sum_k F^0_k\)</span>, and the
+price index</p>
+<p><span class="math display">\[P = \prod_k r_k^{\,s_k}
+\quad\text{(Cobb-Douglas)},\qquad
+P = \Big(\sum_k s_k\, r_k^{\,1-\sigma} + 1 - \sum_k
+s_k\Big)^{\frac{1}{1-\sigma}} \quad\text{(CES)},\]</span></p>
+<p><span class="math display">\[EV = \frac{Y - \sum_k \Delta F_k}{P} -
+Y, \qquad CV = Y\,(1 - P) - \sum_k \Delta F_k .\]</span></p>
+<p>With <span class="math inline">\(\sigma = 0\)</span> (no
+substitution) the compensating variation is the first order; as <span
+class="math inline">\(\sigma \to 1\)</span> the CES tends to
+Cobb-Douglas.</p>
+<p><strong>One item, several items.</strong> An item alone has its own
+terms. The items together — the total column, the direct effect, the
+indirect effect — have the double sum of Taylor’s approximation, or the
+price index of all of them: the total is <strong>not</strong> the sum of
+the items’ columns. The consumption aggregates of the indirect effects
+(Chapter 5) have their own elasticity only and, in the equivalent and
+compensating variations of Taylor’s approximation, an income elasticity
+of 1.</p>
+<figure>
+<img src="figures/fig_measures.png" style="width:90.0%"
+alt="The welfare change of a price rise by measure, for a good that takes 10% of total expenditure. For small rises the measures agree; for large ones the first order overstates the loss, because it ignores the household’s substitution away from the dearer good." />
+<figcaption aria-hidden="true">The welfare change of a price rise by
+measure, for a good that takes 10% of total expenditure. For small rises
+the measures agree; for large ones the first order overstates the loss,
+because it ignores the household’s substitution away from the dearer
+good.</figcaption>
+</figure>
+<p>The measures matter when the price changes are large. On the three
+items of the example data (<a class="secref" href="#a-table-of-items-and-two-scenarios">§8.3</a>) — whose prices rise several fold: the
+price of flour for bread from 0.037 to 0.3136, +748% — the total impact
+on well-being per person is:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Measure</th>
+<th>Option</th>
+<th>Impact per person</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First order (Laspeyres)</td>
+<td><code>meas(1)</code></td>
+<td>−23.92</td>
+</tr>
+<tr>
+<td>Taylor, consumer surplus</td>
+<td><code>meas(2)</code></td>
+<td>−13.66</td>
+</tr>
+<tr>
+<td>Equivalent variation, Cobb-Douglas</td>
+<td><code>meas(3)</code></td>
+<td>−8.06</td>
+</tr>
+<tr>
+<td>Compensating variation, Cobb-Douglas</td>
+<td><code>meas(4)</code></td>
+<td>−8.10</td>
+</tr>
+<tr>
+<td>Compensating variation, CES, <span class="math inline">\(\sigma =
+0.5\)</span></td>
+<td><code>meas(4) model(2) subs(.5)</code></td>
+<td>−12.54</td>
+</tr>
+</tbody>
+</table>
+<p>The first order is an upper bound of the loss; it is accurate for
+moderate price changes and remains the reference of most studies. For
+very large rises, a measure that takes substitution into account is more
+realistic.</p>
+<h2 data-number="4.8" id="poverty"><span
+class="header-section-number">4.8</span> Poverty, inequality and their
+standard errors</h2>
+<p>The living standard of a person is the expenditure per person of the
+household, <span class="math inline">\(x_h = y_h\)</span> — or, with
+<code>aehs()</code>, the expenditure per adult equivalent <span
+class="math inline">\(x_h = y_h\, n_h / a_h\)</span> with <span
+class="math inline">\(a_h\)</span> the size in adult equivalents, the
+impacts being scaled the same way. After the reform, <span
+class="math inline">\(x&#39;_h = x_h + \Delta w_h\)</span>, the change
+of well-being of all the items. With the poverty line <span
+class="math inline">\(z\)</span>, the Foster-Greer-Thorbecke indices
+are</p>
+<p><span class="math display">\[P_\alpha \;=\; \frac{\sum_h \omega_h n_h
+\left(1 - \dfrac{x_h}{z}\right)^{\alpha} \mathbb 1[x_h &lt; z]}
+{\sum_h \omega_h n_h},\]</span></p>
+<p><span class="math inline">\(\alpha = 0\)</span> the poverty headcount
+(table 4.7), <span class="math inline">\(\alpha = 1\)</span> the poverty
+gap (table 4.8); table 4.9 is the Gini index. Each table gives the level
+before the reform, after the change of each item alone, and after the
+reform, with the change, its standard error and its p-value. The
+standard errors take the survey design into account (strata, primary
+sampling units, weights) by linearization; the levels before and after
+are measured on the same households, so the variance of the change
+accounts for their covariance. The method is the one of AURA’s
+distributive analysis package (the DAAP manual, Chapter 2). With
+<code>se</code>, the tables of groups also give the standard errors of
+their statistics, each group being a subpopulation of the design.</p>
+<h2 data-number="4.9" id="transfer"><span
+class="header-section-number">4.9</span> The compensating transfer</h2>
+<p>The <strong>compensating transfer</strong> is the cash transfer <span
+class="math inline">\(T\)</span> that brings the poverty headcount back
+to its level before the reform. It is paid to each person
+(<code>typetr(1)</code>, the default) or to each household
+(<code>typetr(2)</code>), to everyone or to the group that an indicator
+marks (<code>gtarg(var)</code>: <span class="math inline">\(T\)</span>
+times the indicator <span class="math inline">\(g_h\)</span>). With
+<span class="math inline">\(a_h = g_h\)</span> for a transfer per person
+and <span class="math inline">\(a_h = g_h / n_h\)</span> for a transfer
+per household, a person is poor after the reform and the transfer
+when</p>
+<p><span class="math display">\[x&#39;_h + T\, a_h &lt; z .\]</span></p>
+<p>The poor of the group after the reform, new or not, leave poverty in
+the order of their gap <span class="math inline">\((z -
+x&#39;_h)/a_h\)</span>; <span class="math inline">\(T\)</span> is the
+smallest gap that lifts enough persons out of poverty to bring the
+headcount back to its level before the reform. SUBSIM computes it
+exactly. The group stands for a part of the population, not for
+households chosen one by one: all its members receive <span
+class="math inline">\(T\)</span>, poor or not, hit by the reform or not
+— the cost counts them all — and the poor outside it receive nothing.
+The cost of the transfer is <span class="math inline">\(T \sum_h
+\omega_h n_h a_h\)</span>.</p>
+<p><span class="math inline">\(T\)</span> is zero when the reform does
+not raise the headcount, and missing when even lifting all the poor of
+the group out of poverty does not bring the headcount back. The main
+results give the transfer per beneficiary (per person or per household),
+per person of the population, and its cost; graphs 8 to 10 show the
+impacts for any transfer from zero to twice the compensating one.</p>
+<h1 data-number="5" id="indirect-effect"><span
+class="header-section-number">5</span> The indirect effect</h1>
+<p>A reform of the price of an intermediate good — petroleum products,
+electricity, gas — changes the costs of all the sectors that use it, and
+through their prices, the cost of living of the households. These
+<strong>indirect effects</strong> are measured with an
+<strong>input-output table</strong>: the price model gives the change of
+the price of every sector, and the households’ consumption, grouped in
+<strong>aggregates</strong> matched to the sectors, takes these price
+changes.</p>
+<figure>
+<img src="figures/fig_io_flow.png" style="width:100.0%"
+alt="From the shocks to the households: the input-output model spreads the shocks on some sectors to all the sectors; the consumption aggregates take the price changes of their sectors; the households’ well-being, poverty and inequality follow." />
+<figcaption aria-hidden="true">From the shocks to the households: the
+input-output model spreads the shocks on some sectors to all the
+sectors; the consumption aggregates take the price changes of their
+sectors; the households’ well-being, poverty and inequality
+follow.</figcaption>
+</figure>
+<h2 data-number="5.1" id="the-input-output-table"><span
+class="header-section-number">5.1</span> The input-output table</h2>
+<p>The table is a dataset of the Workspace, loaded with <code>use</code>
+beside the household survey: <span class="math inline">\(n\)</span>
+numeric variables, one per sector, and <span class="math inline">\(n +
+1\)</span> rows. Row <span class="math inline">\(i\)</span>, column
+<span class="math inline">\(j\)</span> is the value <span
+class="math inline">\(Z_{ij}\)</span> of the inputs that sector <span
+class="math inline">\(j\)</span> buys from sector <span
+class="math inline">\(i\)</span>; the last row is the value added <span
+class="math inline">\(V_j\)</span> of each sector. The variable labels
+name the sectors. The output of sector <span
+class="math inline">\(j\)</span> is the total of its column, <span
+class="math inline">\(X_j = \sum_i Z_{ij} + V_j\)</span>, and dividing
+each column by it gives the <strong>technical coefficients</strong> and
+the value added per unit of output:</p>
+<p><span class="math display">\[a_{ij} = \frac{Z_{ij}}{X_j}, \qquad v_j
+= \frac{V_j}{X_j}, \qquad \sum_i a_{ij} + v_j = 1 .\]</span></p>
+<p>The table must be in the same currency and for the same year as the
+household survey; the adjustment, when the years differ, is the
+user’s.</p>
+<h2 data-number="5.2" id="the-price-models"><span
+class="header-section-number">5.2</span> The price models</h2>
+<p>A <strong>shock</strong> is an exogenous change <span
+class="math inline">\(s_i\)</span> of the producer price of a sector
+<span class="math inline">\(i\)</span> (in %, in the command); <span
+class="math inline">\(S\)</span> is the set of the shocked sectors,
+<span class="math inline">\(A = (a_{ij})\)</span> the matrix of the
+coefficients and <span class="math inline">\(s\)</span> the vector of
+the shocks. In the cost-push model, each sector passes the change of its
+input costs on to its price: <span class="math inline">\(dp_j = \sum_i
+a_{ij}\, dp_i\)</span>.</p>
+<p><strong>Cost push, exogenous shocks</strong>
+(<code>iomodel(1) tyshock(1)</code>, the default). The shocked sectors
+keep the shocked price — a country that imports the good does not set
+its world price. With <span class="math inline">\(\bar A\)</span> the
+matrix <span class="math inline">\(A\)</span> without the rows and
+columns of the shocked sectors and <span class="math inline">\(d^0_j =
+\sum_{i \in S} a_{ij} s_i\)</span> the first-round effect on the other
+sectors,</p>
+<p><span class="math display">\[dp = (I - \bar A&#39;)^{-1} d^0
+\quad\text{(long term, \texttt{adshock(2)})},\qquad
+dp = \sum_{t=0}^{k-1} (\bar A&#39;)^{t}\, d^0 \quad\text{(short term,
+$k$ periods: \texttt{nadp($k$)})}.\]</span></p>
+<p><strong>Cost push, endogenous shocks</strong>
+(<code>tyshock(2)</code>). The shocked sectors also pass on the change
+of their own input costs:</p>
+<p><span class="math display">\[dp = (I - A&#39;)^{-1} s
+\quad\text{(long term)},\qquad
+dp = \sum_{t=0}^{k} (A&#39;)^{t}\, s \quad\text{(short term, $k$
+periods)}.\]</span></p>
+<p>The short term counts the first rounds of the adjustment (<span
+class="math inline">\(k = 1\)</span> by default), the long term all of
+them. For a rise of prices, the four options are ordered: the exogenous
+short term gives the smallest effects, the endogenous long term the
+largest; a lower and an upper bound are worth reporting.</p>
+<p><strong>Marginal profit push</strong> (<code>iomodel(2)</code>).
+Markets adjust fully and the producers keep their margin per unit: the
+shocked sectors’ outputs cost <span class="math inline">\(1 +
+s_i\)</span> more as inputs, the value added per unit of output does not
+change,</p>
+<p><span class="math display">\[p = (I - A&#39;\,T)^{-1} v, \qquad T = I
++ \operatorname{diag}(s), \qquad dp = p - 1\]</span></p>
+<p>(without a shock, every price is 1).</p>
+<p>The command <code>pciom</code> computes these price changes alone
+(<a class="secref" href="#pciom">§5.5</a>); <code>subsim</code> uses them for the households.</p>
+<h2 data-number="5.3" id="from-sectors-to-consumption-aggregates"><span
+class="header-section-number">5.3</span> From sectors to consumption
+aggregates</h2>
+<p>A household survey records hundreds of goods; an input-output table
+has tens of sectors. The user prepares in advance <strong>consumption
+aggregates</strong> — the expenditure per person on the goods of one
+sector or of a few — and the sectors each aggregate matches. A
+consumption aggregate <span class="math inline">\(g\)</span> matched to
+the sectors <span class="math inline">\(J_g\)</span> takes the mean of
+their price changes, weighted by their output:</p>
+<p><span class="math display">\[dp_g \;=\; \frac{\sum_{j \in J_g} X_j\,
+dp_j}{\sum_{j \in J_g} X_j} .\]</span></p>
+<p>If food matches sectors 8 and 10 with outputs 100 and 400, and their
+prices rise by 10% and 20%, the price of food rises by <span
+class="math inline">\(\tfrac{100}{500}\,10\% + \tfrac{400}{500}\,20\% =
+18\%\)</span>. Each aggregate is then an item with a linear price going
+from 1 to <span class="math inline">\(1 + dp_g\)</span>, and its own
+elasticity (<code>ielas()</code>, 0 by default): its change of
+well-being follows the measure of <a class="secref" href="#measures">§4.7</a>, its quantity <a class="secref" href="#quantities">§4.4</a>.</p>
+<p>The table of aggregates follows the convention of the tables of
+items: its variables are at the top of the household data, one row per
+aggregate — the expenditure variable (<code>iitnames()</code>), the
+matching sectors (<code>match()</code>, as <code>36 37 38</code> or
+<code>36/38</code>), the name (<code>isnames()</code>) and the
+elasticity (<code>ielas()</code>) — and <code>initems(#)</code> says how
+many rows to read.</p>
+<h2 data-number="5.4" id="the-shocks-and-the-direct-effect"><span
+class="header-section-number">5.4</span> The shocks and the direct
+effect</h2>
+<p>The direct effect of the shocked goods on the consumers is the items’
+(Chapter 4): electricity bought by a household is an item, with its own
+prices. To avoid counting it twice, the shocks are <strong>taken off the
+shocked sectors</strong> by default: an aggregate matched to a shocked
+sector keeps only what the model adds to the shock — nothing with
+exogenous shocks, the feedback of its own costs with endogenous ones.
+With <code>allind</code>, the shocks stay in the shocked sectors’
+prices: for a simulation of the indirect effects without items, where
+the aggregates carry the whole effect (with the profit push, a shocked
+sector’s price then also takes the shock, <span class="math inline">\((1
++ s_i)(1 + dp_i) - 1\)</span>).</p>
+<p>To separate the direct and the indirect effects of one good, run
+SUBSIM with the good as an item and its sector shocked, exogenous: the
+items give the direct effect, the aggregates the indirect one. When the
+good is only a part of its sector — gasoline, 20% of the petroleum
+sector — the shock on the sector can be scaled accordingly (a rise of
+10% of gasoline, a shock of 2% on the sector).</p>
+<h2 data-number="5.5" id="pciom"><span
+class="header-section-number">5.5</span> The command
+<code>pciom</code></h2>
+<pre><code>pciom , iomatrix(name) shock(sector:change …) [iomodel(1|2) tyshock(1|2) adshock(1|2) nadp(#)
+        allmodels labsec(varname) graph top(#) sgra(file) egra(file)]</code></pre>
+<p><code>pciom</code> shows the change of the price of every sector.
+With Egypt’s table of 2015, the producer prices of petroleum products
+and gas (sectors 36 to 39) 10% lower, endogenous shocks and the long
+term:</p>
+<pre><code>. pciom , iomatrix(IOM_EGY2015) shock(36:-10, 37:-10, 38:-10, 39:-10) tyshock(2) adshock(2)
+Price changes of the sectors (in %)
+──────────────────────────────────────────────────────────────────────┬──────────────────
+ Sector                                                               │ Price change (%)
+──────────────────────────────────────────────────────────────────────┼──────────────────
+ 1. Growing of cereals (except rice), leguminous crops and oil seeds  │          -0.1275
+ …
+ 7. Support activities to agriculture and post-harvest crop activities│          -1.2108
+ 8. Fishing and aquaculture                                           │          -0.5174
+ …
+ 26. Manufacture of other non-metallic mineral products               │          -1.3502
+ …
+ 33. Manufacture of other transport equipment                         │          -1.7071
+ …
+ 36. Repair and installation of machinery and equipment               │         -10.0001
+ 37. Electric power generation                                        │         -10.0683
+ 38. Services of distribution and transfer of electricity             │         -10.2848
+ 39. Gas distribution services                                        │         -10.9802
+ 40. Water collection, treatment and supply                           │          -1.2691
+ …</code></pre>
+<p>With endogenous shocks, the shocked sectors’ prices fall by more than
+the shock, as their own costs fall too. <code>allmodels</code> shows the
+five models side by side; <code>labsec()</code> names the sectors by a
+variable of the data in memory. The shocks are written
+<code>sector:change</code>, separated by commas or spaces; the forms of
+SUBSIM and WELCOM are read too
+(<code>secp1(#) pr1(#) … nshocks(#)</code>,
+<code>shock1(secp(#) pr(#))</code> …).</p>
+<p><code>graph</code> draws the sectors whose price changes most —
+<code>top(#)</code> of them, 20 by default — in horizontal bars, one per
+model with <code>allmodels</code>. The shocked sectors are left out:
+their change is the shock, and it would hide the others.
+<code>sgra()</code> saves the graph as an <code>.aurg</code> file and
+<code>egra()</code> as a picture.</p>
+<figure>
+<img src="figures/fig_pciom.png" style="width:90.0%"
+alt="pciom , iomatrix(IOM_EGY2015) shock(36:-10, 37:-10, 38:-10, 39:-10) tyshock(2) adshock(2) graph top(15): the fifteen sectors whose producer price falls most when the prices of petroleum products and gas fall by 10%." />
+<figcaption
+aria-hidden="true"><code>pciom , iomatrix(IOM_EGY2015) shock(36:-10, 37:-10, 38:-10, 39:-10) tyshock(2) adshock(2) graph top(15)</code>:
+the fifteen sectors whose producer price falls most when the prices of
+petroleum products and gas fall by 10%.</figcaption>
+</figure>
+<p>The box of <code>pciom</code> (<strong>Statistics ▸ SUBSIM ▸
+Input-output models and sectoral price changes</strong>, <a class="secref" href="#pciom-1">§7.6</a>) writes
+the command.</p>
+<h2 data-number="5.6" id="direct-and-indirect-effects-together"><span
+class="header-section-number">5.6</span> Direct and indirect effects
+together</h2>
+<p><code>subsim</code> computes the direct effect alone (items, no
+<code>iomatrix()</code>), the indirect effect alone (an input-output
+table, no item) or both in one simulation:</p>
+<pre><code>. subsim pcexp, hsize(hhsize) pline(pline) hgroup(Urbrur) ///
+      item1(Electricity and gas, var(pc_D0450) initial(1) subsidy(.3) final(1.2)) ///
+      iomatrix(IOM_EGY2015) ioshock1(36:20, 37:20, 38:20, 39:20) ///
+      iitnames(item) initems(39) isnames(label) match(code) tjobs(1B 42 47) summary</code></pre>
+<p>Table 1B lists the price changes of the aggregates and the sectors
+each matches; the tables of well-being have the columns of the items,
+the direct effect, the indirect effect and the total:</p>
+<pre><code>Table 4.2: The impact on the per capita well-being (in currency) : Scenario 1
+────────┬─────────────────────────────────────┬─────────────────┬─────────
+        │                Direct               │     Indirect    │
+ Groups │ Electricity and gas   Direct effect │ Indirect effect │  Total
+────────┼─────────────────────────────────────┼─────────────────┼─────────
+ Urban  │             -119.71         -119.71 │          -34.29 │ -154.01
+ Rural  │              -92.69          -92.69 │          -23.84 │ -116.53
+────────┼─────────────────────────────────────┼─────────────────┼─────────
+ Total  │             -104.07         -104.07 │          -28.25 │ -132.32
+────────┴─────────────────────────────────────┴─────────────────┴─────────</code></pre>
+<p>The direct effect is the one of the items together, the indirect
+effect the one of the aggregates together, the total the one of all of
+them — with the first-order measure, their sum. The main results show
+the levels before the reform, after the direct effect, after the
+indirect effect and after the reform, each with its compensating
+transfer, and graph 9 draws the three poverty headcounts:</p>
+<figure>
+<img src="figures/fig_egy_9.png" style="width:90.0%"
+alt="Graph 9 with the direct and indirect effects (Egypt; electricity and gas 20% dearer, the producer prices of petroleum and gas 20% higher): the poverty headcount against the transfer per person, for the direct effect, the indirect effect and the reform, with the three compensating transfers." />
+<figcaption aria-hidden="true">Graph 9 with the direct and indirect
+effects (Egypt; electricity and gas 20% dearer, the producer prices of
+petroleum and gas 20% higher): the poverty headcount against the
+transfer per person, for the direct effect, the indirect effect and the
+reform, with the three compensating transfers.</figcaption>
+</figure>
+<figure>
+<img src="figures/fig_egy_aggregates.png" style="width:90.0%"
+alt="The twelve largest price changes of the consumption aggregates in the same simulation (table 1B). The indirect effect reaches goods far from energy — water services, tools, fish — through their costs." />
+<figcaption aria-hidden="true">The twelve largest price changes of the
+consumption aggregates in the same simulation (table 1B). The indirect
+effect reaches goods far from energy — water services, tools, fish —
+through their costs.</figcaption>
+</figure>
+<p>The options <code>direct()</code> and <code>indirect()</code> choose
+the columns of the welfare tables: <code>detail</code> one per item (or
+aggregate), <code>total</code> only the effect, <code>both</code>. With
+the indirect effects alone, the aggregates take the place of the items
+in the tables that concern them; the tables and graphs of the
+quantities, subsidies and revenue remain the items’ (<a class="secref" href="#subsim-tables">§6.4</a>).</p>
+<h1 data-number="6" id="subsim"><span
+class="header-section-number">6</span> The <code>subsim</code>
+command</h1>
+<pre><code>subsim pcexp, hsize(varname) pline(varname|#) item1(name, item options) [item2(…) …] [options]
+subsim pcexp, hsize(varname) pline(varname|#) itnames(varname) nitems(#) ipsch(varname)
+       fpsch1(varname) [elas1(varname) fpsch2(…) elas2(…) …] [options]
+subsim pcexp, hsize(varname) pline(varname|#) [items] iomatrix(name) ioshock1(sector:change …)
+       [ioshock2(…) …] iitnames(varname) initems(#) match(varname) [options]</code></pre>
+<p><code>pcexp</code> is the total expenditure per person. The survey
+weight is the one declared by <code>svyset</code>. The complete list of
+options is in <code>help subsim</code>; this chapter gives the main
+ones, by theme.</p>
+<h2 data-number="6.1" id="items-given-by-parameters"><span
+class="header-section-number">6.1</span> Items given by parameters</h2>
+<p>Each item is an option <code>item1()</code>, <code>item2()</code>, …
+— as many as needed, numbered from 1:</p>
+<pre><code>item1(name, var(varname) [unit(text) initial(#|schedule) subsidy(#) final(#|schedule) elasticity(#)])</code></pre>
+<p><code>name</code> is the short name shown in the tables (in quotes
+only if it holds a comma or a parenthesis). <code>var()</code> is the
+expenditure per person on the item (required), <code>unit()</code> its
+unit of quantity, <code>initial()</code> and <code>final()</code> its
+initial and final prices — a number or the name of a schedule declared
+by <code>pschset</code> — <code>subsidy()</code> the unit subsidy of a
+linear initial price, and <code>elasticity()</code> its own-price
+elasticity (0 by default). With parameters, a simulation has one
+scenario.</p>
+<h2 data-number="6.2" id="items-given-by-a-table-and-scenarios"><span
+class="header-section-number">6.2</span> Items given by a table, and
+scenarios</h2>
+<p>When the items are many, or for several scenarios, the items are
+given by a <strong>table</strong>: its variables are added at the top of
+the household data, one row per item, missing values below — as in
+SUBSIM’s example data:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Option</th>
+<th>The variable holding, row by row, …</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>itnames()</code></td>
+<td>the name of the expenditure variable of the item (required)</td>
+</tr>
+<tr>
+<td><code>snames()</code></td>
+<td>the short name of the item</td>
+</tr>
+<tr>
+<td><code>unit()</code></td>
+<td>its unit of quantity</td>
+</tr>
+<tr>
+<td><code>ipsch()</code></td>
+<td>the name of its initial schedule, the same for every scenario
+(required)</td>
+</tr>
+<tr>
+<td><code>fpsch1()</code>, <code>fpsch2()</code>, …</td>
+<td>the name of its final schedule in scenario 1, 2, …
+(<code>fpsch1()</code> required)</td>
+</tr>
+<tr>
+<td><code>elas1()</code>, <code>elas2()</code>, …</td>
+<td>its elasticity in scenario 1, 2, …; an empty cell takes the
+elasticity of scenario 1, else 0</td>
+</tr>
+</tbody>
+</table>
+<p><code>nitems(#)</code> — required — says how many rows to read: only
+the first # rows are read, as many items as needed. With a table, the
+prices are names of schedules (a linear price is a schedule of one
+block). <code>scenarios("label" …)</code> names the scenarios (by
+default their numbers) and <code>nscen(#)</code> keeps the first # of
+them. <code>itable(name)</code> reads the table in another dataset of
+the Workspace. The example of <a class="secref" href="#a-table-of-items-and-two-scenarios">§8.3</a> has two scenarios: a cut of 30% of
+the subsidies and their removal.</p>
+<h2 data-number="6.3" id="the-options-of-the-main-tab"><span
+class="header-section-number">6.3</span> The options of the main
+tab</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Option</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hgroup(varname)</code></td>
+<td>the groups of the tables; by default the quintiles of
+<code>pcexp</code>, households weighted by their size</td>
+</tr>
+<tr>
+<td><code>aehs(varname)</code></td>
+<td>the size in adult equivalents: poverty is measured on the
+expenditure per adult equivalent</td>
+</tr>
+<tr>
+<td><code>cname()</code>, <code>ysvy()</code>, <code>ysim()</code>,
+<code>lcur()</code></td>
+<td>the country, the year of the survey and of the simulation, the
+currency (header and workbook)</td>
+</tr>
+<tr>
+<td><code>meas()</code>, <code>sotm()</code>, <code>model()</code>,
+<code>subs()</code>, <code>matpel()</code>, <code>matiel()</code></td>
+<td>the welfare measure (<a class="secref" href="#measures">§4.7</a>); <code>wappr(2)</code> and
+<code>appr(2)</code> are SUBSIM’s forms</td>
+</tr>
+<tr>
+<td><code>typetr(1\|2)</code></td>
+<td>the compensating transfer per person (1) or per household (2)</td>
+</tr>
+<tr>
+<td><code>gtarg(varname)</code></td>
+<td>the transfer goes to the group this indicator marks</td>
+</tr>
+<tr>
+<td><code>gvimp</code></td>
+<td>creates the variables of the impact on well-being per person:
+<code>_imp_wel_&lt;var&gt;</code> for each item,
+<code>_imp_on_well</code> for the reform (<code>_imp_ind_well</code> for
+the indirect effect)</td>
+</tr>
+<tr>
+<td><code>gvqnt</code></td>
+<td>creates the quantities per person before and after the reform,
+<code>_qnt_0_&lt;var&gt;</code> and <code>_qnt_1_&lt;var&gt;</code></td>
+</tr>
+<tr>
+<td><code>inisave(file)</code></td>
+<td>writes the inputs to a file (<a class="secref" href="#saving-and-loading-the-inputs">§6.7</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>With several scenarios, the created variables end in
+<code>_s1</code>, <code>_s2</code>, …</p>
+<h2 data-number="6.4" id="subsim-tables"><span
+class="header-section-number">6.4</span> The tables</h2>
+<p><code>tjobs()</code> lists the tables to produce by their codes
+(<code>tjobs(11 23 42)</code>); without it, all the tables of the case;
+<code>tjobs(off)</code> none. <code>summary</code> adds the main
+results. <code>help subsim_tables</code> lists them; in the box,
+<strong>Select…</strong> shows them in a tree.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Code</th>
+<th>Table</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1A</td>
+<td>The prices of the items: initial price and subsidy, then for each
+scenario the final price, its change and the elasticity (items)</td>
+</tr>
+<tr>
+<td>1B</td>
+<td>The price changes of the consumption aggregates, by scenario, with
+their sectors (indirect effects)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Population and expenditures</td>
+</tr>
+<tr>
+<td>21, 22, 23</td>
+<td>Expenditures on the items: total, per household, per capita</td>
+</tr>
+<tr>
+<td>24, 25</td>
+<td>Quantities consumed: total, per capita (items)</td>
+</tr>
+<tr>
+<td>31, 32</td>
+<td>Structure of the expenditure on the items; its share in total
+expenditure</td>
+</tr>
+<tr>
+<td>33, 34, 35</td>
+<td>Benefits through subsidies: total, per capita, shares (items)</td>
+</tr>
+<tr>
+<td>41, 42, 43</td>
+<td>Impact on well-being: total, per capita, in % of expenditure</td>
+</tr>
+<tr>
+<td>44, 45</td>
+<td>Impact on quantities: total, per capita (items)</td>
+</tr>
+<tr>
+<td>46</td>
+<td>Impact on government revenue (items)</td>
+</tr>
+<tr>
+<td>47, 48</td>
+<td>Poverty headcount and poverty gap: before, after each item alone,
+after the reform; the change, its standard error and p-value</td>
+</tr>
+<tr>
+<td>49</td>
+<td>Gini index, the same way</td>
+</tr>
+</tbody>
+</table>
+<p>Tables 4.1 to 4.9 are given for each scenario. The groups are in rows
+(then the total), the items in columns (then the total). A table of
+groups wider than 100 characters is shown with the items in rows and the
+groups in columns (<code>transpose</code> always,
+<code>notranspose</code> never); the matrices of <code>r()</code> and
+the workbook keep the groups in rows. Other options:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Option</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>taggr(1 2 : name \| …)</code></td>
+<td>adds up the results of some items in one column
+(<code>help subsim_aggr</code>); <code>aggr()</code> is the same</td>
+</tr>
+<tr>
+<td><code>xfil(file)</code></td>
+<td>also writes the tables to an Excel workbook (<code>.xlsx</code>),
+one sheet per table</td>
+</tr>
+<tr>
+<td><code>lan(en\|fr)</code></td>
+<td>the language of the tables: English (the default) or French</td>
+</tr>
+<tr>
+<td><code>se</code></td>
+<td>the standard errors of the statistics of the groups (each group a
+subpopulation of the design)</td>
+</tr>
+<tr>
+<td><code>direct()</code>, <code>indirect()</code></td>
+<td>the welfare columns with the direct and indirect effects (<a class="secref" href="#direct-and-indirect-effects-together">§5.6</a>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The main results</strong> (<code>summary</code>) give, before
+and after the reform: the welfare per capita, the poverty headcount and
+gap, the Gini index; the subsidies, the compensating transfer and the
+total budget (in millions); the subsidy and the transfer per capita, and
+the transfer per beneficiary. The subsidy per capita after the reform is
+the subsidy before less the revenue gain per capita.</p>
+<h2 data-number="6.5" id="subsim-graphs"><span
+class="header-section-number">6.5</span> The graphs</h2>
+<p><code>gjobs()</code> lists the graphs to draw by their numbers
+(<code>gjobs(1 2 4)</code>); without it, or with
+<code>gjobs(all)</code>, all the graphs of the case;
+<code>gjobs(off)</code> none. Graphs 5 to 10 are drawn for each
+scenario. <code>help subsim_graphs</code> lists them. The figures below
+come from the three items of <a class="secref" href="#a-table-of-items-and-two-scenarios">§8.3</a> (flour, flour for bread and semolina,
+a cut of 30% of the subsidies).</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Number</th>
+<th>Graph</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>The share of each item in expenditure (%), by percentile of
+expenditure per capita</td>
+</tr>
+<tr>
+<td>2</td>
+<td>The per capita benefits of the subsidies, by percentile (items with
+a subsidy)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>The Lorenz curve of expenditure and the concentration curves of the
+benefits (or expenditures)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>The change of the poverty headcount when the price of an item rises
+by 0 to 100%</td>
+</tr>
+<tr>
+<td>5</td>
+<td>The change of government revenue when the price of an item rises by
+0 to 100%</td>
+</tr>
+<tr>
+<td>6</td>
+<td>The change of government revenue by the elasticity, from −1 to
+0</td>
+</tr>
+<tr>
+<td>7</td>
+<td>The change of government revenue when the unit subsidies fall by 0
+to 100%</td>
+</tr>
+<tr>
+<td>8</td>
+<td>The impact on well-being per capita, by group, with a transfer of
+<span class="math inline">\(T\)</span></td>
+</tr>
+<tr>
+<td>9</td>
+<td>The poverty headcount with a transfer of <span
+class="math inline">\(T\)</span>, its level before the reform, the
+compensating transfer</td>
+</tr>
+<tr>
+<td>10</td>
+<td>The change of government revenue net of a transfer of <span
+class="math inline">\(T\)</span></td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="figures/fig_ex3_1.png" style="width:85.0%"
+alt="Graph 1: the share of each item in total expenditure, by percentile of expenditure per capita (local linear regressions). Flour for bread weighs more in the budget of the poor." />
+<figcaption aria-hidden="true">Graph 1: the share of each item in total
+expenditure, by percentile of expenditure per capita (local linear
+regressions). Flour for bread weighs more in the budget of the
+poor.</figcaption>
+</figure>
+<figure>
+<img src="figures/fig_ex3_2.png" style="width:85.0%"
+alt="Graph 2: the per capita benefit of the subsidies, by percentile." />
+<figcaption aria-hidden="true">Graph 2: the per capita benefit of the
+subsidies, by percentile.</figcaption>
+</figure>
+<figure>
+<img src="figures/fig_ex3_3.png" style="width:85.0%"
+alt="Graph 3: the Lorenz curve of expenditure per capita and the concentration curves of the benefits. A curve above the Lorenz curve means benefits more equally shared than expenditure; above the diagonal, the poor receive more than their share of the population." />
+<figcaption aria-hidden="true">Graph 3: the Lorenz curve of expenditure
+per capita and the concentration curves of the benefits. A curve above
+the Lorenz curve means benefits more equally shared than expenditure;
+above the diagonal, the poor receive more than their share of the
+population.</figcaption>
+</figure>
+<figure>
+<img src="figures/fig_ex3_4.png" style="width:85.0%"
+alt="Graph 4: the change of the poverty headcount (points) when the price of each item rises by 0 to 100%." />
+<figcaption aria-hidden="true">Graph 4: the change of the poverty
+headcount (points) when the price of each item rises by 0 to
+100%.</figcaption>
+</figure>
+<figure>
+<img src="figures/fig_ex3_5_s1.png" style="width:85.0%"
+alt="Graph 5: the change of government revenue when the price of each item rises by 0 to 100%, with the scenario’s elasticities." />
+<figcaption aria-hidden="true">Graph 5: the change of government revenue
+when the price of each item rises by 0 to 100%, with the scenario’s
+elasticities.</figcaption>
+</figure>
+<figure>
+<img src="figures/fig_ex3_6_s1.png" style="width:85.0%"
+alt="Graph 6: the change of government revenue against the elasticity, from −1 to 0, at the scenario’s prices." />
+<figcaption aria-hidden="true">Graph 6: the change of government revenue
+against the elasticity, from −1 to 0, at the scenario’s
+prices.</figcaption>
+</figure>
+<figure>
+<img src="figures/fig_ex3_9_s1.png" style="width:85.0%"
+alt="Graph 9: the poverty headcount against the transfer per person, its level before the reform, and the compensating transfer — the smallest transfer that brings the headcount back (16.87)." />
+<figcaption aria-hidden="true">Graph 9: the poverty headcount against
+the transfer per person, its level before the reform, and the
+compensating transfer — the smallest transfer that brings the headcount
+back (16.87).</figcaption>
+</figure>
+<p>Graphs 1 and 2 are local linear regressions on the percentiles of
+expenditure per capita, graph 3 the curves of <code>clorenz</code>.
+Graphs 4 to 7 compute the impacts as the tables do, so that at the
+scenario’s prices they give the tables’ figures. Graph 9 is the exact
+staircase of the headcount: a step at each household’s gap. The transfer
+of graphs 8 to 10 goes from 0 to twice the compensating transfer (or to
+the mean gap of the poor to the line when there is none), paid as
+<code>typetr()</code> and <code>gtarg()</code> say.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Option</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gaggr(1 2 : name \| …)</code></td>
+<td>adds up some items in one curve, as <code>taggr()</code> in the
+tables</td>
+</tr>
+<tr>
+<td><code>opgr1(min(#) max(#) options)</code> …</td>
+<td>the range of graph 1 (its horizontal axis) and any option of
+<code>twoway</code>: titles, axes, legend, <code>scheme()</code>,
+<code>lcolor()</code> …</td>
+</tr>
+<tr>
+<td><code>folgr(folder)</code></td>
+<td>also writes each graph in this folder, as <code>Fig_#.aurg</code>
+(it reopens in the graph editor) and <code>Fig_#.png</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each graph is a graph of the session: it opens in the graph editor,
+can be saved (<code>graph save</code>) and copied to Word (right-click:
+EMF, PNG, its code). The graphs are in black and white unless a scheme
+is chosen (<code>set scheme dasp</code>, <strong>Graphics ▸ Graph
+Preferences…</strong>, or <code>scheme()</code> in
+<code>opgr#()</code>).</p>
+<h2 data-number="6.6" id="stored-results"><span
+class="header-section-number">6.6</span> Stored results</h2>
+<p>The tables are stored in <code>r()</code>, as matrices with the names
+of their rows and columns:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Result</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>r(t1A)</code></td>
+<td>table 1A (a block schedule: missing)</td>
+</tr>
+<tr>
+<td><code>r(t1B)</code></td>
+<td>table 1B: the price changes of the aggregates, one column per
+scenario</td>
+</tr>
+<tr>
+<td><code>r(t11)</code>, <code>r(t21)</code> … <code>r(t35)</code></td>
+<td>tables 1.1 to 3.5</td>
+</tr>
+<tr>
+<td><code>r(t41_s1)</code> …</td>
+<td>tables 4.1 to 4.9 of scenario 1, and so on</td>
+</tr>
+<tr>
+<td><code>r(summary_s1)</code></td>
+<td>the main results of scenario 1</td>
+</tr>
+<tr>
+<td><code>r(t21_se)</code> …</td>
+<td>with <code>se</code>, the standard errors of the tables</td>
+</tr>
+<tr>
+<td><code>r(N_items)</code>, <code>r(N_scenarios)</code></td>
+<td>the number of items and of scenarios</td>
+</tr>
+</tbody>
+</table>
+<pre><code>. matrix T = r(t42_s1)
+. matrix list T</code></pre>
+<h2 data-number="6.7" id="saving-and-loading-the-inputs"><span
+class="header-section-number">6.7</span> Saving and loading the
+inputs</h2>
+<p><code>inisave(file)</code> writes the inputs of a simulation to a
+file (<code>.sub</code> by default): the price schedules declared in the
+session, as <code>pschset</code> commands, then the <code>subsim</code>
+command. The file holds commands: it can be opened and run in the Script
+Editor, and the box of <code>subsim</code> reads it back (<strong>Main ▸
+Load the inputs</strong>: the schedules are declared and the box
+filled). It plays the role of the <code>.prj</code> and
+<code>.pri</code> files of SUBSIM in Stata.</p>
+<h1 data-number="7" id="dialog-boxes"><span
+class="header-section-number">7</span> The dialog boxes</h1>
+<p>Every SUBSIM command has a dialog box, under <strong>Statistics ▸
+SUBSIM</strong> or with <code>db</code> (<code>db subsim</code>,
+<code>db pschset</code>, <code>db pschdes</code>). A box writes the
+command it runs: <strong>OK</strong> runs it and closes the box,
+<strong>Submit</strong> runs it and keeps the box open,
+<strong>⧉</strong> copies the command, <strong>⟳</strong> resets the box
+and <strong>?</strong> opens the help. The command is echoed in the
+Results window and kept in the Review panel. The fields marked with a
+star are required. From a help page, the link <em>run in dialog box</em>
+under an example opens the box filled with it.</p>
+<h2 data-number="7.1" id="pschset-and-pschdes"><span
+class="header-section-number">7.1</span> <code>pschset</code> and
+<code>pschdes</code></h2>
+<figure>
+<img src="figures/box_pschset.png" style="width:75.0%"
+alt="The box of pschset, filled with the quota of flour: two brackets per individual, the first up to 36 kg at 0.09 with a subsidy of 0.94, the second at 1.03." />
+<figcaption aria-hidden="true">The box of <code>pschset</code>, filled
+with the quota of flour: two brackets per individual, the first up to 36
+kg at 0.09 with a subsidy of 0.94, the second at 1.03.</figcaption>
+</figure>
+<p>The box of <code>pschset</code> has the name of the schedule, then
+the brackets: by <strong>parameter values</strong> (up to ten brackets,
+each with its maximum — the last one has none —, its tariff, its subsidy
+and its structure, IBT or VDT), or by <strong>variables</strong> (the
+variables that hold the maxima, the tariffs, the subsidies and the
+structures in their first rows, and the number of brackets, required —
+as many as needed). <em>Blocks defined by</em> is the unit of the blocks
+(household or individual), <em>Subscription fee</em> the fee. <em>Save
+the information</em> writes the schedule to a <code>.psc</code> file
+(<code>inisave()</code>), which <em>Load the information</em> reads back
+— also the <code>.psc</code> files of SUBSIM in Stata.</p>
+<p>The box of <code>pschdes</code> lists the declared schedules; its
+<em>Graph</em> frame draws them, saves the graph (<code>.aurg</code>) or
+exports it (a picture), and its graph tabs set the curves (colour,
+pattern, width), the axes, the titles, the legend and the scheme.</p>
+<h2 data-number="7.2" id="subsim-the-main-tab"><span
+class="header-section-number">7.2</span> <code>subsim</code>: the Main
+tab</h2>
+<figure>
+<img src="figures/box_subsim_main.png" style="width:90.0%"
+alt="The Main tab: the inputs file, the general information, the variables of interest, the groups, the welfare measure, the compensating transfer." />
+<figcaption aria-hidden="true">The Main tab: the inputs file, the
+general information, the variables of interest, the groups, the welfare
+measure, the compensating transfer.</figcaption>
+</figure>
+<ul>
+<li><strong>Dialog box inputs</strong>: <em>Load the inputs</em> reads a
+<code>.sub</code> file written by <code>inisave()</code> (<a class="secref" href="#saving-and-loading-the-inputs">§6.7</a>);
+<em>Save the inputs</em> writes one when the simulation runs.</li>
+<li><strong>General information</strong>: the country, the years, the
+currency, shown in the header and the workbook.</li>
+<li><strong>Variables of interest</strong>: the expenditure per person,
+the household size and the poverty line (required), the size in adult
+equivalents.</li>
+<li><strong>Group variable</strong>: the groups of the tables (by
+default the quintiles).</li>
+<li><strong>Price change and well-being model</strong>: the welfare
+measure (<a class="secref" href="#measures">§4.7</a>) — first order, Taylor’s second order (with the
+approximated measure and the matrices of elasticities), the exact
+equivalent or compensating variation (with the consumer model,
+Cobb-Douglas or CES, and the elasticity of substitution).</li>
+<li><strong>Lump-sum transfer</strong>: per person or per household,
+universal or to a population group (its indicator variable) (<a class="secref" href="#transfer">§4.9</a>).</li>
+<li>The two check boxes create the variables of the impacts and of the
+quantities (<code>gvimp</code>, <code>gvqnt</code>). <strong>Survey
+settings…</strong> opens the box of <code>svyset</code>.</li>
+</ul>
+<h2 data-number="7.3" id="subsim-the-direct-effect-tab"><span
+class="header-section-number">7.3</span> <code>subsim</code>: the Direct
+effect tab</h2>
+<figure>
+<img src="figures/box_subsim_direct.png" style="width:90.0%"
+alt="The Direct effect tab with items given by parameter values: sugar at a linear price, flour by its initial and final schedules." />
+<figcaption aria-hidden="true">The Direct effect tab with items given by
+parameter values: sugar at a linear price, flour by its initial and
+final schedules.</figcaption>
+</figure>
+<p>The check box <em>Direct effects: the items</em> turns the items on.
+<em>Initialise information with</em> chooses how the items are
+given:</p>
+<ul>
+<li><strong>Parameter values</strong> — up to ten items, one row each:
+short name, unit, expenditure variable, price type, initial price,
+subsidy, final price, elasticity. For a <em>Non linear</em> price, the
+initial and final prices are the names of schedules: the list shows the
+declared ones (<code>ps_i_1</code> and <code>ps_f_1</code> by default,
+as in SUBSIM), and <strong>…</strong> opens the box of
+<code>pschset</code> for that schedule.</li>
+<li><strong>Variables</strong> — the table of items at the top of the
+data, and the number of items (required, as many as needed); then the
+scenarios, each with the variables of its final schedules and
+elasticities.</li>
+</ul>
+<figure>
+<img src="figures/box_subsim_direct_vars.png" style="width:90.0%"
+alt="The Direct effect tab with items given by variables: the table of items of the example data, two scenarios." />
+<figcaption aria-hidden="true">The Direct effect tab with items given by
+variables: the table of items of the example data, two
+scenarios.</figcaption>
+</figure>
+<h2 data-number="7.4" id="subsim-the-indirect-effect-tab"><span
+class="header-section-number">7.4</span> <code>subsim</code>: the
+Indirect effect tab</h2>
+<figure>
+<img src="figures/box_subsim_indirect.png" style="width:90.0%"
+alt="The Indirect effect tab: the price model, the input-output table and the shocks, the consumption aggregates." />
+<figcaption aria-hidden="true">The Indirect effect tab: the price model,
+the input-output table and the shocks, the consumption
+aggregates.</figcaption>
+</figure>
+<p>The check box <em>Indirect effects</em> turns them on. <strong>I/O
+price change model</strong>: the model (cost push or marginal profit
+push), the shocks (exogenous or endogenous), the adjustment (short term,
+with its number of periods, or long term). <strong>Price shocks and I/O
+matrix</strong>: the input-output table (a dataset of the Workspace),
+<em>Keep the shocks in the shocked sectors</em> (<code>allind</code>),
+and the shocks of each scenario, <code>sector:change</code> separated by
+commas or spaces; without items, the number of scenarios is the indirect
+tab’s own. <strong>Consumption aggregates</strong>: their number
+(required), the variables of their names, expenditures, elasticities and
+matching sectors.</p>
+<h2 data-number="7.5" id="subsim-table-and-graph-options"><span
+class="header-section-number">7.5</span> <code>subsim</code>: Table and
+Graph options</h2>
+<figure>
+<img src="figures/box_subsim_tables.png" style="width:80.0%"
+alt="The Table options tab: the tables to produce, the joined items, the Excel workbook and its language, the display." />
+<figcaption aria-hidden="true">The Table options tab: the tables to
+produce, the joined items, the Excel workbook and its language, the
+display.</figcaption>
+</figure>
+<p>Each frame’s check box turns its options on. <strong>Tables</strong>:
+the codes of the tables (empty: all; <code>off</code>: none), and
+<em>Produce the summary table</em>. <strong>Select…</strong> opens the
+list of the tables in a tree, by section: a click checks or unchecks a
+table, or a whole section; OK writes the codes. <strong>?</strong> opens
+the list of the tables and their codes
+(<code>help subsim_tables</code>). <strong>Join items</strong>: the
+items to add up (<code>taggr()</code>; its <strong>?</strong> explains
+the form). <strong>Excel file</strong>: the workbook and the language of
+the tables. <strong>Display</strong>: the standard errors, the
+transposition of wide tables, the columns of the direct and indirect
+effects.</p>
+<figure>
+<img src="figures/box_tables_tree.png" style="width:70.0%"
+alt="Select… in the Table options: the tables in a tree, the ones checked go to the field." />
+<figcaption aria-hidden="true">Select… in the Table options: the tables
+in a tree, the ones checked go to the field.</figcaption>
+</figure>
+<p>The <strong>Graph options</strong> tab works the same way for the
+graphs (<code>gjobs()</code>, <strong>Select…</strong>,
+<strong>?</strong>: <code>help subsim_graphs</code>), the joined items
+of the graphs (<code>gaggr()</code>), the folder where the graphs are
+written (<code>folgr()</code>), and, for each graph, its range (min,
+max) and its other options of <code>twoway</code>.</p>
+<figure>
+<img src="figures/box_subsim_graphs.png" style="width:80.0%"
+alt="The Graph options tab." />
+<figcaption aria-hidden="true">The Graph options tab.</figcaption>
+</figure>
+<h2 data-number="7.6" id="pciom-1"><span
+class="header-section-number">7.6</span> <code>pciom</code></h2>
+<figure>
+<img src="figures/box_pciom_main.png" style="width:90.0%"
+alt="The box of pciom: the input-output table (a dataset of the Workspace) and the names of its sectors, the price model, the shocks." />
+<figcaption aria-hidden="true">The box of <code>pciom</code>: the
+input-output table (a dataset of the Workspace) and the names of its
+sectors, the price model, the shocks.</figcaption>
+</figure>
+<p>The <strong>Main</strong> tab of <code>pciom</code> has the
+input-output table — a dataset of the Workspace — and, optionally, the
+variable that names its sectors (by default, the variable labels of the
+table); the price model, as in the Indirect effect tab of
+<code>subsim</code>; and the shocks, <code>sector:change</code>
+separated by commas or spaces, with <em>Show the five models side by
+side</em> (<code>allmodels</code>). The <strong>Results</strong> tab
+draws the graph of <a class="secref" href="#pciom">§5.5</a>: the number of sectors shown, and the files
+where the graph is saved (<code>.aurg</code>) or exported (a picture).
+The price change of every sector is always listed in the Results
+window.</p>
+<figure>
+<img src="figures/box_pciom_results.png" style="width:75.0%"
+alt="The Results tab of pciom." />
+<figcaption aria-hidden="true">The Results tab of
+<code>pciom</code>.</figcaption>
+</figure>
+<h1 data-number="8" id="examples"><span
+class="header-section-number">8</span> Worked examples</h1>
+<p>The examples of <code>help subsim</code> are numbered; each runs on
+the example data, from the help window (in the command window or in the
+box). This chapter comments on some of them. The price schedules of the
+example data are declared first (they are in the
+<code>##exampledata</code> of the help page):</p>
+<pre><code>. use &quot;data/subsim_example.dta&quot;, clear
+. pschset iflour , nblock(2) bun(2) mxb1(36) sub1(.94) tr1(.09) sub2(0) tr2(1.03)
+. pschset f1_flour , nblock(2) bun(2) mxb1(36) sub1(0) tr1(.372) sub2(0) tr2(1.03)
+. pschset f2_flour , nblock(1) bun(1) sub1(0) tr1(1.03)
+  … (the same for flour for bread and semolina)</code></pre>
+<h2 data-number="8.1" id="sugar-one-item-a-linear-price"><span
+class="header-section-number">8.1</span> Sugar: one item, a linear
+price</h2>
+<p>Example 1 of the help page, and Chapter 2: the price of sugar from
+0.25 to 0.5704, a cut of 30% of its subsidy of 1.068. The loss per
+person is −23.87 on average, 1.32% of expenditure in the poorest
+quintile against 1.00% in the richest; the subsidy bill falls by 75%;
+the poverty headcount rises by 0.37 points.</p>
+<h2 data-number="8.2" id="flour-a-quota"><span
+class="header-section-number">8.2</span> Flour: a quota</h2>
+<p>Flour is sold by a quota of 36 kg per person and per year at 0.09,
+with a subsidy of 0.94 — so that a kilogram costs 1.03 to produce — and
+at the market price of 1.03 beyond (the schedule <code>iflour</code>).
+The reform cuts the subsidy of the quota block by 30%: its price becomes
+<span class="math inline">\(0.09 + 0.3    imes 0.94 = 0.372\)</span>
+(<code>f1_flour</code>):</p>
+<pre><code>. pschdes iflour f1_flour
+Price schedule: iflour
+────────┬───────────────────────────────────
+ Number │    Block       Tariff    Subsidy
+────────┼───────────────────────────────────
+ 1      │ 0 - 36        0.090000   0.940000
+ 2      │ 36 and more   1.030000   0.000000
+────────┴───────────────────────────────────
+  Tariff structure: Increasing block tariff (IBT)
+  Blocks counted per individual; subscription fee: 0
+Price schedule: f1_flour
+ 1      │ 0 - 36        0.372000   0.000000
+ 2      │ 36 and more   1.030000   0.000000
+. subsim pc_exp_tot, hsize(hhsize) pline(pline) ///
+      item1(Flour, var(pc_exp_flour) unit(kg) initial(iflour) final(f1_flour) elasticity(-.5)) ///
+      tjobs(1A 24 42 44 46) gjobs(off)</code></pre>
+<p>Table 1A names the schedules (<code>pschdes</code> describes them). A
+household that buys more than its quota loses <span
+class="math inline">\(36 \times (0.372 - 0.09) = 10.15\)</span> per
+person; one that buys less loses its quantity times <span
+class="math inline">\(0.282\)</span>. The households buy 16.7 million
+kilograms; with an elasticity of −0.5 applied to the change of the
+average price they pay, they buy 6.3 million less (tables 2.4 and 4.4).
+The units given up come off the top blocks first: a household above its
+quota first gives up units at the market price, which carry no subsidy,
+and keeps its quota units, whose subsidy falls from 0.94 to <span
+class="math inline">\(0.09 + 0.94 - 0.372 = 0.658\)</span>. The bill
+falls by 5.8 million (table 4.6).</p>
+<h2 data-number="8.3" id="a-table-of-items-and-two-scenarios"><span
+class="header-section-number">8.3</span> A table of items and two
+scenarios</h2>
+<p>Example 3: flour, flour for bread and semolina, given by the table at
+the top of the data, with two scenarios — a cut of 30% of the subsidies
+(<code>fpsch1</code>) and their removal (<code>fpsch2</code>):</p>
+<pre><code>. subsim pc_exp_tot, hsize(hhsize) pline(pline) itnames(itnames) snames(snames) ipsch(ipsch) ///
+      unit(unit) fpsch1(fpsch1) elas1(elas1) fpsch2(fpsch2) elas2(elas2) nitems(3) ///
+      scenarios(&quot;-30% of subsidy&quot; &quot;No subsidy&quot;) tjobs(1A 42 46) summary gjobs(off)</code></pre>
+<pre><code>Table 1A: The prices of the items, direct effect
+─────────────┬─────────────────────────┬───────────────────────────────────────┬───────────────────────────────────────
+             │                         │      Scenario 1 (-30% of subsidy)     │        Scenario 2 (No subsidy)
+ Items       │ Initial price   Subsidy │ Final price   Change (%)   Elasticity │ Final price   Change (%)   Elasticity
+─────────────┼─────────────────────────┼───────────────────────────────────────┼───────────────────────────────────────
+ Flour       │        iflour         — │    f1_flour            —        -0.50 │      1.0300            —        -0.50
+ Flour-bread │        0.0370    0.9220 │      0.3136       747.57        -0.50 │      0.9590      2491.89        -0.50
+ Semolina    │     isemolina         — │ f1_semolina            —        -0.50 │      0.9110            —        -0.50
+─────────────┴─────────────────────────┴───────────────────────────────────────┴───────────────────────────────────────</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>−30% of subsidy</th>
+<th>No subsidy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Impact on well-being per person</td>
+<td>−23.92</td>
+<td>−79.72</td>
+</tr>
+<tr>
+<td>Revenue gain (millions)</td>
+<td>45.42</td>
+<td>51.70</td>
+</tr>
+<tr>
+<td>Poverty headcount (%), from 11.50</td>
+<td>12.23</td>
+<td>14.45</td>
+</tr>
+<tr>
+<td>Compensating transfer per person</td>
+<td>16.87</td>
+<td>62.98</td>
+</tr>
+<tr>
+<td>Net gain of the budget (millions)</td>
+<td>34.48</td>
+<td>10.86</td>
+</tr>
+</tbody>
+</table>
+<p>Removing the subsidies saves 51.7 million, the whole bill, but raises
+the poverty headcount by almost 3 points; the transfer that offsets it
+costs 40.8 million, four fifths of the saving. Flour for bread brings
+the same revenue in both scenarios (37.7 million): its price rises
+eightfold even in the first, and with an elasticity of −0.5 its quantity
+falls to zero in both — a sign that the elasticity is too large for such
+a price change (<a class="secref" href="#elasticity">§4.5</a>).</p>
+<h2 data-number="8.4" id="a-targeted-transfer"><span
+class="header-section-number">8.4</span> A targeted transfer</h2>
+<p>Example 4: the compensating transfer paid to each household spending
+less than 1,500 per person, a group marked by an indicator:</p>
+<pre><code>. generate targ = pc_exp_tot &lt; 1500
+. subsim pc_exp_tot, hsize(hhsize) pline(pline) itnames(itnames) snames(snames) ipsch(ipsch) ///
+      unit(unit) fpsch1(fpsch1) elas1(elas1) nitems(3) tjobs(off) gjobs(off) summary typetr(2) gtarg(targ)</code></pre>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>Universal, per person</th>
+<th>Targeted, per household</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transfer per beneficiary</td>
+<td>16.87 (per person)</td>
+<td>150.37 (per household)</td>
+</tr>
+<tr>
+<td>Transfer per person of the population</td>
+<td>16.87</td>
+<td>5.83</td>
+</tr>
+<tr>
+<td>Cost (millions)</td>
+<td>10.94</td>
+<td>3.78</td>
+</tr>
+<tr>
+<td>Net gain of the budget (millions)</td>
+<td>34.48</td>
+<td>41.64</td>
+</tr>
+</tbody>
+</table>
+<p>Targeting the group cuts the cost of the compensation by two thirds:
+the transfer goes to fewer people, closer to the poverty line.</p>
+<h2 data-number="8.5" id="the-welfare-measures"><span
+class="header-section-number">8.5</span> The welfare measures</h2>
+<p>Examples 6 and 7: the same reform measured by the compensating
+variation with CES preferences (<code>meas(4) model(2) subs(.5)</code>)
+and by Taylor’s second order of the consumer surplus
+(<code>meas(2)</code>). The table of <a class="secref" href="#measures">§4.7</a> compares the measures: with
+price rises of several hundred per cent, the first order (−23.92) is
+about three times the exact variations (−8.06 and −8.10 with
+Cobb-Douglas preferences).</p>
+<h2 data-number="8.6" id="egypt-direct-and-indirect-effects"><span
+class="header-section-number">8.6</span> Egypt: direct and indirect
+effects</h2>
+<p>Examples 11 to 14 use Egypt’s data: the household survey and the
+input-output table, both in the Workspace. Chapter 5 shows a reform that
+raises the price of electricity and gas by 20% for the households (the
+direct effect, an item with a subsidy of 0.3) and the producer prices of
+petroleum and gas by 20% (the indirect effect, through 39 consumption
+aggregates):</p>
+<pre><code>Main results : Scenario 1
+───────────────────────────────┬───────────────────────────────────────────────────────────────────────
+ Component                     │ Pre-reform   Direct effect   Indirect effect   Post-reform    Change
+───────────────────────────────┼───────────────────────────────────────────────────────────────────────
+ Well-being                    │
+   Welfare (per capita)        │  14035.061       13930.988         14006.814     13902.741   -132.320
+   Poverty headcount (%)       │     16.473          17.216            16.681        17.424      0.950
+   Poverty gap (%)             │      3.048           3.186             3.073         3.212      0.164
+   Inequality, Gini (%)        │     31.772          31.832            31.771        31.831      0.059
+───────────────────────────────┼───────────────────────────────────────────────────────────────────────
+ Budget                        │
+   Subsidies (in millions)     │      1.174           0.391             1.174         0.391     -0.783
+   Transfers (in millions) (*) │      0.000           0.560             0.097         0.661      0.661
+   Total budget (in millions)  │      1.174           0.951             1.271         1.053     -0.121
+───────────────────────────────┼───────────────────────────────────────────────────────────────────────
+ Per capita                    │
+   Subsidy (per capita)        │    156.110          52.037           156.110        52.037   -104.073
+   Transfer (per capita)       │      0.000          74.425            12.920        87.920     87.920
+   Transfer (per beneficiary)  │      0.000          74.425            12.920        87.920     87.920
+───────────────────────────────┴───────────────────────────────────────────────────────────────────────</code></pre>
+<p>The indirect effect adds more than a quarter to the loss of the
+direct effect (−28.25 against −104.07 per person), and 0.21 points to
+the rise of poverty. The subsidies change only with the direct effect:
+the consumption aggregates carry no subsidy. Example 12 computes the
+indirect effect alone (no item, <code>allind</code>), the long term with
+endogenous shocks; example 14 two scenarios, each with its shocks.</p>
+<h1 data-number="9" id="stata-users"><span
+class="header-section-number">9</span> Notes for users of SUBSIM in
+Stata</h1>
+<p>SUBSIM for AURA follows the model of SUBSIM 3.0 and reads its syntax:
+the do-files of <code>pschset</code> run as they are, and the options of
+<code>asubsim</code> keep their names (<code>hsize()</code>,
+<code>pline()</code>, <code>wappr()</code>, <code>appr()</code>,
+<code>gvimp</code>, <code>tjobs()</code>, <code>taggr()</code>,
+<code>gjobs()</code>, <code>opgr#()</code> …). On SUBSIM’s examples,
+AURA gives the tables of SUBSIM in Stata. For a subset of results, AURA
+reports more precise estimates — mainly the quantities and the revenue
+under block tariffs, the welfare change with subscription fees and the
+compensating transfer — so that these figures can differ; the list below
+says where.</p>
+<p><strong>Commands and boxes.</strong></p>
+<ul>
+<li>One command, <code>subsim</code>, and one box compute the direct
+effects, the indirect effects or both (in Stata, <code>asubsim</code>
+and <code>asubsim_ind</code>). The input-output table is a dataset of
+the Workspace, not a file path.</li>
+<li>The inputs are saved in a <code>.sub</code> file — the schedules and
+the command — in place of the <code>.prj</code> and <code>.pri</code>
+files of the boxes.</li>
+<li>Items are unlimited, given by parameters or by a table; with a
+table, <code>nitems()</code> says how many rows to read. Scenarios are
+unlimited too.</li>
+<li>A schedule may give each block its own structure, IBT or VDT, also
+read from a variable; given by variables, a schedule has as many blocks
+as needed, <code>nblock()</code> saying how many.</li>
+<li>The welfare measures of Araar and Verme (2016) — Taylor’s second
+order, exact equivalent and compensating variations, Cobb-Douglas or CES
+— are available for the direct and indirect effects.</li>
+</ul>
+<p><strong>The rules behind the results.</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Result</th>
+<th>AURA’s rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Change of quantity</td>
+<td><span class="math inline">\(\varepsilon\, q^0\, d\bar p\)</span>,
+with <span class="math inline">\(d\bar p\)</span> the change of the
+average price paid for the initial quantity, fees included: households
+respond to the average price of what they buy (<a class="secref" href="#quantities">§4.4</a>)</td>
+</tr>
+<tr>
+<td>Government revenue</td>
+<td>the exact fall of the subsidy bill, <span class="math inline">\(S^0
+- S^1\)</span>, the final quantities consumed from the first block up
+(<a class="secref" href="#revenue">§4.6</a>)</td>
+</tr>
+<tr>
+<td>Subscription fees</td>
+<td>part of the cost of the quantity, of the change of well-being and of
+the average price</td>
+</tr>
+<tr>
+<td>Cobb-Douglas approach</td>
+<td>it measures the change of well-being; the quantities follow the
+elasticity given</td>
+</tr>
+<tr>
+<td>Mixed initial schedule</td>
+<td>the limit between the IBT and VDT blocks read on the initial
+schedule</td>
+</tr>
+<tr>
+<td>Several items, Cobb-Douglas</td>
+<td>the post-reform rows of tables 4.7-4.9 combine the price changes of
+all the items, as the total of table 4.1</td>
+</tr>
+<tr>
+<td>Subsidy per capita after the reform (main results)</td>
+<td>the subsidy before less the revenue gain per capita</td>
+</tr>
+<tr>
+<td>Compensating transfer</td>
+<td>computed exactly from the households’ gaps to the poverty line; 0
+when poverty does not rise; missing when no transfer to the group can
+bring poverty back; per adult equivalent with <code>aehs()</code>; a
+missing indicator of the group counts as 0</td>
+</tr>
+<tr>
+<td>Graphs 1 and 2</td>
+<td>from the smallest expenditure of the data</td>
+</tr>
+<tr>
+<td>Graphs 8 to 10</td>
+<td>from <code>min()</code> to <code>max()</code>, by default from 0 to
+twice the compensating transfer</td>
+</tr>
+<tr>
+<td>Input-output, short term with <code>nadp(k)</code></td>
+<td><span class="math inline">\(k\)</span> rounds of adjustment</td>
+</tr>
+<tr>
+<td>Input-output, endogenous long term</td>
+<td><span class="math inline">\((I - A&#39;)^{-1} s\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>When all the units of a household change price alike — a linear
+price, a VDT schedule — the quantities and the revenue are the same
+under both sets of rules: to compare a study made with SUBSIM in Stata,
+the tables of a linear item are the natural place to start.</p>
+<h1 data-number="10" id="references"><span
+class="header-section-number">10</span> References</h1>
+<p>Araar, A. and P. Verme (2012). <em>Reforming subsidies: a toolkit for
+policy simulations</em>. World Bank Policy Research Working Paper
+6148.</p>
+<p>Araar, A. and P. Verme (2016). <em>Prices and welfare</em>. World
+Bank Policy Research Working Paper 7566.</p>
+<p>Coady, D., M. El-Said, R. Gillingham, K. Kpodar, P. Medas and D.
+Newhouse (2006). <em>The magnitude and distribution of fuel subsidies:
+evidence from Bolivia, Ghana, Jordan, Mali, and Sri Lanka</em>. IMF
+Working Paper 06/247.</p>
+<p>Foster, J., J. Greer and E. Thorbecke (1984). A class of decomposable
+poverty measures. <em>Econometrica</em> 52(3), 761-766.</p>
+<p>Ito, K. (2014). Do consumers respond to marginal or average price?
+Evidence from nonlinear electricity pricing. <em>American Economic
+Review</em> 104(2), 537-563.</p>
+<p>Miller, R. E. and P. D. Blair (2009). <em>Input-output analysis:
+foundations and extensions</em>, 2nd edition. Cambridge University
+Press.</p>
+</body>
+</html>

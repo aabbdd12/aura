@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Packages — AURA</title>
+<meta name="description" content="DAAP for poverty and inequality analysis and SUBSIM for price and subsidy reforms come with AURA; more packages install with one command.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+
+</head>
+<body>
+
+<div class="announce" id="announce">
+  <div class="wrap">
+    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
+    <span class="short"><b>AURA 1.6</b> is out.</span>
+    <a href="release-notes.html#v1.6">See what's new &rarr;</a>
+    <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">A</span><b>AURA</b></a>
+    <nav class="main" id="menu" aria-label="Main">
+      <ul>
+        <li><a class="top-link" href="features.html">Features</a>
+          <div class="drop">
+            <a href="features.html#data">Data management<small>Workspace, merge, reshape, by groups</small></a>
+            <a href="features.html#estimation">Estimation<small>Regression, panel, IV, post-estimation</small></a>
+            <a href="features.html#tables">Tables of results<small>esttab: screen, LaTeX, Word, HTML</small></a>
+            <a href="features.html#survey">Survey data<small>Designs and their standard errors</small></a>
+            <a href="features.html#graphics">Graphics<small>The Graph Editor, merged figures, 3-D</small></a>
+            <a href="features.html#scripts">Scripts and reproducibility<small>Loops, macros, logs with graphs</small></a>
+            <a href="features.html#extend">Extend AURA<small>Modules, dialog boxes, AI assistant</small></a>
+          </div></li>
+        <li><a class="top-link on" href="packages.html">Packages</a>
+          <div class="drop">
+            <a href="packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
+            <a href="packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="packages.html#more">More packages<small>Install, update, publish your own</small></a>
+          </div></li>
+        <li><a class="top-link" href="learn.html">Learn</a>
+          <div class="drop">
+            <a href="commands.html">Command reference<small>Every command, searchable</small></a>
+            <a href="learn.html#guides">User and Developer guides<small>Read them online</small></a>
+            <a href="learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="release-notes.html">Release notes</a>
+          </div></li>
+        <li><a class="top-link" href="download.html">Download</a></li>
+        <li><a class="top-link" href="about.html">About</a>
+          <div class="drop">
+            <a href="about.html">The project</a>
+            <a href="about.html#cite">How to cite</a>
+            <a href="about.html#licence">Licence</a>
+            <a href="about.html#contact">Report a problem</a>
+          </div></li>
+      </ul>
+    </nav>
+    <button class="burger" type="button" aria-label="Menu" aria-controls="menu"
+            onclick="document.getElementById('menu').classList.toggle('open')">&#9776;</button>
+    <a class="btn btn-gold btn-small" href="download.html">Download</a>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Packages</p>
+    <h1>Complete methods, in the box</h1>
+    <p>Two packages come with AURA, each with its commands, dialog boxes, help and user manual: DAAP for distributive analysis and SUBSIM for price reforms. Others install with one command.</p>
+    <nav class="subnav" aria-label="Sections"><a href="#daap">DAAP</a><a href="#subsim">SUBSIM</a><a href="#more">More packages</a></nav>
+  </div>
+</section>
+
+<section class="block" id="daap">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="eyebrow">DAAP · Distributive Analysis for AURA</p>
+        <h2>Poverty and inequality, with their standard errors</h2>
+        <p>DAAP measures poverty and inequality, compares distributions, draws curves and decomposes changes — with design-based standard errors and tests throughout. It carries the heritage of the DASP methods into an open, Python-native tool: the same rigor, none of the licence. <b>Statistics → DAAP</b> opens a dialog box for every command; <span class="k">daapmanual</span> opens its user manual.</p>
+      </div>
+      <img src="images/lorenz.jpg" alt="Lorenz curves for rural and urban households with 95% confidence bands, against the line of equality." loading="lazy">
+    </div>
+    <div class="tiles" style="margin-top:40px">
+      <div class="tile"><h3>Poverty</h3><p>FGT and EDE-FGT, Watts and Sen-Shorrocks-Thon indices, with fixed or relative lines; changes between two distributions; multidimensional, chronic and transient poverty.</p>
+        <div class="chips"><span class="chip">ipov</span><span class="chip">dipov</span><span class="chip">imdpov</span><span class="chip">dtcpov</span></div></div>
+      <div class="tile"><h3>Inequality</h3><p>Gini and concentration, Atkinson and generalized entropy (Theil, mean log deviation); differences between distributions; Shapley decompositions by groups and by sources, and by regression.</p>
+        <div class="chips"><span class="chip">ineq</span><span class="chip">dineq</span><span class="chip">dsineqg</span><span class="chip">rbdineq</span></div></div>
+      <div class="tile"><h3>Curves</h3><p>Lorenz and concentration curves, FGT and poverty curves, densities, quantiles, non-parametric regression and growth incidence — with confidence bands.</p>
+        <div class="chips"><span class="chip">clorenz</span><span class="chip">cfgt</span><span class="chip">cnpe</span><span class="chip">gicur</span></div></div>
+      <div class="tile"><h3>Dominance</h3><p>Poverty and inequality dominance between two distributions, and consumption-dominance curves for marginal tax and subsidy reforms.</p>
+        <div class="chips"><span class="chip">dompov</span><span class="chip">domineq</span><span class="chip">cdomc</span></div></div>
+      <div class="tile"><h3>Polarization</h3><p>Duclos-Esteban-Ray, Foster-Wolfson and bipolarization indices, and their differences between distributions.</p>
+        <div class="chips"><span class="chip">ipola</span><span class="chip">dipola</span></div></div>
+      <div class="tile"><h3>Pro-poor growth and progressivity</h3><p>Was growth pro-poor? Are taxes and transfers progressive? Indices and curves.</p>
+        <div class="chips"><span class="chip">ipropoor</span><span class="chip">iprog</span><span class="chip">cprog</span><span class="chip">dprogress</span></div></div>
+      <div class="tile"><h3>Targeting and incidence</h3><p>The impact of targeted transfers on poverty, and who benefits from public spending.</p>
+        <div class="chips"><span class="chip">itargetg</span><span class="chip">bian</span><span class="chip">imbi</span></div></div>
+      <div class="tile"><h3>Means and shares</h3><p>Means, proportions and income shares by group, and their differences between distributions.</p>
+        <div class="chips"><span class="chip">imean</span><span class="chip">dimean</span><span class="chip">quinsh</span></div></div>
+    </div>
+    <figure style="margin:44px 0 0">
+      <img src="images/dipov-results.jpg" alt="The output of dipov: the change in FGT poverty from 1994 to 1998 in Burkina Faso, by sex, area and socio-economic group." loading="lazy" style="border-radius:6px;box-shadow:var(--shadow);border:1px solid var(--line)">
+      <figcaption style="color:var(--muted);margin-top:.8rem;font-size:15.5px">A real result: the change in FGT poverty from 1994 to 1998 in Burkina Faso, by sex, area and socio-economic group. Every difference carries its design-based standard error, its <i>t</i> statistic, p-value and 95% interval, with the test underneath.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="block alt" id="subsim">
+  <div class="wrap">
+    <div class="split flip">
+      <div>
+        <p class="eyebrow">SUBSIM · Simulating subsidy reforms</p>
+        <h2>What a reform of prices and subsidies does to households</h2>
+        <p>Declare the price schedules — blocks with increasing or volume-differentiated tariffs, a structure per block, a fixed fee, a schedule per group — set the items and the scenarios of the reform, and SUBSIM reports, for each item and scenario, the change in well-being, poverty, inequality, quantities and public revenue, by group. <b>Statistics → SUBSIM</b> opens its dialog boxes; <span class="k">subsimmanual</span> its user manual.</p>
+      </div>
+      <img src="images/subsim-box.png" alt="The SUBSIM dialog box: items, prices and scenarios." loading="lazy">
+    </div>
+    <div class="cards" style="margin-top:40px">
+      <div class="card">
+        <img src="images/subsim-tariffs.png" alt="Price schedules drawn by pschdes: the tariff of each block." loading="lazy">
+        <h3>Price schedules</h3>
+        <p><span class="k">pschset</span> declares a schedule, from values or from variables of the data; <span class="k">pschdes</span> describes it and draws its tariffs, the cost of a quantity and the average price.</p>
+      </div>
+      <div class="card">
+        <img src="images/subsim-fig9.png" alt="SUBSIM: the poverty headcount and the transfer that compensates the reform." loading="lazy">
+        <h3>Direct effects and compensation</h3>
+        <p><span class="k">subsim</span> gives the tables of the reform, a summary with the transfer that keeps poverty at its level — to everyone or to a group —, ten figures, and an Excel workbook.</p>
+      </div>
+      <div class="card">
+        <img src="images/subsim-pciom.png" alt="pciom: how a price shock spreads to the prices of the other sectors." loading="lazy">
+        <h3>Indirect effects</h3>
+        <p>A price shock spreads through an input-output table to every sector (<span class="k">pciom</span>), in the short or the long run; <span class="k">subsim</span> adds these indirect effects to the direct ones.</p>
+      </div>
+      <div class="card">
+        <h3>Measures of well-being</h3>
+        <p>First order; second order — consumer surplus, equivalent and compensating variations, with matrices of price and income elasticities —; or the exact equivalent and compensating variations of a Cobb-Douglas or CES model.</p>
+        <div class="chips"><span class="chip">pschset</span><span class="chip">pschdes</span><span class="chip">subsim</span><span class="chip">pciom</span><span class="chip">subsimmanual</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="more">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">More packages</p>
+      <h2>Install, update — or publish your own</h2>
+      <p>A package is a set of commands with their help, dialog boxes and menu entries. Point AURA to a repository, install, and the commands are there at once, with their entries in the menus. AURA keeps their versions and fetches the updates; <b>Tools → Manage Packages</b> lists them, turns them on or off, and browses a repository.</p>
+      <p>Publishing is as simple: put the package's files in a folder of a web repository, with its index, and share the address.</p>
+    </div>
+    <pre class="code">pkg from "https://…/my-repository"
+pkg list
+pkg install mypackage
+pkg check
+pkg update _all
+pkg uninstall mypackage</pre>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div style="max-width:22em">
+        <a class="brand" href="index.html"><span class="mark">A</span><b>AURA</b></a>
+        <p>An open, Python-native environment for statistics, econometrics, distributive analysis and price-reform simulation. By Dr. Abdelkrim Araar.</p>
+      </div>
+      <div><h5>Product</h5><a href="features.html">Features</a><a href="packages.html">Packages</a><a href="download.html">Download</a></div>
+      <div><h5>Learn</h5><a href="commands.html">Command reference</a><a href="learn.html#guides">Guides</a><a href="learn.html#manuals">Manuals</a><a href="release-notes.html">Release notes</a></div>
+      <div><h5>Project</h5><a href="about.html">About</a><a href="about.html#cite">How to cite</a><a href="https://www.gnu.org/licenses/gpl-3.0.html">Licence — GPLv3</a><a href="https://github.com/aabbdd12/aura/issues">Report a problem</a></div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
+      <span>AURA 1.6 · <a href="release-notes.html">release notes</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function hideAnnounce() {
+    document.getElementById("announce").classList.add("gone");
+    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+  }
+  try {
+    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+      document.getElementById("announce").classList.add("gone");
+    }
+  } catch (e) {}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!-- title: Features — AURA | description: What AURA does: data management, estimation, tables of results, survey statistics, graphics, reproducible scripts, and your own commands. | nav: features | out: features.html -->
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Features</p>
+    <h1>Everything an applied analysis needs, in one place</h1>
+    <p>Type a command or fill a dialog box: AURA writes every action as a command, so the whole analysis can be run again. Each command has a help page with examples you can run.</p>
+    <nav class="subnav" aria-label="Sections">
+      <a href="#data">Data management</a><a href="#estimation">Estimation</a><a href="#tables">Tables of results</a>
+      <a href="#survey">Survey data</a><a href="#graphics">Graphics</a><a href="#scripts">Scripts</a><a href="#extend">Extend AURA</a>
+    </nav>
+  </div>
+</section>
+
+<section class="block" id="data">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Data management</p>
+      <h2>A workspace of datasets, never overwritten in silence</h2>
+      <p>Open Stata, SPSS, SAS, Excel and CSV files; keep several datasets in the Workspace and switch between them. <span class="k">merge</span>, <span class="k">reshape</span> and <span class="k">collapse</span> write their result as a new dataset, so the original is kept. Labels, value labels, formats and notes travel with the data.</p>
+      <pre class="code">use "bkf98I.dta"
+bysort zone: summarize exppc size
+egen mean_exp = mean(exppc), by(zone)
+label variable mean_exp "Mean spending in the zone"
+tabstat exppc size, by(zone) stats(mean sd p50)</pre>
+    </div>
+    <img src="images/data-editor.png" alt="The data editor on a household survey: variables with their value labels." loading="lazy">
+  </div>
+</section>
+
+<section class="block alt" id="estimation">
+  <div class="wrap split flip">
+    <div>
+      <p class="eyebrow">Estimation</p>
+      <h2>Regression, panel and instrumental variables — with their tests</h2>
+      <p>Linear regression, logit, probit and poisson; fixed, random and between effects with the Hausman test; two-stage least squares, LIML and GMM. Robust and clustered standard errors, weights, factor variables and interactions (<span class="k">i.zone</span>, <span class="k">c.size#c.size</span>), collinear variables left out with a note. After the estimation: <span class="k">predict</span>, <span class="k">margins</span>, <span class="k">test</span>, <span class="k">lincom</span>, <span class="k">nlcom</span>.</p>
+      <pre class="code">regress lexp size i.zone c.size#c.size, vce(cluster psu)
+logit poor size i.zone [pw=weight]
+predict p_poor
+quietly xtreg lexp size, fe
+estimates store fe
+quietly xtreg lexp size, re
+hausman fe .</pre>
+    </div>
+    <img src="images/dialog-regress.jpg" alt="The dialog box of regress: variables, factors and options; it writes the command." loading="lazy">
+  </div>
+</section>
+
+<section class="block" id="tables">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Tables of results</p>
+      <h2>Models side by side, ready for the paper</h2>
+      <p><span class="k">eststo</span> stores the models, <span class="k">esttab</span> writes them side by side: coefficients with stars, standard errors or t statistics, the statistics you choose, variable labels. To the screen, or to a file in LaTeX, HTML, RTF for Word, CSV or Markdown. <span class="k">estpost</span> turns summaries and tabulations into tables of the same kind.</p>
+      <pre class="code">eststo: regress lexp size
+eststo: regress lexp size i.zone
+esttab, se star(* 0.10 ** 0.05 *** 0.01) label
+esttab using "models.rtf", replace</pre>
+    </div>
+    <pre class="code" aria-label="The table esttab writes">────────────────┬─────────────────────────────
+                │       (1)            (2)
+                │      lexp           lexp
+────────────────┼─────────────────────────────
+ Household size │   -0.0682***     -0.0516***
+                │ (0.00166)      (0.00155)
+                │
+ Urban          │                    0.762***
+                │                 (0.0174)
+                │
+ Constant       │     12.16***       11.81***
+                │  (0.0152)       (0.0159)
+────────────────┼─────────────────────────────
+ Observations   │      8478           8478
+────────────────┴─────────────────────────────
+  Standard errors in parentheses
+  * p&lt;0.10, ** p&lt;0.05, *** p&lt;0.01</pre>
+  </div>
+</section>
+
+<section class="block alt" id="survey">
+  <div class="wrap split flip">
+    <div>
+      <p class="eyebrow">Survey data</p>
+      <h2>The design of the survey, in every standard error</h2>
+      <p>Declare the strata, primary sampling units and weights once with <span class="k">svyset</span> — a <span class="k">.dta</span> file brings its own design. <span class="k">svy:</span> then gives means, totals, ratios, proportions and regressions with linearized standard errors, by subpopulation if needed; <span class="k">bootstrap</span> resamples the design.</p>
+      <pre class="code">svyset psu [pw=weight], strata(strata)
+svy: mean exppc size
+svy: proportion poor
+svy, subpop(zone == 1): regress lexp size</pre>
+    </div>
+    <pre class="code" aria-label="The output of svy: mean">Survey: Mean estimation
+
+Number of strata =     10       Number of obs   =        8,478
+Number of PSUs   =    425       Population size =    1,398,888.489
+                                Design df       =          415
+───────┬──────────────────────────────────────────────
+       │                       Linearized
+       │   Mean    Std. err.   [95% conf.   interval]
+───────┼──────────────────────────────────────────────
+ exppc │ 173,791    7,089.46      159,856     187,727
+ size  │  7.5756    0.100080       7.3788      7.7723
+───────┴──────────────────────────────────────────────</pre>
+  </div>
+</section>
+
+<section class="block" id="graphics">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Graphics</p>
+      <h2>Publication graphs, edited with the mouse</h2>
+      <p>Two-way plots in layers, histograms, densities, bars, pies and interactive 3-D surfaces. In the Graph Editor, click a part of the graph — a title, the legend, an axis, a curve — to move it or open its own window of options; add texts, lines and arrows. <span class="k">graphmerge</span> joins graphs into one figure sized for a page; a right click copies a graph to Word as a vector drawing.</p>
+      <pre class="code">histogram exppc if exppc &lt; 300000
+twoway (scatter lexp size) (lfit lexp size)
+graphmerge -2 -1, cols(2)
+graph export "figure.emf"</pre>
+    </div>
+    <div class="stackimg"><img src="images/graph-editor.png" alt="The Graph Editor with its Objects tree." loading="lazy"><img src="images/graphmerge.png" alt="A figure of four graphs merged with graphmerge." loading="lazy"></div>
+  </div>
+</section>
+
+<section class="block alt" id="scripts">
+  <div class="wrap split flip">
+    <div>
+      <p class="eyebrow">Scripts and reproducibility</p>
+      <h2>Run it once, run it again tomorrow</h2>
+      <p><span class="k">.aur</span> scripts with loops, conditions, macros and matrices, in an editor that flags problems as you type. Every action of a menu or a dialog box is written as a command in the Review panel. A log keeps the session; an html log keeps its graphs too.</p>
+      <pre class="code">log using "session.hlog", replace
+foreach v of varlist exppc size {
+    quietly summarize `v'
+    display "`v': mean " %9.2f r(mean)
+}
+log close</pre>
+    </div>
+    <img src="images/script-editor.jpg" alt="The AURA script editor." loading="lazy">
+  </div>
+</section>
+
+<section class="block" id="extend">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Extend AURA</p>
+      <h2>Your own commands, dialog boxes and packages</h2>
+      <p>A new command is a small Python <span class="k">.auru</span> file: it reads the data and the options, and writes its results like any command. Dialog Studio designs its dialog box; the module editor tests it, and its AI assistant can draft it from a description and check it against your numbers. Publish a package that others install with <span class="k">pkg install</span>.</p>
+      <ul class="ticks">
+        <li>Help pages in a simple markup, with examples users run with a click</li>
+        <li>Packages with versions, updates and their own menu entries</li>
+        <li>The Python scientific stack inside every module</li>
+      </ul>
+    </div>
+    <div class="stackimg">
+      <img src="images/module-editor-ai.jpg" alt="The module editor with its AI assistant." loading="lazy">
+      <img src="images/dialog-studio.jpg" alt="Dialog Studio: the code of a dialog box and its preview." loading="lazy">
+    </div>
+  </div>
+</section>

@@ -1,0 +1,3134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Developer Guide — AURA</title>
+<meta name="description" content="The AURA Developer Guide: write your own commands as Python modules, with their results, tables, help pages, dialog boxes and packages.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+
+<div class="announce" id="announce">
+  <div class="wrap">
+    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
+    <span class="short"><b>AURA 1.6</b> is out.</span>
+    <a href="../release-notes.html#v1.6">See what's new &rarr;</a>
+    <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="mark">A</span><b>AURA</b></a>
+    <nav class="main" id="menu" aria-label="Main">
+      <ul>
+        <li><a class="top-link" href="../features.html">Features</a>
+          <div class="drop">
+            <a href="../features.html#data">Data management<small>Workspace, merge, reshape, by groups</small></a>
+            <a href="../features.html#estimation">Estimation<small>Regression, panel, IV, post-estimation</small></a>
+            <a href="../features.html#tables">Tables of results<small>esttab: screen, LaTeX, Word, HTML</small></a>
+            <a href="../features.html#survey">Survey data<small>Designs and their standard errors</small></a>
+            <a href="../features.html#graphics">Graphics<small>The Graph Editor, merged figures, 3-D</small></a>
+            <a href="../features.html#scripts">Scripts and reproducibility<small>Loops, macros, logs with graphs</small></a>
+            <a href="../features.html#extend">Extend AURA<small>Modules, dialog boxes, AI assistant</small></a>
+          </div></li>
+        <li><a class="top-link" href="../packages.html">Packages</a>
+          <div class="drop">
+            <a href="../packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
+            <a href="../packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="../packages.html#more">More packages<small>Install, update, publish your own</small></a>
+          </div></li>
+        <li><a class="top-link on" href="../learn.html">Learn</a>
+          <div class="drop">
+            <a href="../commands.html">Command reference<small>Every command, searchable</small></a>
+            <a href="../learn.html#guides">User and Developer guides<small>Read them online</small></a>
+            <a href="../learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="../release-notes.html">Release notes</a>
+          </div></li>
+        <li><a class="top-link" href="../download.html">Download</a></li>
+        <li><a class="top-link" href="../about.html">About</a>
+          <div class="drop">
+            <a href="../about.html">The project</a>
+            <a href="../about.html#cite">How to cite</a>
+            <a href="../about.html#licence">Licence</a>
+            <a href="../about.html#contact">Report a problem</a>
+          </div></li>
+      </ul>
+    </nav>
+    <button class="burger" type="button" aria-label="Menu" aria-controls="menu"
+            onclick="document.getElementById('menu').classList.toggle('open')">&#9776;</button>
+    <a class="btn btn-gold btn-small" href="../download.html">Download</a>
+  </div>
+</header>
+
+<main>
+<div class="wrap docs">
+<nav class="toc" aria-label="Contents">
+<a class="l2" href="#version-16-building-modules-for-aura">Version 1.6 — Building Modules for AURA</a>
+<a class="l2" href="#1-aura-as-a-platform">1. AURA as a Platform</a>
+<a class="l3" href="#what-the-platform-provides-to-the-developer">What the platform provides to the developer</a>
+<a class="l3" href="#what-the-developer-provides">What the developer provides</a>
+<a class="l2" href="#2-module-architecture-the-auru-protocol">2. Module Architecture — The .auru Protocol</a>
+<a class="l3" href="#canonical-module-shape">Canonical module shape</a>
+<a class="l3" href="#where-to-put-your-auru-file">Where to put your .auru file</a>
+<a class="l3" href="#existing-modules-in-this-repo">Existing modules in this repo</a>
+<a class="l2" href="#3-the-args-syntax-system-reference">3. The args() / syntax() System (reference)</a>
+<a class="l3" href="#import">Import</a>
+<a class="l3" href="#calling-syntax">Calling syntax()</a>
+<a class="l3" href="#accessing-results">Accessing results</a>
+<a class="l3" href="#option-type-functions">Option type functions</a>
+<a class="l3" href="#varlist-constraints">varlist constraints</a>
+<a class="l3" href="#names-and-free-text">Names and free text</a>
+<a class="l3" href="#handing-a-value-back-auralocal">Handing a value back — aura.local()</a>
+<a class="l3" href="#what-syntax-validates-automatically">What syntax() validates automatically</a>
+<a class="l3" href="#if-in-without-syntax">if / in without syntax()</a>
+<a class="l2" href="#4-session-api-reference">4. Session API Reference</a>
+<a class="l3" href="#data-access">Data access</a>
+<a class="l3" href="#modifying-data">Modifying data</a>
+<a class="l3" href="#label-access">Label access</a>
+<a class="l3" href="#defining-labels-from-a-module">Defining labels from a module</a>
+<a class="l3" href="#output">Output</a>
+<a class="l3" href="#events">Events</a>
+<a class="l3" href="#result-namespaces">Result namespaces</a>
+<a class="l3" href="#history-and-survey">History and survey</a>
+<a class="l3" href="#long-commands-progress-and-interruption">Long commands — progress and interruption</a>
+<a class="l3" href="#reporting-by-group-coregroupingpy">Reporting by group — core/grouping.py</a>
+<a class="l2" href="#5-result-classes">5. Result Classes</a>
+<a class="l3" href="#declaration">Declaration</a>
+<a class="l3" href="#returning-output-alongside-stored-results">Returning output alongside stored results</a>
+<a class="l3" href="#rclass-descriptive-commands">rclass — descriptive commands</a>
+<a class="l3" href="#eclass-estimation-commands">eclass — estimation commands</a>
+<a class="l2" href="#5b-posting-results-the-return-system">5B. Posting Results — the Return System</a>
+<a class="l3" href="#posting-from-a-module">Posting from a module</a>
+<a class="l3" href="#the-archive">The archive</a>
+<a class="l3" href="#reading-results-back">Reading results back</a>
+<a class="l3" href="#named-matrices">Named matrices</a>
+<a class="l3" href="#ereturn-sreturn">ereturn / sreturn</a>
+<a class="l3" href="#pitfall-silent-posts-must-return-not-none">Pitfall — silent posts must return [], not None</a>
+<a class="l2" href="#6-multi-dataset-modules">6. Multi-Dataset Modules</a>
+<a class="l3" href="#61-direct-workspace-access">6.1 Direct workspace access</a>
+<a class="l3" href="#62-the-datasrc-protocol">6.2 The datasrc protocol</a>
+<a class="l3" href="#comparing-two-distributions-distset">Comparing two distributions — distset</a>
+<a class="l3" href="#63-the-sw-protocol-declarative-form">6.3 The sw protocol — declarative form</a>
+<a class="l2" href="#6b-matrices-macros-and-containers">6B. Matrices, Macros and Containers</a>
+<a class="l3" href="#matrices-corematrix_enginepy">Matrices — core/matrix_engine.py</a>
+<a class="l3" href="#macros-and-scalars-coremacrospy">Macros and scalars — core/macros.py</a>
+<a class="l3" href="#omatrix-coreomatrixpy">omatrix — core/omatrix.py</a>
+<a class="l2" href="#7-producing-graphics">7. Producing Graphics</a>
+<a class="l3" href="#pattern">Pattern</a>
+<a class="l3" href="#combining-table-and-figure">Combining table and figure</a>
+<a class="l3" href="#example-linear-fit-with-confidence-band">Example: linear fit with confidence band</a>
+<a class="l2" href="#7b-aura-blocks">7B. Aura Blocks</a>
+<a class="l3" href="#the-simple-form">The simple form</a>
+<a class="l3" href="#the-bridge-form-auranamearray">The bridge form — aura(name=array, ...):</a>
+<a class="l3" href="#scope-semantics-what-survives">Scope semantics — what survives</a>
+<a class="l3" href="#permanent-the-escape-hatch">permanent — the escape hatch</a>
+<a class="l3" href="#python-aura-interpolation">Python ↔ AURA interpolation</a>
+<a class="l3" href="#reading-aura-results-back-in-python">Reading AURA results back in Python</a>
+<a class="l3" href="#how-it-works-under-the-hood">How it works under the hood</a>
+<a class="l3" href="#blocks-do-not-nest">Blocks do not nest</a>
+<a class="l3" href="#pre-filling-a-dialog-from-a-command">Pre-filling a dialog from a command</a>
+<a class="l3" href="#when-not-to-use-an-aura-block">When NOT to use an aura: block</a>
+<a class="l2" href="#7c-producing-tables-coretablestable">7C. Producing Tables — core.tables.Table</a>
+<a class="l3" href="#quickest-path-return-a-table-from-run">Quickest path — return a Table from run()</a>
+<a class="l3" href="#builders">Builders</a>
+<a class="l3" href="#formatting-fluent-style">Formatting — fluent style</a>
+<a class="l3" href="#renderers">Renderers</a>
+<a class="l3" href="#worked-example">Worked example</a>
+<a class="l3" href="#grouped-tables-ipov-style-output">Grouped tables — ipov-style output</a>
+<a class="l3" href="#manual-row-groups-if-you-dont-need-tpci-computation">Manual row groups (if you don&#x27;t need t/p/CI computation)</a>
+<a class="l3" href="#what-not-to-do-anymore">What NOT to do anymore</a>
+<a class="l2" href="#7d-the-estimation-module-pattern">7D. The Estimation Module Pattern</a>
+<a class="l3" href="#reference-implementation">Reference implementation</a>
+<a class="l3" href="#the-8-step-flow">The 8-step flow</a>
+<a class="l3" href="#shared-estimation-helpers-coreestimationpy">Shared estimation helpers — core/estimation.py</a>
+<a class="l3" href="#what-the-developer-owns">What the developer owns</a>
+<a class="l3" href="#what-aura-provides-for-free">What AURA provides for free</a>
+<a class="l3" href="#value-label-retrieval">Value-label retrieval</a>
+<a class="l3" href="#adapting-the-pattern-to-other-estimators">Adapting the pattern to other estimators</a>
+<a class="l2" href="#8-the-module-editor">8. The Module Editor</a>
+<a class="l3" href="#features">Features</a>
+<a class="l3" href="#the-toolbar-actions">The toolbar actions</a>
+<a class="l3" href="#three-pass-syntax-check">Three-pass syntax check</a>
+<a class="l3" href="#developer-overrides-testing-without-installing">Developer overrides — testing without installing</a>
+<a class="l3" href="#developer-friendly-runtime-errors">Developer-friendly runtime errors</a>
+<a class="l3" href="#the-test-directive-a-runnable-example-in-the-file">The # test: directive — a runnable example in the file</a>
+<a class="l3" href="#testing-workflow">Testing workflow</a>
+<a class="l2" href="#8b-debugging-and-tracing-tools">8B. Debugging and Tracing Tools</a>
+<a class="l3" href="#the-script-linter-corescript_lintpy">The script linter — core/script_lint.py</a>
+<a class="l3" href="#execution-tracing-set-trace">Execution tracing — set trace</a>
+<a class="l2" href="#8c-option-validation-option_guard">8C. Option Validation — option_guard</a>
+<a class="l2" href="#8d-fast-numeric-kernels-fastmath">8D. Fast Numeric Kernels — fastmath</a>
+<a class="l3" href="#heavy-libraries-at-first-use-corelazypy">Heavy libraries at first use — core/lazy.py</a>
+<a class="l2" href="#9-installing-and-distributing-modules">9. Installing and Distributing Modules</a>
+<a class="l3" href="#manual-install">Manual install</a>
+<a class="l3" href="#starting-a-package">Starting a package</a>
+<a class="l3" href="#the-manifest-namelst">The manifest — &lt;name&gt;.lst</a>
+<a class="l3" href="#the-repository-index-auracnt">The repository index — aura.cnt</a>
+<a class="l3" href="#package-commands">Package commands</a>
+<a class="l3" href="#adding-menu-entries">Adding menu entries</a>
+<a class="l2" href="#10-complete-examples">10. Complete Examples</a>
+<a class="l3" href="#example-1-mean-with-confidence-interval-rclass">Example 1 — Mean with confidence interval (rclass)</a>
+<a class="l3" href="#example-2-mean-comparison-across-two-datasets-eclass-sw-protocol">Example 2 — Mean comparison across two datasets (eclass, sw protocol)</a>
+<a class="l3" href="#example-3-standalone-figure-no-data-required">Example 3 — Standalone figure (no data required)</a>
+<a class="l2" href="#11-quick-reference">11. Quick Reference</a>
+<a class="l3" href="#injected-names-no-import-needed-inside-a-auru-file">Injected names (no import needed inside a .auru file)</a>
+<a class="l3" href="#aura-blocks-cheat-sheet">Aura blocks (cheat sheet)</a>
+<a class="l3" href="#args-option-types">args() option types</a>
+<a class="l3" href="#args-top-level-parameters">args() top-level parameters</a>
+<a class="l3" href="#parsedsyntax-attributes-returned-by-args">ParsedSyntax attributes (returned by args())</a>
+<a class="l3" href="#output-helpers">Output helpers</a>
+<a class="l3" href="#session-api">Session API</a>
+<a class="l3" href="#aura_class-values">aura_class values</a>
+<a class="l3" href="#_output-convention">_output convention</a>
+<a class="l3" href="#sw-protocol-multi-dataset-options">sw protocol (multi-dataset options)</a>
+<a class="l2" href="#12-the-auruconnect-api-reference">12. The auru.connect API (reference)</a>
+<a class="l3" href="#inputs-from-auruconnectinputs">Inputs (from auru.connect.inputs)</a>
+<a class="l3" href="#outputs-from-auruconnectoutputs">Outputs (from auru.connect.outputs)</a>
+<a class="l3" href="#graph-from-auruconnectgraph">Graph (from auru.connect.graph)</a>
+<a class="l3" href="#writing-a-graph-module">Writing a graph module</a>
+<a class="l2" href="#13-writing-a-help-file-aurh">13. Writing a Help File (.aurh)</a>
+<a class="l3" href="#quickest-start-scaffold-one-from-the-module-editor">Quickest start — scaffold one from the Module Editor</a>
+<a class="l3" href="#why-a-dedicated-mini-format-instead-of-markdown">Why a dedicated mini-format instead of Markdown ?</a>
+<a class="l3" href="#file-structure">File structure</a>
+<a class="l3" href="#exampledata-make-the-examples-runnable">##exampledata — make the examples runnable</a>
+<a class="l3" href="#technote-the-method-behind-the-command">##technote — the method behind the command</a>
+<a class="l3" href="#inline-tags">Inline tags</a>
+<a class="l3" href="#helpwindow-features">HelpWindow features</a>
+<a class="l3" href="#minimal-example">Minimal example</a>
+<a class="l2" href="#14-writing-a-demo">14. Writing a Demo</a>
+<a class="l3" href="#quickest-start-scaffold-one-in-2-seconds">Quickest start — scaffold one in 2 seconds</a>
+<a class="l3" href="#directory-layout">Directory layout</a>
+<a class="l3" href="#manifest-schema-manifestjson">Manifest schema (manifest.json)</a>
+<a class="l3" href="#single-file-demos-demo-front-matter">Single-file demos — @demo front-matter</a>
+<a class="l3" href="#where-demos-are-discovered">Where demos are discovered</a>
+<a class="l3" href="#bundling-a-demo-with-your-auru-module">Bundling a demo with your .auru module</a>
+<a class="l3" href="#writing-a-good-demo-script">Writing a good demo script</a>
+<a class="l3" href="#safety-contract">Safety contract</a>
+<a class="l3" href="#per-command-demos-the-demo-protocol">Per-command demos — the .demo protocol</a>
+<a class="l2" href="#15-auradb-the-dialog-studio">15. AURADB — the Dialog Studio</a>
+<a class="l3" href="#the-language">The language</a>
+<a class="l3" href="#the-studio">The Studio</a>
+<a class="l3" href="#testing-rule">Testing rule</a>
+<a class="l2" href="#16-the-graph-object-model-aurg">16. The Graph Object Model (.aurg)</a>
+<a class="l3" href="#the-spec-coregraph_specpy">The spec — core/graph_spec.py</a>
+<a class="l3" href="#saving-and-rendering">Saving and rendering</a>
+<a class="l3" href="#the-catalogue-coregraph_catalogpy">The catalogue — core/graph_catalog.py</a>
+<a class="l3" href="#the-editors">The editors</a>
+<a class="l2" href="#17-ai-assisted-module-authoring">17. AI-Assisted Module Authoring</a>
+<a class="l3" href="#providers-coreaiproviderpy-configpy">Providers — core/ai/provider.py, config.py</a>
+<a class="l3" href="#the-project-scaffold-coreaiprojectpy">The project scaffold — core/ai/project.py</a>
+<a class="l3" href="#generating-and-shipping-chatpy-generatorpy-produce-package">Generating and shipping — chat.py / generator.py, Produce Package</a>
+<a class="l3" href="#validating-the-headless-test-service-and-the-two-gates">Validating — the headless test service and the two gates</a>
+</nav>
+<article class="doc">
+<h1 id="aura-developer-guide">AURA Developer Guide</h1>
+<h2 id="version-16-building-modules-for-aura">Version 1.6 — Building Modules for AURA</h2>
+<hr />
+<hr />
+<h2 id="1-aura-as-a-platform">1. AURA as a Platform</h2>
+<p>AURA is a <strong>protocol and a platform</strong>, not just a statistics tool. Its command interface draws inspiration <strong>in part</strong> from established statistical software such as Stata, but AURA is an <strong>independent</strong> platform — the protocol below, the internals, and the behaviour are its own, and it is not a clone of any single package. Its core value is the separation between three layers:</p>
+<pre><code>┌──────────────────────────────────────────┐
+│  USER LAYER                              │
+│  Types commands. Sees results.           │
+│  No Python knowledge required.           │
+├──────────────────────────────────────────┤
+│  PLATFORM LAYER  (AURA core)             │
+│  Parses input. Manages session state.    │
+│  Routes commands. Stores results.        │
+│  Refreshes GUI. Manages workspace.       │
+├──────────────────────────────────────────┤
+│  MODULE LAYER  (.auru files)             │
+│  Pure Python. Full scientific stack.     │
+│  Reads data. Computes. Returns output.   │
+└──────────────────────────────────────────┘
+</code></pre>
+<h3 id="what-the-platform-provides-to-the-developer">What the platform provides to the developer</h3>
+<p>When you write a <code>.auru</code> module, AURA automatically handles:</p>
+<ul>
+<li><strong>Parsing</strong> — the user's raw command string is parsed into a structured object (<code>parsed</code>) with validated varlist, if/in conditions, options, and weights</li>
+<li><strong>Session state</strong> — the active dataset, all labels, all stored results (r/e/s), command history</li>
+<li><strong>Multi-dataset workspace</strong> — access to all loaded datasets by name or declared source id</li>
+<li><strong>Result storage</strong> — declare <code>__aura_class__</code> and return a dict; AURA posts it to the right namespace automatically</li>
+<li><strong>GUI refresh</strong> — emit <code>session.events.emit("data_updated")</code> and all panels update instantly</li>
+<li><strong>Library availability</strong> — numpy, pandas, scipy, statsmodels, matplotlib are already imported in the process; your <code>import</code> statements are instant cache lookups</li>
+</ul>
+<h3 id="what-the-developer-provides">What the developer provides</h3>
+<ul>
+<li>A <code>.auru</code> file named after the command</li>
+<li>A <code>run(session, parsed)</code> function</li>
+<li>The statistical logic and output formatting</li>
+</ul>
+<p>That is all. No registration, no configuration, no restart needed.</p>
+<hr />
+<h2 id="2-module-architecture-the-auru-protocol">2. Module Architecture — The .auru Protocol</h2>
+<p><strong>Every <code>.auru</code> module follows the same three-step contract:</strong></p>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│  1. DECLARATION   The developer declares the command's syntax   │
+│                   via args(). AURA validates everything.        │
+│                                                                 │
+│  2. SILENCE RADIO Pure Python. Any library, any external tool.  │
+│                   AURA does not look in, does not constrain.    │
+│                                                                 │
+│  3. RETURN        result() / text() / error() / warning()       │
+│                   AURA collects what the module emits.          │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="canonical-module-shape">Canonical module shape</h3>
+<pre><code class="language-python">&quot;&quot;&quot;mymod — One-line description.&quot;&quot;&quot;
+__aura_class__ = &quot;rclass&quot;     # or &quot;eclass&quot; / &quot;sclass&quot; / omit
+
+import numpy as np   # any scientific library you want (no AURA imports needed)
+
+
+def _compute(df, var, alpha):
+    &quot;&quot;&quot;Pure Python. Testable with pytest alone — no AURA dependency.&quot;&quot;&quot;
+    return {&quot;stat&quot;: float(df[var].mean()), &quot;n&quot;: int(df[var].notna().sum())}
+
+
+def run(session, parsed):
+
+    # 1. DECLARATION — args() is your only validation surface
+    a = args(parsed, session,
+        varlist = varlist(min=1, max=1, numeric=True),
+        options = {
+            &quot;alpha&quot;: real(default=0.05, min=0, max=1),
+            &quot;level&quot;: integer(default=95, min=1, max=99),
+        },
+    )
+
+    # 2. SILENCE RADIO — pure Python
+    res = _compute(a.df, a.varlist[0], a.opt.alpha)
+
+    # 3. RETURN
+    return result(
+        text = f&quot;stat = {res['stat']:.4f}   N = {res['n']}&quot;,
+        kind = &quot;r&quot;,
+        **res,
+    )
+</code></pre>
+<p>That is the <strong>entire protocol</strong>. No registration, no decorators, no AURA
+imports. The helpers <code>args</code>, <code>varlist</code>, <code>flag</code>, <code>integer</code>, <code>real</code>, <code>string</code>,
+<code>varname</code>, <code>choice</code>, <code>result</code>, <code>text</code>, <code>error</code>, <code>warning</code>, <code>note</code>,
+<code>active_df</code>, <code>sw_pair</code>, <code>sw_load</code>, <code>sw_resolve</code> are <strong>injected automatically</strong>
+into every <code>.auru</code> namespace by the execution engine.</p>
+<blockquote>
+<p><strong>The stable public API is <code>auru.connect</code>.</strong> Even though you don't import
+it, that is the module surface the helpers come from. Sections 3-10 of
+this guide describe what <code>args()</code> and the helpers do under the hood;
+they are reference material, not alternative protocols. For new modules,
+only the form shown above is supported.</p>
+</blockquote>
+<h3 id="where-to-put-your-auru-file">Where to put your .auru file</h3>
+<pre><code>1. Built-in registered commands  (core/execution_engine.py — AURA team only)
+2. %USERPROFILE%\AURA\modules\personal\   ← your own modules
+3. %USERPROFILE%\AURA\modules\plus\&lt;package&gt;\
+4. %USERPROFILE%\AURA\modules\base\
+5. ./auru/                                ← project-shipped modules
+</code></pre>
+<p>The first match wins; place a module in <code>personal/</code> to override a base one.</p>
+<h3 id="existing-modules-in-this-repo">Existing modules in this repo</h3>
+<p>Some files in <code>./auru/</code> predate the v0.2 protocol and use older patterns
+(direct <code>core.syntax</code> imports, raw dict returns, ad-hoc error strings).
+Treat those as <strong>legacy</strong> — they may still execute, but they are not the
+template for new work. The two canonical examples are:</p>
+<ul>
+<li><code><code>examples/modules/diff.auru</code></code> — an example module for the sw protocol: <code>args(sw=True)</code>, <code>result(kind='e')</code></li>
+<li><code><code>auru/histo.auru</code></code> — varlist, an <code>aura:</code> block, <code>result(kind='r')</code></li>
+</ul>
+<p>Their <code>.aurh</code> files show the help format that pairs with the protocol.</p>
+<hr />
+<h2 id="3-the-args-syntax-system-reference">3. The args() / syntax() System (reference)</h2>
+<blockquote>
+<p><strong>Reference section.</strong> In your <code>.auru</code> file you call <code>args()</code> — it is
+already injected into the namespace and is the public name of this API.
+Internally <code>args()</code> calls <code>core.syntax.syntax()</code>, documented below for
+understanding how validation works. Always write <code>args(...)</code> in modules,
+not <code>syntax(...)</code> or direct <code>core.syntax</code> imports.</p>
+</blockquote>
+<p><code>args()</code> is AURA's standardised input validation layer — analogous to a <code>syntax</code>-style validator in other statistical packages. It parses, validates, and type-converts all inputs in one call.</p>
+<h3 id="import">Import</h3>
+<pre><code class="language-python">from core.syntax import syntax, flag, integer, real, string, varname, varlist, choice
+</code></pre>
+<h3 id="calling-syntax">Calling syntax()</h3>
+<pre><code class="language-python">syn = syntax(parsed, session,
+    varlist_spec = varlist(min=1, numeric=True),
+    if_in        = True,
+    weights      = [&quot;aweight&quot;, &quot;pweight&quot;],
+    options = {
+        &quot;detail&quot;    : flag(),
+        &quot;level&quot;     : integer(95, min=1, max=99),
+        &quot;cluster&quot;   : varname(),
+        &quot;vce&quot;       : choice(&quot;ols&quot;, &quot;robust&quot;, &quot;cluster&quot;),
+        &quot;alpha&quot;     : real(0.05, min=0.0, max=1.0),
+        &quot;noconstant&quot;: flag(),
+        &quot;title&quot;     : string(&quot;&quot;),
+    }
+)
+</code></pre>
+<h3 id="accessing-results">Accessing results</h3>
+<pre><code class="language-python">syn.varlist        # list[str]  — validated variable list
+syn.depvar         # str        — first variable (dependent)
+syn.indepvars      # list[str]  — variables[1:] (regressors)
+syn.df             # DataFrame  — data with if/in applied
+syn.if_cond        # str|None   — raw if condition
+syn.obs_range      # tuple|None — (1, 100)
+syn.weight         # str|None   — weight variable name
+syn.weight_type    # str|None   — &quot;aweight&quot;|&quot;pweight&quot;|...
+syn.opt.detail     # bool
+syn.opt.level      # int
+syn.opt.cluster    # str|None
+syn.opt.vce        # str
+syn.opt.alpha      # float
+syn.opt.title      # str
+</code></pre>
+<h3 id="option-type-functions">Option type functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Example declaration</th>
+<th>User syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flag()</code></td>
+<td><code>bool</code></td>
+<td><code>"noconstant": flag()</code></td>
+<td><code>, noconstant</code></td>
+</tr>
+<tr>
+<td><code>integer(n, min, max)</code></td>
+<td><code>int</code></td>
+<td><code>"level": integer(95, min=1, max=99)</code></td>
+<td><code>, level(90)</code></td>
+</tr>
+<tr>
+<td><code>real(x, min, max)</code></td>
+<td><code>float</code></td>
+<td><code>"alpha": real(0.05)</code></td>
+<td><code>, alpha(0.01)</code></td>
+</tr>
+<tr>
+<td><code>string("")</code></td>
+<td><code>str</code></td>
+<td><code>"title": string("")</code></td>
+<td><code>, title(My Output)</code></td>
+</tr>
+<tr>
+<td><code>varname()</code></td>
+<td><code>str\|None</code></td>
+<td><code>"by": varname()</code></td>
+<td><code>, by(region)</code></td>
+</tr>
+<tr>
+<td><code>choice(*c)</code></td>
+<td><code>str</code></td>
+<td><code>"vce": choice("ols","robust")</code></td>
+<td><code>, vce(robust)</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="varlist-constraints">varlist constraints</h3>
+<pre><code class="language-python">varlist()                      # any number, any type
+varlist(min=1)                 # at least 1 required
+varlist(min=2, max=2)          # exactly 2
+varlist(min=1, numeric=True)   # at least 1, all numeric
+varlist(min=0)                 # optional
+</code></pre>
+<h3 id="names-and-free-text">Names and free text</h3>
+<p>A command whose words are not variables declares them instead of a varlist. The
+declarations go in <code>args()</code>, and are available in a module without an import.</p>
+<pre><code class="language-python">a = args(parsed, session, namelist=namelist(min=2, max=3, id=&quot;thing&quot;))
+a.namelist                 # [&quot;a&quot;, &quot;b&quot;]: valid names, which need not exist
+
+a = args(parsed, session, namelist=name(name=&quot;who&quot;, id=&quot;person&quot;))
+a.who                      # &quot;ann&quot;: one name, a string
+
+a = args(parsed, session, anything=anything(name=&quot;e&quot;, id=&quot;expression&quot;))
+a.e                        # &quot;a + b&quot;: the words as they were typed
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Declaration</th>
+<th>Arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>namelist()</code></td>
+<td><code>min=1</code>, <code>max=None</code>, <code>name=</code> (the attribute; <code>namelist</code> by default), <code>id=</code> (the word in messages), <code>local=False</code> (names of local macros: a digit may come first)</td>
+</tr>
+<tr>
+<td><code>name()</code></td>
+<td><code>required=True</code>, <code>name=</code> (<code>name</code> by default), <code>id=</code>, <code>local=False</code></td>
+</tr>
+<tr>
+<td><code>anything()</code></td>
+<td><code>required=True</code>, <code>name=</code> (<code>anything</code> by default), <code>id=</code>, <code>equalok=False</code> (a lone <code>=</code> is allowed), <code>everything=False</code> (<code>if</code>, <code>in</code> and <code>using</code> belong to the text)</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing given when something is needed is r(100) (<code>id required</code>); too few r(102); too
+many r(103); a word that cannot be a name r(198); a lone <code>=</code> r(101).</p>
+<p><code>anything()</code> stops at <code>if</code>, <code>in</code>, <code>using</code>, a <code>[weight]</code> or the comma, and <code>x[1]</code> stays
+in the text. With <code>everything=True</code> it stops at the comma only, and the module writes
+at its top level, so that AURA does not read those words as an <code>if</code> and an <code>in</code>
+before it runs:</p>
+<pre><code class="language-python">__aura_free_text__ = True
+</code></pre>
+<h3 id="handing-a-value-back-auralocal">Handing a value back — <code>aura.local()</code></h3>
+<p>A module has its own local macros, which end with it. <code>aura.local()</code> reads and writes
+those of the command that called it, so a module can give a script a value:</p>
+<pre><code class="language-python">aura.local(&quot;answer&quot;, 42)        # `answer' is 42 in the script that ran the module
+caller = aura.local(&quot;mine&quot;)     # a local of that script (&quot;&quot; if it has none)
+</code></pre>
+<p>In a <code>py:</code> block of a script, the same calls act on the script's own locals.</p>
+<h3 id="what-syntax-validates-automatically">What syntax() validates automatically</h3>
+<ul>
+<li>Varlist count (min/max), variable existence, numeric/string type</li>
+<li>Option type coercion, bounds checking, valid choice values</li>
+<li>Unknown option names (raises <code>SyntaxError</code> with clear message)</li>
+</ul>
+<p>Abbreviation matching is automatic: <code>, det</code> → <code>detail</code>, <code>, lev(90)</code> → <code>level</code>.</p>
+<h3 id="if-in-without-syntax"><code>if</code> / <code>in</code> without <code>syntax()</code></h3>
+<p>AURA evaluates the <code>if</code> / <code>in</code> written with a command once, on the whole dataset,
+before <code>run()</code> is called (<code>core.qualifiers.mark_sample</code>): a mistake in the
+condition stops there, and <code>_n</code> / <code>_N</code> in it are those of the whole dataset. The
+module receives the selected rows as <code>parsed.sample</code>, a boolean Series on the
+dataset's index (None without <code>if</code> / <code>in</code>), and applies them —
+<code>df[parsed.sample]</code> to compute on them, or, for a command that writes, its
+values on those rows only. <code>syn.df</code> and <code>parsed.work_df(session)</code> already hold
+them; <code>core.qualifiers.select(df, parsed.if_cond, parsed.obs_range, session)</code>
+reuses the same evaluation for the dataset's rows.</p>
+<p>Which of AURA's own commands take <code>if</code> / <code>in</code> is declared in
+<code>core.qualifiers.TAKES_IFIN</code> (<code>TAKES_IN_ONLY</code> for <code>in</code> alone); any other command
+of AURA refuses them with r(101). A module from outside AURA (a package, your own
+module, a generated one) is checked after it ran: given <code>if</code> / <code>in</code>, it must have
+read them (<code>parsed.sample</code>, <code>parsed.if_cond</code>, <code>work_df</code>, <code>syntax()</code>), or its
+results are replaced by an error — never a result computed on every row.</p>
+<p>Under the <code>by</code> prefix (<code>commands/by_prefix.py</code>), a command that takes <code>if</code> is run
+once per group, and <code>parsed.sample</code> is that group's rows (its <code>if</code> evaluated on the
+group, <code>_n</code> / <code>_N</code> counted in it). A module that applies <code>parsed.sample</code> — or
+<code>select</code> / <code>row_mask</code> with the session — therefore works by group with nothing
+more to write; one that re-evaluates <code>parsed.if_cond</code> by itself would compute on
+the whole dataset (for a group written without <code>if</code>, <code>if_cond</code> is a marker,
+<code>core.qualifiers.BY_GROUP</code>, that fails if evaluated).</p>
+<p>The conditions a module uses inside its computations are its own: an option such
+as <code>subpop()</code> or <code>cond1()</code> goes through <code>core.qualifiers.cond_array(df, text,
+session)</code>, a numpy boolean array (None when the option is empty), and a command
+the module runs (<code>aura:</code> block) reads its own <code>if</code> / <code>in</code> at its own level.</p>
+<p>Do not evaluate a condition with <code>df.eval</code> / <code>df.query</code>. Every AURA command
+follows one rule, and pandas knows none of it: a condition whose result is
+missing leaves the observation out (<code>if x != 0</code> does not select a row where <code>x</code>
+is missing), a numeric variable alone is true where it is non-zero (<code>if urban</code>),
+<code>in a/b</code> counts the whole dataset before any <code>if</code>, and a condition may use
+<code>missing()</code>, <code>x == .</code>, <code>!</code>, AURA's functions and the session's scalars.</p>
+<hr />
+<h2 id="4-session-api-reference">4. Session API Reference</h2>
+<p>The session object is the only interface to the AURA environment.</p>
+<h3 id="data-access">Data access</h3>
+<pre><code class="language-python">df = session.get_dataframe()           # active DataFrame or None
+df = session.get_dataframe(copy=True)  # safe copy to modify freely
+</code></pre>
+<h3 id="modifying-data">Modifying data</h3>
+<pre><code class="language-python">session.add_variable(&quot;newvar&quot;, series, label=&quot;My new variable&quot;)
+session.replace_variable(&quot;varname&quot;, series)
+session.drop_variables([&quot;var1&quot;, &quot;var2&quot;])
+session.drop_observations(mask)        # boolean Series
+session.reorder_variables([&quot;id&quot;, &quot;year&quot;, &quot;wage&quot;])
+session.set_dataframe(df)              # replace entire dataset
+
+# Always emit after modifying:
+session.events.emit(&quot;data_updated&quot;, dataframe=session.get_dataframe())
+</code></pre>
+<h3 id="label-access">Label access</h3>
+<pre><code class="language-python">session.get_var_label(&quot;wage&quot;)          # &quot;Monthly wage (USD)&quot;
+session.get_value_labels(&quot;sex&quot;)        # {1: &quot;Male&quot;, 2: &quot;Female&quot;}
+session.label_value(&quot;sex&quot;, 1)          # &quot;Male&quot;
+session.apply_labels(series, &quot;sex&quot;)    # labeled Series
+session.get_variable_info(&quot;wage&quot;)      # full metadata dict
+</code></pre>
+<h3 id="defining-labels-from-a-module">Defining labels from a module</h3>
+<pre><code class="language-python">session.define_value_labels(&quot;yesno&quot;, {0: &quot;No&quot;, 1: &quot;Yes&quot;})
+session.assign_value_labels(&quot;employed&quot;, &quot;yesno&quot;)
+</code></pre>
+<h3 id="output">Output</h3>
+<pre><code class="language-python"># Shortcut — return a string directly:
+return &quot;Operation completed.&quot;
+return tabulate(df, headers=&quot;keys&quot;)
+
+# Or use the output API:
+session.output.add_text(&quot;text&quot;)
+session.output.add_warning(&quot;msg&quot;)
+</code></pre>
+<h3 id="events">Events</h3>
+<pre><code class="language-python">session.events.emit(&quot;data_updated&quot;, dataframe=df)   # refresh GUI panels
+</code></pre>
+<h3 id="result-namespaces">Result namespaces</h3>
+<pre><code class="language-python">session.r    # rclass — general return values
+session.e    # eclass — estimation results
+session.s    # sclass — string results
+
+session.post_results({&quot;N&quot;: 100, &quot;mean&quot;: 42.0}, kind=&quot;r&quot;)
+session.get_results(kind=&quot;r&quot;)
+</code></pre>
+<h3 id="history-and-survey">History and survey</h3>
+<pre><code class="language-python">session.history      # list of all commands run
+session.survey       # dict — survey design metadata
+</code></pre>
+<hr />
+<h3 id="long-commands-progress-and-interruption">Long commands — progress and interruption</h3>
+<p>A command that may run for a while should do two things.</p>
+<p><strong>Report progress.</strong> <code>session.progress_bar(done, total, label)</code> drives the bar
+in the status bar; passing <code>total &lt;= 0</code> hides it. It is a no-op when there is
+no GUI, so the same code runs headless and under test.</p>
+<p><strong>Stay interruptible.</strong> <code>session.tick()</code> gives the interface a chance to
+respond and raises <code>BreakError</code> if the user pressed Stop. Call it once per
+iteration of your outer loop; without it a long loop cannot be interrupted.</p>
+<pre><code class="language-python">for i, rep in enumerate(replications):
+    session.tick()                                   # lets Stop work
+    session.progress_bar(i + 1, len(replications), &quot;bootstrap&quot;)
+    ...
+session.progress_bar(0, 0)                           # hide it when done
+</code></pre>
+<h3 id="reporting-by-group-coregroupingpy">Reporting by group — <code>core/grouping.py</code></h3>
+<p>Per-group work in AURA is an <strong>option</strong>, not a command prefix. The shared
+helper lives in <code>core/grouping.py</code> and is deliberately free of any
+command-specific logic, so adding <code>over()</code> to a command is cheap:</p>
+<pre><code class="language-python">from core import grouping
+
+over = grouping.parse_over(parsed)           # None when the option is absent
+if over:
+    bad = grouping.check_over(df, over, &quot;mycmd&quot;)   # unknown grouping variable?
+    if bad:
+        return bad
+    for label, sub in grouping.iter_groups(session, df, over):
+        ...                                  # one section per group, ONE table
+</code></pre>
+<p><code>parse_over(parsed)</code> reads the option off the parsed command and raises
+<code>ValueError</code> on an unknown sub-option; the sub-options are <code>nolabel</code>, <code>missing</code>
+and <code>descending</code>. <code>check_over</code> validates the grouping variables against the
+data. <code>iter_groups(session, df, spec)</code> yields <code>(label, subset)</code> with the
+ordering and missing-group policy already applied, the label resolved through
+the value labels — so a command only has to decide how to render each section.</p>
+<p><strong>Parse the option outside any broad <code>except</code>.</strong> A command that wraps its work
+in <code>try: ... except Exception:</code> and falls back to a legacy path will swallow
+the <code>ValueError</code> from a mis-spelled sub-option, and the user gets an ordinary
+table that looks as if the option had worked. That failure is silent, which is
+the one kind worth designing against.</p>
+<h2 id="5-result-classes">5. Result Classes</h2>
+<h3 id="declaration">Declaration</h3>
+<pre><code class="language-python">__aura_class__ = &quot;rclass&quot;   # → session.r
+__aura_class__ = &quot;eclass&quot;   # → session.e
+__aura_class__ = &quot;sclass&quot;   # → session.s
+</code></pre>
+<p>The engine clears the namespace before each call and auto-posts results if <code>run()</code> returns a dict.</p>
+<h3 id="returning-output-alongside-stored-results">Returning output alongside stored results</h3>
+<p>Use the <code>_output</code> key in the returned dict. The engine extracts it and displays it in the console; the rest goes into the result namespace:</p>
+<pre><code class="language-python">__aura_class__ = &quot;eclass&quot;
+
+def run(session, parsed):
+    ...
+    return {
+        &quot;N&quot;:       n,
+        &quot;mean1&quot;:   mean_a,
+        &quot;mean2&quot;:   mean_b,
+        &quot;diff&quot;:    mean_a - mean_b,
+        &quot;_output&quot;: formatted_table_string,   # displayed in console
+    }
+</code></pre>
+<p>Without <code>_output</code>, the dict is posted silently (nothing displayed).</p>
+<h3 id="rclass-descriptive-commands">rclass — descriptive commands</h3>
+<pre><code class="language-python">__aura_class__ = &quot;rclass&quot;
+
+def run(session, parsed):
+    ...
+    session.r[&quot;N&quot;]    = len(df)
+    session.r[&quot;mean&quot;] = float(df[&quot;wage&quot;].mean())
+    return output_string
+</code></pre>
+<h3 id="eclass-estimation-commands">eclass — estimation commands</h3>
+<pre><code class="language-python">__aura_class__ = &quot;eclass&quot;
+
+def run(session, parsed):
+    ...
+    names = list(result.params.index)
+
+    session.e[&quot;N&quot;]      = N
+    session.e[&quot;r2&quot;]     = result.rsquared
+    session.e[&quot;names&quot;]  = names                      # the coefficient names
+    session.e[&quot;b&quot;]      = [float(c) for c in result.params]          # flat list
+    session.e[&quot;V&quot;]      = [[float(v) for v in row]                   # k x k
+                           for row in result.cov_params().to_numpy()]
+    session.e[&quot;df_r&quot;]   = int(result.df_resid)
+    session.e[&quot;depvar&quot;] = y_name
+    return output_string
+</code></pre>
+<p><strong>The coefficient vector has a fixed shape, and it is not a dictionary.</strong>
+<code>e["b"]</code> is a flat list, <code>e["V"]</code> the matching k×k covariance matrix, and
+<code>e["names"]</code> the names that index both. Every post-estimation consumer relies
+on it — <code>nlcom</code>, <code>test</code>, <code>lincom</code>, <code>estimates</code>, <code>bootstrap</code>, and the matrix
+engine reading <code>matrix b = e(b)</code>.</p>
+<p>Posting a name-keyed dictionary instead is the one mistake worth guarding
+against, because nothing rejects it at posting time: the failure surfaces
+later, inside whichever command tried to use the results, as a type error that
+mentions neither <code>e(b)</code> nor the shape it wanted. If your library hands you a
+named series, keep the names in <code>e["names"]</code> and pass the values on as a list.</p>
+<p>Post the scalars your estimator is asked about too — <code>e["df_r"]</code> decides
+whether post-estimation inference uses <em>t</em> or <em>z</em>.</p>
+<hr />
+<h2 id="5b-posting-results-the-return-system">5B. Posting Results — the Return System</h2>
+<p>§5 covered the <strong>result class</strong> of a module (<code>__aura_class__ = "rclass"</code> /
+<code>"eclass"</code>). This section covers <em>how</em> a module posts named results, and how
+they are read back — the API in <code>core/returns.py</code>. Results are kept in a
+<strong>named archive keyed by recency</strong> rather than in a single global slot, so the
+results of an earlier command survive the next one and stay addressable.</p>
+<h3 id="posting-from-a-module">Posting from a module</h3>
+<p>A handler posts results directly on the session — no helper class required:</p>
+<pre><code class="language-python">def run(session, parsed):
+    ...
+    session.results.scalar(&quot;N&quot;, n)
+    session.results.scalar(&quot;mean&quot;, m)
+    session.results.string(&quot;depvar&quot;, y)
+    session.results.matrix(&quot;stats&quot;, arr)          # numpy array
+    session.results.table(&quot;table&quot;, tablespec)     # a TableSpec
+    session.results.omatrix(&quot;T&quot;, omat)            # an OMatrix
+    return result(text=&quot;…&quot;, kind=&quot;r&quot;)             # r-class | e-class
+</code></pre>
+<p><code>session.r</code>, <code>session.e</code>, <code>session.s</code> remain plain dicts (kept mirrored for
+back-compat); <code>post_results(dict, kind)</code> posts a whole dict at once.</p>
+<h3 id="the-archive">The archive</h3>
+<p>Every command that posts something non-empty is archived under an <strong>id</strong> built
+from its canonical name plus a counter: <code>summarize1</code>, <code>summarize2</code>, <code>regress1</code>,
+… (a <code>svy:</code> prefix yields the id <code>svy</code>). The archive is a bounded deque capped
+by <code>set nreturn</code> (default 6). One slot is special: <strong><code>last_estimation</code></strong> is
+protected from eviction, so <code>e(b)</code> / <code>e(V)</code> survive even after several
+descriptive commands run afterwards.</p>
+<p>The lifecycle is driven by <code>execute_text</code>:
+<code>begin_command_results</code> → run the handler → <code>commit_command_results()</code> (archive
+<strong>iff</strong> non-empty; an empty post changes nothing). Ids are <strong>monotone and
+stable</strong> — never renumbered — so <code>r(cmd, N)</code> addressing stays valid. <code>clear all</code>
+/ <code>clear results</code> calls <code>returns.reset()</code> (empties the archive <em>and</em> the
+counters → the next <code>summarize</code> is <code>summarize1</code> again).</p>
+<h3 id="reading-results-back">Reading results back</h3>
+<ul>
+<li><strong>In command text</strong> — <code>macros.expand_results()</code> substitutes scalar/string
+  <code>r(name)</code> / <code>e(name)</code> / <code>s(name)</code> before parsing (so <code>display r(mean)</code>,
+  <code>gen z = r(N)*2</code>, <code>if e(N)&gt;100</code> all work). <code>e(...)</code> looks in
+  <code>last_estimation</code> first.</li>
+<li><strong>Direct addressing</strong> — <code>r(cmd, name)</code> or <code>r(id, name)</code> reaches a specific
+  archived entry (<code>_lookup_in_entry</code>).</li>
+<li><strong>Matrices</strong> — <code>e(b)</code> / <code>e(V)</code> / <code>r(stats)</code> are left to the matrix engine,
+  which reads them through the archive (<code>matrix b = e(b)</code>, <code>matrix C = r(C)</code>).</li>
+<li><strong>Display</strong> — <code>display r(cmd,table)</code> / <code>display r(stats)</code> renders the stored
+  table / matrix.</li>
+</ul>
+<h3 id="named-matrices">Named matrices</h3>
+<p>Matrix row/column names live in <code>MacroState.matrix_names</code>. <code>matrix
+rownames/colnames A = …</code> sets them; <code>`: rownames A'</code> reads them. They are
+<strong>carried automatically</strong> when a matrix is pulled from a posted result
+(<code>matrix A = r(stats)</code> / <code>e(b)</code> / <code>e(V)</code>), so <code>summarize</code> and <code>regress</code> post
+their matrices already named.</p>
+<h3 id="ereturn-sreturn">ereturn / sreturn</h3>
+<p><code>ereturn</code> and <code>sreturn</code> are <code>return</code> with flavor <code>e</code> / <code>s</code>; <code>ereturn post b V</code>
+posts an estimation vector and covariance. A typical estimator posts
+<code>e(b)</code>, <code>e(V)</code>, <code>e(names)</code> (+ scalars like <code>e(N)</code>, <code>e(df_r)</code>) — which is exactly
+what makes <code>nlcom</code>, <code>matrix</code>, and <code>bootstrap</code> work on top of it.</p>
+<h3 id="pitfall-silent-posts-must-return-not-none">Pitfall — silent posts must return <code>[]</code>, not <code>None</code></h3>
+<p>A builtin handler that posts silently and returns <code>None</code> makes <code>execute()</code>
+believe the command was <em>not handled</em> → it falls through to the plugin path and
+raises a bogus <code>r(199) Command '…' unknown</code>. <strong>Return an empty list <code>[]</code></strong> for a
+successful silent post (see <code>commands/return_cmd.py:run_return</code>).</p>
+<hr />
+<h2 id="6-multi-dataset-modules">6. Multi-Dataset Modules</h2>
+<p>AURA provides two mechanisms for modules that need more than one dataset.</p>
+<h3 id="61-direct-workspace-access">6.1 Direct workspace access</h3>
+<pre><code class="language-python">def run(session, parsed):
+    ws          = session.workspace           # {alias: {&quot;df&quot;, &quot;path&quot;, ...&#125;&#125;
+    active_name = session.workspace_active()  # name of active dataset
+    active_df   = session.get_dataframe()     # active DataFrame
+
+    # Access any dataset by alias
+    df_1994 = ws[&quot;bkf94I&quot;][&quot;df&quot;]
+    df_1998 = ws[&quot;bkf98I&quot;][&quot;df&quot;]
+
+    # Iterate over all datasets
+    for name, snap in ws.items():
+        df = snap[&quot;df&quot;]
+        print(name, len(df))
+</code></pre>
+<h3 id="62-the-datasrc-protocol">6.2 The datasrc protocol</h3>
+<p>For modules that require explicit source declarations with optional variable mappings:</p>
+<p><strong>User declares sources:</strong></p>
+<pre><code>datasrc 1 &quot;bkf94I.aura&quot;, income(revenu) weight(pondh)
+datasrc 2 &quot;bkf98I.aura&quot;, income(revpc)  weight(pondm)
+</code></pre>
+<p><strong>Module accesses them:</strong></p>
+<pre><code class="language-python"># Load a declared source. It returns a PAIR: the DataFrame copy and the
+# source's declaration (its path and the variable roles mapped onto it).
+df1, info1 = session.load_datasource(&quot;1&quot;)
+df2, info2 = session.load_datasource(&quot;2&quot;)
+
+# Resolve a variable name through the mapping
+col_income_1 = session.resolve_var(&quot;1&quot;, &quot;income&quot;)   # → &quot;revenu&quot;
+col_income_2 = session.resolve_var(&quot;2&quot;, &quot;income&quot;)   # → &quot;revpc&quot;
+</code></pre>
+<p><code>load_datasource</code> raises <code>ValueError</code> with a clear message if the source was not declared, listing which sources are available.</p>
+<h3 id="comparing-two-distributions-distset">Comparing two distributions — <code>distset</code></h3>
+<p>Beside the two mechanisms above there is a third, for the common case of a
+command that compares <strong>the same variable across two datasets</strong>: poverty in
+1994 against 1998, one region against another.</p>
+<p><code>distset</code> records the pair once, and the commands then read it:</p>
+<pre><code>use &quot;bkf94I.aura&quot;
+use &quot;bkf98I.aura&quot;
+distset bkf94I bkf98I
+</code></pre>
+<p>A module reads the pairing from <code>session.distset</code>, which is <code>None</code> until one
+is declared. It also carries whether the two distributions are <strong>dependent</strong>
+(paired, sharing a sampling design) or <strong>independent</strong>, since that decides how
+the standard error of a difference is computed — a difference command that
+ignores it will report a plausible and wrong interval.</p>
+<p>The advantage over asking for two filenames in the options is that the pairing
+is declared once and every difference command in a session inherits it.</p>
+<h3 id="63-the-sw-protocol-declarative-form">6.3 The sw protocol — declarative form</h3>
+<p>The <code>sw</code> (switched-workspace) protocol lets a module accept <strong>dynamic option
+names</strong> of the form <code>&lt;role&gt;&lt;N&gt;(value)</code> — for example <code>income1(revenu)</code>,
+<code>income2(revpc)</code>, <code>weight1(w94)</code>, <code>weight2(w98)</code>. The role is any name
+(<code>income</code>, <code>cons</code>, <code>wage</code>, ...); the digit <code>N</code> is a source number; the value
+inside the parens is a variable name in that source.</p>
+<p>To opt in, the module passes <code>sw=True</code> to <code>args()</code>. AURA then:</p>
+<ul>
+<li>accepts any option matching <code>&lt;role&gt;&lt;digit&gt;(...)</code> without complaining about
+  "unknown option";</li>
+<li>requires the user to terminate the option list with the literal keyword <code>sw</code>;</li>
+<li>auto-resolves every numbered option against <code>session.datasources</code> (or, by
+  fallback, the N-th workspace dataset) and exposes the result on <code>a.sw</code>.</li>
+</ul>
+<p><strong>User syntax:</strong></p>
+<pre><code>diff, income1(revenu) income2(revpc) weight1(pondh) weight2(pondm) sw
+</code></pre>
+<p><strong>Module code (canonical):</strong></p>
+<pre><code class="language-python">def run(session, parsed):
+    a = args(parsed, session,
+        varlist = varlist(min=0, max=0),    # no varlist for sw modules
+        sw      = True,                     # enable sw-protocol options
+        options = {                         # ordinary (fixed-name) options only
+            &quot;level&quot;: integer(default=95, min=1, max=99),
+        },
+    )
+
+    # a.sw is auto-resolved:
+    # {&quot;income&quot;: [(df1, &quot;revenu&quot;, &quot;1&quot;), (df2, &quot;revpc&quot;,  &quot;2&quot;)],
+    #  &quot;weight&quot;: [(df1, &quot;pondh&quot;,  &quot;1&quot;), (df2, &quot;pondm&quot;,  &quot;2&quot;)]}
+    (df_a, col_a, sid_a), (df_b, col_b, sid_b) = a.sw[&quot;income&quot;]
+</code></pre>
+<p><strong>Resolution priority for <code>sw_load(session, sid)</code>:</strong>
+1. <code>session.datasources[sid]</code> — explicit <code>datasrc</code> declaration
+2. N-th entry of <code>session.workspace</code> (1-based) — workspace fallback</p>
+<p>This means the module works whether or not the user has declared <code>datasrc</code>
+explicitly. With two datasets in the workspace, <code>sw_load(session, "1")</code> returns
+the first, <code>sw_load(session, "2")</code> returns the second.</p>
+<blockquote>
+<p>The older pattern that imported <code>sw_resolve</code> from <code>auru._sw</code> and checked
+<code>parsed.opts.get("sw")</code> manually still works, but it is <strong>legacy</strong>. Write
+new sw modules with <code>args(sw=True)</code> only.</p>
+</blockquote>
+<hr />
+<h2 id="6b-matrices-macros-and-containers">6B. Matrices, Macros and Containers</h2>
+<p>Three engines back the macro/matrix layer. A module rarely calls them directly
+(it usually emits command lines with <code>run_cmd</code> or reads <code>session.macros</code>), but
+knowing the surface helps.</p>
+<h3 id="matrices-corematrix_enginepy">Matrices — <code>core/matrix_engine.py</code></h3>
+<p>numpy-backed <code>matrix [define] NAME = expr</code>, stored in <code>session.macros.matrices</code>.
+Operators <code>'</code> (transpose) <code>*</code> <code>+</code> <code>-</code> <code>:* :/ :^</code> <code>^</code> <code>\</code> (vstack) <code>,</code> (hstack)
+<code>A[i,j]</code> (<strong>1-based</strong>, <code>.</code> = whole dim, <code>a/b</code> ranges). Functions: <code>I J inv
+invsym rows cols trace det diag cholesky eigenvalues sqrt exp log abs</code>. Bridges:
+<code>data(varlist [, in(a/b)] [if(cond)])</code> → filtered columns, and <code>e()</code> / <code>r()</code> /
+<code>s()</code> → posted results. <code>svmat A [, names()]</code> writes matrix columns to
+variables; <strong><code>mkmat varlist [, matrix(name)]</code></strong> is the inverse. The classic
+<code>matrix beta = invsym(X'*X)*X'*y</code> reproduces numpy OLS exactly.</p>
+<h3 id="macros-and-scalars-coremacrospy">Macros and scalars — <code>core/macros.py</code></h3>
+<p><code>MacroState</code> holds <code>globals</code>, <code>scalars</code>, and a stack of local <code>frames</code>.
+<code>local</code> / <code>global</code> / <code>scalar</code> define silently; <code>`name'</code> /
+<code>$name</code> / <code>`=expr'</code> expand. Extended functions <code>`: word count …'</code>,
+<code>`: list uniq …'</code>, <code>`: type var'</code>, <code>`: variable label var'</code>, etc.
+Temporaries <code>tempvar</code> / <code>tempname</code> / <code>tempfile</code> are cleaned up when their scope
+pops; <code>tokenize</code> fills the numbered locals <code>`1' `2'</code>. Scalars are visible as
+bare names in expressions (<code>gen x = _n * k</code>), with a same-named <strong>column taking
+priority</strong>.</p>
+<h3 id="omatrix-coreomatrixpy">omatrix — <code>core/omatrix.py</code></h3>
+<p>A bi-indexed <strong>mixed</strong> container (values <em>or</em> strings) wrapping a DataFrame —
+for <strong>transport, not algebra</strong>. <code>omatrix NAME = data(varlist)</code> keeps each
+column's dtype; <code>O'</code>, <code>O[rows,cols]</code> select. <code>to_matrix()</code> extracts a numeric
+block (clear error if a column is non-numeric) so you can cross over to a real
+<code>matrix</code>. It is the <strong>5th return type</strong> (<code>return omatrix T = O</code>; <code>display
+r(id,T)</code>).</p>
+<hr />
+<h2 id="7-producing-graphics">7. Producing Graphics</h2>
+<p>Modules can produce matplotlib figures in addition to (or instead of) text output.</p>
+<blockquote>
+<p><strong>Tip — prefer AURA commands when they fit.</strong> Since v0.2.x, AURA ships native
+<code>rarea</code>, <code>rline</code>, <code>rcap</code>, <code>rspike</code>, <code>area</code>, <code>bar</code>, and <code>twoway (...)</code> commands.
+For typical fits-with-confidence-bands, calling them from an <code>aura: ... end aura</code>
+block (see §7B) gives you the standard graph options (<code>graphregion</code>, <code>plotregion</code>,
+<code>legend(size())</code>, <code>xlabel(, nogrid)</code>, ...) for free. The hand-rolled
+matplotlib pattern below is still supported and useful for non-standard
+visualisations.</p>
+</blockquote>
+<h3 id="pattern">Pattern</h3>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+def run(session, parsed):
+    df = session.get_dataframe()
+    ...
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.plot(x, y)
+    ax.set_title(&quot;My chart&quot;)
+    plt.show(block=False)   # NON-blocking — a plain plt.show() freezes the console
+
+    return &quot;Summary text displayed in console.&quot;
+</code></pre>
+<p>Always <strong><code>plt.show(block=False)</code></strong> — it hands the figure to AURA's running
+event loop, so the figure and the console text both appear and the console stays
+responsive; a plain <code>plt.show()</code> starts a nested loop and freezes it until the
+window is closed. Use one <code>plt.subplots()</code> + <code>plt.show(block=False)</code> per figure.
+There is no AURA graph object to return and <strong>no <code>core.graphics</code> / <code>scatter_plot</code>
+helper</strong> — draw with matplotlib directly, exactly as AURA's built-in graph commands
+do. The graph is a side effect: <code>run()</code> still returns its text/table.</p>
+<h3 id="combining-table-and-figure">Combining table and figure</h3>
+<pre><code class="language-python">def run(session, parsed):
+    ...
+    # Figure
+    fig, ax = plt.subplots()
+    ax.scatter(x, y)
+    plt.show()
+
+    # Table (returned to console)
+    return tabulate(rows, headers=[&quot;x&quot;, &quot;y&quot;], tablefmt=&quot;simple&quot;)
+</code></pre>
+<h3 id="example-linear-fit-with-confidence-band">Example: linear fit with confidence band</h3>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+def run(session, parsed):
+    df    = session.get_dataframe()
+    vars_ = parsed.vars
+    if len(vars_) &lt; 2:
+        return &quot;Syntax: linfit yvar xvar&quot;
+
+    yvar, xvar = vars_[0], vars_[1]
+    sub = df[[yvar, xvar]].dropna()
+    x   = sub[xvar].to_numpy(dtype=float)
+    y   = sub[yvar].to_numpy(dtype=float)
+
+    x_plot = np.linspace(x.min(), x.max(), 200)
+    a, b   = np.polyfit(x, y, deg=1)
+    y_est  = a * x_plot + b
+
+    n     = len(x)
+    s_res = np.sqrt(np.sum((y - (a * x + b)) ** 2) / (n - 2))
+    y_err = s_res * np.sqrt(1/n + (x_plot - x.mean())**2 / np.sum((x - x.mean())**2))
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.plot(x_plot, y_est, '-', color='tab:blue', linewidth=2, label='Linear fit')
+    ax.fill_between(x_plot, y_est - y_err, y_est + y_err, alpha=0.2, color='tab:blue')
+    ax.plot(x, y, 'o', color='tab:brown', markersize=4, alpha=0.6, label='Data')
+    ax.set_xlabel(xvar);  ax.set_ylabel(yvar)
+    ax.legend();  fig.tight_layout()
+    plt.show()
+
+    return f&quot;Linear fit: {yvar} = {a:.4f}·{xvar} + {b:.4f}   (n={n:,})&quot;
+</code></pre>
+<hr />
+<h2 id="7b-aura-blocks">7B. Aura Blocks</h2>
+<p>Inside a <code>.auru</code> module you can switch from Python to AURA syntax with an <code>aura: ... end aura</code> block. This is AURA's in-module escape into command syntax (analogous to a <code>mata:</code> / <code>end</code> block in other packages) — a clean way to use AURA's commands (regress, summarize, twoway, ...) for the statistical and graphical heavy lifting without re-implementing them in Python.</p>
+<h3 id="the-simple-form">The simple form</h3>
+<pre><code class="language-python">def run(session, parsed):
+
+    aura:
+        summarize x y
+        regress y x, robust
+        twoway (rarea ci_low ci_high x) (line yhat x) (scatter y x)
+    end aura
+
+    return &quot;Done.&quot;
+</code></pre>
+<p>Each non-comment line in the block is parsed by AURA and dispatched through the execution engine — exactly as if you typed it in the console. Comments (<code>//</code>, <code>*</code>, <code>/* */</code>), continuations (<code>///</code>), and <code>#delimit ;</code> all work inside the block.</p>
+<h3 id="the-bridge-form-auranamearray">The bridge form — <code>aura(name=array, ...):</code></h3>
+<p>When you have arrays computed in Python (numpy, scipy) that you want AURA to use as columns:</p>
+<pre><code class="language-python">import numpy as np
+from scipy import stats
+
+def run(session, parsed):
+    df = session.get_dataframe()
+    y, x = df[&quot;wage&quot;].values, df[&quot;age&quot;].values
+
+    # Python: compute the fit and 95% CI
+    slope, intercept, *_ = stats.linregress(x, y)
+    yhat_np = intercept + slope * x
+    se      = np.std(y - yhat_np) * np.sqrt(1/len(x) +
+                  (x - x.mean())**2 / np.sum((x - x.mean())**2))
+    lb_np   = yhat_np - 1.96 * se
+    ub_np   = yhat_np + 1.96 * se
+
+    # AURA: same names, exposed as TEMPORARY columns just for this block
+    aura(yhat=yhat_np, lb=lb_np, ub=ub_np):
+        twoway (rarea lb ub age, fcolor(navy%20)) ///
+               (line yhat age, lcolor(navy)) ///
+               (scatter wage age, mcolor(cranberry) msize(small)), ///
+               title(&quot;Wage by age with 95% CI&quot;) ///
+               legend(pos(2) size(small)) ///
+               graphregion(fcolor(white) margin(medlarge))
+    end aura
+
+    return result(text=f&quot;slope = {slope:.4f}&quot;, kind=&quot;r&quot;, slope=slope)
+</code></pre>
+<p>The kwargs <code>yhat</code>, <code>lb</code>, <code>ub</code> become real columns on the dataframe for the duration of the block, then are <strong>dropped automatically</strong> at <code>end aura</code>.</p>
+<h3 id="scope-semantics-what-survives">Scope semantics — what survives</h3>
+<table>
+<thead>
+<tr>
+<th>Action inside the block</th>
+<th>After <code>end aura</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gen newvar = ...</code></td>
+<td>dropped</td>
+</tr>
+<tr>
+<td><code>replace existing_var = ...</code></td>
+<td>persists (mutates a pre-existing column)</td>
+</tr>
+<tr>
+<td><code>aura(x=arr):</code> kwarg injection</td>
+<td>dropped</td>
+</tr>
+<tr>
+<td><code>permanent newvar</code> directive</td>
+<td><strong>kept</strong> (promoted to permanent)</td>
+</tr>
+<tr>
+<td>Exception raised mid-block</td>
+<td>scope still cleans up (try/finally)</td>
+</tr>
+<tr>
+<td>Nested <code>aura: ... end aura</code></td>
+<td>refused — a block cannot contain another (see below)</td>
+</tr>
+</tbody>
+</table>
+<p>The rule: <strong>anything that didn't exist when you entered the block is dropped when you leave it.</strong> This keeps test datasets clean and prevents intermediate variables from polluting the user's data browser.</p>
+<h3 id="permanent-the-escape-hatch"><code>permanent</code> — the escape hatch</h3>
+<p>When you DO want a computed column to survive:</p>
+<pre><code class="language-python">aura:
+    gen logx = log(x)
+    gen yhat = a + b*logx
+    gen residual = y - yhat
+    permanent residual         // ← survives; logx and yhat are dropped
+end aura
+</code></pre>
+<h3 id="python-aura-interpolation">Python ↔ AURA interpolation</h3>
+<p>AURA command lines inside the block are emitted as Python f-strings, so <code>{name}</code> placeholders are substituted with Python locals:</p>
+<pre><code class="language-python">def run(session, parsed):
+    a = args(parsed, session,
+             options={&quot;thresh&quot;: real(default=1.96),
+                      &quot;k&quot;:      integer(default=100)})
+    threshold = a.opt.thresh
+    k = a.opt.k
+
+    aura:
+        keep if x &gt; {threshold}
+        gen scaled = x * {k}
+        summarize scaled
+    end aura
+
+    return &quot;Done.&quot;
+</code></pre>
+<p>To put a literal <code>{</code> or <code>}</code> in a command, double it (<code>&#123;&#123;</code> / <code>&#125;&#125;</code>) — standard f-string rules.</p>
+<h3 id="reading-aura-results-back-in-python">Reading AURA results back in Python</h3>
+<p>Built-in commands (regress, summarize, ttest, ...) populate <code>session.r</code>, <code>session.e</code>, and <code>session.s</code>. These dictionaries are read normally after <code>end aura</code>:</p>
+<pre><code class="language-python">def run(session, parsed):
+    aura:
+        regress y x1 x2, robust
+    end aura
+
+    names = session.e[&quot;names&quot;]          # ['x1', 'x2', '_cons']
+    b     = session.e[&quot;b&quot;]              # a flat list, aligned with names
+    coef  = b[names.index(&quot;x1&quot;)]
+    rsq   = session.e[&quot;r2&quot;]
+    return result(text=f&quot;coef(x1) = {coef:.4f}, R² = {rsq:.4f}&quot;,
+                  kind=&quot;e&quot;, coef_x1=coef, r2=rsq)
+</code></pre>
+<p>An estimator posts its coefficients as the vector <code>e["b"]</code> indexed by
+<code>e["names"]</code>, not as one scalar per regressor — there is no <code>e["coef_x1"]</code> to
+read. Scalars that stand alone (<code>r2</code>, <code>N</code>, <code>df_r</code>) are posted under their own
+name, so <code>session.e["r2"]</code> is right.</p>
+<h3 id="how-it-works-under-the-hood">How it works under the hood</h3>
+<p>When the execution engine loads a <code>.auru</code> file it pipes the source through <code>core.preprocessor.transform_aura_blocks()</code> before compiling. Each <code>aura:</code> block becomes:</p>
+<pre><code class="language-python">_aura_scope_enter(**kwargs)
+try:
+    run_cmd(f&quot;command1 vars, opts&quot;)
+    run_cmd(f&quot;command2 vars, opts&quot;)
+    ...
+finally:
+    _aura_scope_exit()
+</code></pre>
+<p>The three helpers <code>run_cmd</code>, <code>_aura_scope_enter</code>, <code>_aura_scope_exit</code> are injected into the module's namespace alongside the existing <code>args</code>, <code>result</code>, <code>outputs</code>, <code>graph</code>, etc. — you don't import them.</p>
+<p><code>_aura_scope_enter</code> snapshots the current column list. <code>_aura_scope_exit</code> diffs the current column list against the snapshot and drops anything new (unless a <code>permanent</code> directive promoted it). The <code>try/finally</code> guarantees cleanup even when an AURA command raises.</p>
+<h3 id="blocks-do-not-nest">Blocks do not nest</h3>
+<p>A block cannot contain another one. The body of a block is already AURA
+syntax, so an inner <code>aura:</code> would not be a nested scope — it would be a
+command, and there is no such command. The preprocessor refuses it and names
+the line:</p>
+<pre><code>line 4: an `aura:` block cannot contain another one. The body of a block is
+already AURA syntax, so nesting has no meaning — close the first block with
+`end aura` before opening a second, or simply keep all the commands in one
+block.
+</code></pre>
+<p>Consecutive blocks are fine, and are the way to interleave Python between two
+runs of AURA commands:</p>
+<pre><code class="language-python">aura:
+    gen outer = x + 1
+    summarize outer
+end aura
+
+mean = session.r[&quot;mean&quot;]          # Python again, between the two blocks
+
+aura(cut=mean):
+    keep if x &gt; cut
+end aura
+</code></pre>
+<h3 id="pre-filling-a-dialog-from-a-command">Pre-filling a dialog from a command</h3>
+<p>A dialog that implements <code>preset_from_command(cmd)</code> can be <strong>opened already
+filled in</strong> from a command line. This is what lets a help example offer its
+"open dialog" link, and it is how a reader inspects the arguments of a
+destructive command before running it.</p>
+<p>The method reads a command string and sets the dialog's fields; the contract
+is a round trip:</p>
+<pre><code class="language-python">dlg.preset_from_command(cmd)
+assert dlg.generate_command() == cmd      # what goes in comes back out
+</code></pre>
+<p>Test it that way. A preset that silently drops an option produces a dialog
+that disagrees with the example printed above it, which is worse than having
+no preset — the reader trusts the box.</p>
+<h3 id="when-not-to-use-an-aura-block">When NOT to use an aura: block</h3>
+<ul>
+<li><strong>Pure numeric work</strong> — keep it in numpy/pandas. No need to round-trip through AURA's text parser.</li>
+<li><strong>Single-line trivial commands</strong> — <code>run_cmd("summarize x")</code> directly is just as readable.</li>
+<li><strong>Conditional logic on AURA output</strong> — read <code>session.r</code> / <code>session.e</code> between blocks rather than trying to control flow inside one.</li>
+</ul>
+<hr />
+<h2 id="7c-producing-tables-coretablestable">7C. Producing Tables — <code>core.tables.Table</code></h2>
+<p>Every command that returns tabular results should use a <code>Table</code> object rather than handcrafting a multi-line string. Tables get free exports to HTML / LaTeX / Markdown / CSV and look consistent across all of AURA.</p>
+<h3 id="quickest-path-return-a-table-from-run">Quickest path — return a Table from <code>run()</code></h3>
+<pre><code class="language-python">def run(session, parsed):
+    df = session.get_dataframe()
+
+    # Compute whatever — here, summary stats per variable
+    summary = {v: {&quot;mean&quot;: df[v].mean(), &quot;sd&quot;: df[v].std(),
+                   &quot;min&quot;: df[v].min(),  &quot;max&quot;: df[v].max(),
+                   &quot;N&quot;:   int(df[v].notna().sum())}
+               for v in parsed.vars}
+
+    t = (table_from_dict(summary, title=&quot;Descriptive Statistics&quot;)
+         .format_cols(mean=&quot;%.4f&quot;, sd=&quot;%.4f&quot;, min=&quot;%.4g&quot;, max=&quot;%.4g&quot;, N=&quot;%d&quot;)
+         .add_note(&quot;All variables: &quot; + &quot;, &quot;.join(parsed.vars)))
+
+    return t   # ← engine auto-wraps as AURAResult(type='table')
+</code></pre>
+<p>That's the whole pattern. The engine sees a <code>Table</code> return value, wraps it as <code>AURAResult(type='table')</code>, and the console renders it via <code>Table.to_text()</code>. The user can also right-click → "Copy as LaTeX / HTML / CSV" (Phase 5 GUI work).</p>
+<h3 id="builders">Builders</h3>
+<pre><code class="language-python"># 1. From a 2D matrix (numpy, list-of-lists, pandas)
+t = table_from_matrix(coef_matrix,
+                      rownames=[&quot;age&quot;, &quot;educ&quot;, &quot;exper&quot;, &quot;const&quot;],
+                      colnames=[&quot;Coef.&quot;, &quot;Std. Err.&quot;, &quot;t&quot;, &quot;P&gt;|t|&quot;])
+
+# 2. From a dict of dicts (outer = rows, inner = cols)
+t = table_from_dict({
+    &quot;wage&quot;: {&quot;mean&quot;: 18.5, &quot;sd&quot;: 4.2, &quot;N&quot;: 1234},
+    &quot;age&quot;:  {&quot;mean&quot;: 35.0, &quot;sd&quot;: 10.0, &quot;N&quot;: 1234},
+})
+
+# 3. From a flat dict (single row)
+t = table_from_dict({&quot;mean&quot;: 5.0, &quot;sd&quot;: 1.5, &quot;N&quot;: 100})
+
+# 4. From a pandas DataFrame
+t = table_from_dataframe(summary_df, title=&quot;Group statistics&quot;)
+
+# 5. Regression-style (coef + se [+ ci])
+t = table_from_coefficients(
+        coef=fit.params, se=fit.bse,
+        ci=list(zip(fit.conf_int()[:, 0], fit.conf_int()[:, 1])),
+        rownames=list(fit.model.exog_names),
+        ci_level=95,
+        title=&quot;OLS Regression&quot;)
+</code></pre>
+<h3 id="formatting-fluent-style">Formatting — fluent style</h3>
+<pre><code class="language-python">(t.format_col(&quot;Coef.&quot;, &quot;%.4f&quot;)
+  .format_col(&quot;t&quot;,     &quot;%.2f&quot;)
+  .format_col(&quot;P&gt;|t|&quot;, &quot;%.3f&quot;)
+  .format_col(&quot;N&quot;,     &quot;%d&quot;)
+  .align_col(&quot;Coef.&quot;, &quot;right&quot;)
+  .set_nan(&quot;.&quot;)
+  .add_note(&quot;Robust standard errors clustered by region.&quot;)
+  .add_note(&quot;N=1,234   F(3, 1230)=45.6   R²=0.234&quot;))
+</code></pre>
+<p>Auto-format rules when no explicit spec is set:</p>
+<table>
+<thead>
+<tr>
+<th>Cell type</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>float</code> with no fractional part</td>
+<td><code>"5"</code></td>
+</tr>
+<tr>
+<td>other <code>float</code></td>
+<td><code>"%.4g"</code> (e.g. <code>3.142</code>)</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td><code>"%,d"</code> (e.g. <code>12,345</code>)</td>
+</tr>
+<tr>
+<td><code>str</code></td>
+<td>as-is</td>
+</tr>
+<tr>
+<td><code>None</code> / <code>NaN</code></td>
+<td>the <code>nan_repr</code> value (default <code>.</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Auto-alignment: numeric columns → right, text columns → left.</p>
+<h3 id="renderers">Renderers</h3>
+<pre><code class="language-python">t.to_text(style=&quot;simple&quot;)      # default, tabulate's `simple` ASCII
+t.to_text(style=&quot;stata&quot;)       # 3-rule Stata-style ASCII
+t.to_markdown()                # GFM with alignment markers
+t.to_html(class_=&quot;my-table&quot;)   # &lt;table&gt; with CSS class
+t.to_latex(style=&quot;booktabs&quot;)   # `\toprule \midrule \bottomrule`
+t.to_latex(style=&quot;standard&quot;)   # tabular with `\hline`
+t.to_csv(sep=&quot;,&quot;)              # standard CSV
+t.to_dataframe()               # round-trip to pandas (formats discarded)
+</code></pre>
+<p>Special characters are auto-escaped: HTML <code>&lt;script&gt;</code> → <code>&amp;lt;script&amp;gt;</code>, LaTeX <code>%</code> → <code>\%</code>, etc.</p>
+<h3 id="worked-example">Worked example</h3>
+<pre><code>                                                  Coef.    Std. Err.        t    P&gt;|t|
+----------------------------------------------------------------------------------------
+age                                              0.5421       0.1024     5.29    0.000
+educ                                             0.0875       0.0233     3.75    0.000
+exper                                            0.0312       0.0156     2.00    0.046
+_cons                                            2.1843       0.4521     4.83    0.000
+----------------------------------------------------------------------------------------
+  Note: Robust SE clustered by region.
+  Note: N=1,234   F(3, 1230)=45.6   R²=0.234
+</code></pre>
+<h3 id="grouped-tables-ipov-style-output">Grouped tables — <code>ipov</code>-style output</h3>
+<p>For tables that organise rows into <strong>groups</strong> (with an italic header) and end with a <strong>total</strong> row (visually separated from the body), use the dedicated builder and methods:</p>
+<pre><code class="language-python">from core.tables import from_grouped_results
+
+t = from_grouped_results(
+    groups=[
+        (&quot;Socio-economic group of the household head&quot;, [
+            # (row_name,                      est,    se,     p_line)
+            (&quot;wage-earner (public sector)&quot;,  0.0122, 0.0191, 36391.67),
+            (&quot;wage-earner (private sector)&quot;, 0.0550, 0.0261, 36391.67),
+            (&quot;Crop farmer&quot;,                  0.3809, 0.0315, 36391.67),
+        ]),
+        (&quot;Region&quot;, [
+            (&quot;Urban&quot;,   0.21, 0.013, 36391.67),
+            (&quot;Rural&quot;,   0.41, 0.018, 36391.67),
+        ]),
+    ],
+    population=[(&quot;Population&quot;, 0.3661, 0.0140, 36391.67)],
+    df=1000, ci_level=95, conf=&quot;ts&quot;,
+)
+</code></pre>
+<p>The builder:
+- Adds each <code>(label, rows)</code> pair as an <strong>italic group header</strong> + indented data rows
+- Computes for each row: <code>t = est/se</code>, two-sided p-value (using <code>df</code> if provided, else normal), and <code>[lo% , hi%]</code> confidence interval bounds
+- Appends <code>population</code> as a <code>total</code> row (separator rule above it, italic label)
+- Auto-formats numeric columns to 4 decimals and <code>P.Line</code> to 2 decimals</p>
+<p>Renders as (style="stata"):</p>
+<pre><code>--------------------------------------------+---------------------------------------------------------------
+                                            | Estimate   Std. Err.     t    P&gt;|t|    [2.5%   97.5%]    P.Line
+--------------------------------------------+---------------------------------------------------------------
+ Socio-economic group of the household head
+   - wage-earner (public sector)            |   0.0122      0.0191  0.6387  0.5231  -0.0253   0.0497  36391.67
+   - wage-earner (private sector)           |   0.0550      0.0261  2.1073  0.0353   0.0038   0.1062  36391.67
+   - Crop farmer                            |   0.3809      0.0315 12.0921  0.0000   0.3191   0.4427  36391.67
+ Region
+   - Urban                                  |   0.2100      0.0130 16.1538  0.0000   0.1844   0.2356  36391.67
+   - Rural                                  |   0.4100      0.0180 22.7778  0.0000   0.3746   0.4454  36391.67
+--------------------------------------------+---------------------------------------------------------------
+ Population                                 |   0.3661      0.0140 26.1500  0.0000   0.3386   0.3936  36391.67
+--------------------------------------------+---------------------------------------------------------------
+</code></pre>
+<p>The same Table also renders to LaTeX (<code>\multicolumn</code> for group headers, <code>\midrule</code> before total, <code>\textit</code> italic labels), HTML (<code>&lt;tr class="group"&gt;</code> / <code>&lt;tr class="total"&gt;</code>), and Markdown (<code>**_italic-bold_**</code> group rows, <strong>bold</strong> total cells).</p>
+<h3 id="manual-row-groups-if-you-dont-need-tpci-computation">Manual row groups (if you don't need t/p/CI computation)</h3>
+<p>If you already have the columns computed and just want the visual structure:</p>
+<pre><code class="language-python">t = Table(colnames=[&quot;Mean&quot;, &quot;SD&quot;, &quot;N&quot;], title=&quot;By region&quot;)
+t.add_group(&quot;Urban&quot;)
+t.add_row(&quot;Wage&quot;, [18.5, 4.2, 1234])
+t.add_row(&quot;Age&quot;,  [35.0, 10.0, 1234])
+t.add_group(&quot;Rural&quot;)
+t.add_row(&quot;Wage&quot;, [10.2, 3.1, 1500])
+t.add_row(&quot;Age&quot;,  [42.0, 12.0, 1500])
+t.add_total_row(&quot;Population&quot;, [14.0, 7.5, 2734])
+</code></pre>
+<p>The <code>.add_group / .add_row / .add_total_row</code> methods are chainable and can be mixed freely in any order.</p>
+<h3 id="what-not-to-do-anymore">What NOT to do anymore</h3>
+<pre><code class="language-python"># ❌ Old style — handcrafted multi-line strings
+def run(session, parsed):
+    out = &quot;Variable    Mean    SD\n&quot;
+    out += f&quot;wage     {mean:.4f}   {sd:.4f}\n&quot;
+    return text(out)
+
+# ✓ New style — Table
+def run(session, parsed):
+    t = table_from_dict({&quot;wage&quot;: {&quot;mean&quot;: mean, &quot;sd&quot;: sd&#125;&#125;)
+    t.format_cols(mean=&quot;%.4f&quot;, sd=&quot;%.4f&quot;)
+    return t
+</code></pre>
+<p>The first form is brittle (alignment breaks on long names, no exports possible). The second is one line, scales to any number of columns, and gives the user LaTeX/HTML/CSV for free.</p>
+<hr />
+<h2 id="7d-the-estimation-module-pattern">7D. The Estimation Module Pattern</h2>
+<p>This section describes the standard pattern for writing any estimation
+command as a <code>.auru</code> module — OLS, logit, probit, poisson, tobit, ivreg,
+xtreg, etc.  All share the same output skeleton; only the numbers and the
+column conventions differ.</p>
+<h3 id="reference-implementation">Reference implementation</h3>
+<p>The canonical example is <code><code>auru/regress.auru</code></code> —
+read it side-by-side with this section.  Every estimator should follow
+the same 8-step flow.</p>
+<h3 id="the-8-step-flow">The 8-step flow</h3>
+<pre><code class="language-python">&quot;&quot;&quot;my_estimator — what it does, syntax.&quot;&quot;&quot;
+__aura_class__ = &quot;eclass&quot;   # or &quot;rclass&quot; / &quot;sclass&quot; / omit
+
+import numpy as np
+# any scientific lib you want
+
+
+def run(session, parsed):
+
+    # 1. PARSE the syntax (manual if you support `i.var` / `c.var` factors,
+    #    or via args() / varlist() for plain numeric varlists)
+    raw_vars = list(parsed.get(&quot;vars&quot;, []))
+    if len(raw_vars) &lt; 2:
+        return error(&quot;Syntax: my_estimator depvar indepvars [, options]&quot;)
+    y_name, x_names = raw_vars[0], raw_vars[1:]
+    opts = parsed.opts if hasattr(parsed, &quot;opts&quot;) else {}
+
+    # 2. EXPAND factor variables (i.varname) into k-1 indicators
+    df = session.get_dataframe()
+    all_cols, all_names = [], []
+    from core.factor_vars import build_design
+    Xdf = build_design(df, x_names)          # k-1 indicators, base level dropped
+    all_names = list(Xdf.columns)            # 'size', 'gse:2', 'size#gse:2', ...
+    all_cols  = [Xdf[c].to_numpy(float) for c in all_names]
+    # build_design drops rows missing on any input; align y to Xdf.index.
+
+    # 3. ESTIMATE — pure Python, your choice of library
+    X = np.column_stack(all_cols)
+    if not opts.get(&quot;noconstant&quot;):
+        X = np.column_stack([X, np.ones(len(X))])
+        all_names = all_names + [&quot;_cons&quot;]
+    y = df[y_name].astype(float).values
+    result = my_python_estimator(y, X)
+
+    # 4. ANOVA / fit decomposition (if applicable — skip for ML estimators)
+    anova = TableSpec(
+        matrix=[[result.ess, k, result.msm],
+                [result.ssr, df_r, result.msr],
+                [result.tss, df_t, result.mst]],
+        rownames=[&quot;Model&quot;, &quot;Residual&quot;, &quot;Total&quot;],
+        colnames=[&quot;SS&quot;, &quot;df&quot;, &quot;MS&quot;],
+        col_formats=[&quot;%.4g&quot;, &quot;%d&quot;, &quot;%.4g&quot;],
+        h_separators={2},
+        v_separators={1},
+        title=f&quot;My Estimator — depvar: {y_name}&quot;,
+    )
+
+    # 5. SUMMARY-STATS banner — one call, free format
+    stats = build_estimation_header([
+        (&quot;Number of obs&quot;,   f&quot;{result.n:,}&quot;),
+        (&quot;LR chi2(k)&quot;,      f&quot;{result.llrt:.2f}&quot;),    # adjust per estimator
+        (&quot;Prob &gt; chi2&quot;,     f&quot;{result.llrt_p:.4f}&quot;),
+        (&quot;Pseudo R²&quot;,       f&quot;{result.prsquared:.4f}&quot;),
+        (&quot;Log likelihood&quot;,  f&quot;{result.llf:.2f}&quot;),
+    ])
+
+    # 6. COEFFICIENT TABLE via the generic builder.  Rows for factor levels
+    #    use the &quot;group:level_label&quot; naming so build_coefficient_table can
+    #    insert section titles and indentation automatically.
+    coef_rows = []
+    for i, name in enumerate(all_names):
+        if isinstance(name, tuple):                  # (&quot;gse&quot;, 2)
+            var_name, code = name
+            lbl = session.label_value(var_name, code)
+            level_str = str(lbl) if (lbl != code and isinstance(lbl, str)) else str(code)
+            display = f&quot;{var_name}:{level_str}&quot;
+        else:
+            display = name
+        coef_rows.append((
+            display,
+            float(result.coef[i]),
+            float(result.se[i]),
+            float(result.tval[i]),                   # or zval for ML
+            float(result.pval[i]),
+            float(result.ci_lo[i]),
+            float(result.ci_hi[i]),
+        ))
+    coef = build_coefficient_table(
+        coef_rows,
+        depvar=y_name,
+        se_label=&quot;Std. err.&quot;,                        # or &quot;Robust SE&quot;
+        stat_label=&quot;t&quot;,                              # or &quot;z&quot; for ML
+        ci_level=int(opts.get(&quot;level&quot;, 95)),
+    )
+
+    # 7. STORE ECLASS RESULTS (or rclass / sclass per __aura_class__)
+    #    b is a FLAT LIST, V the matching k x k matrix, names indexes both —
+    #    see &quot;eclass&quot; in section 5. A name-keyed dict here breaks nlcom, test,
+    #    lincom, estimates and bootstrap.
+    session.e[&quot;N&quot;]      = result.n
+    session.e[&quot;names&quot;]  = all_names
+    session.e[&quot;b&quot;]      = [float(c) for c in result.coef]
+    session.e[&quot;V&quot;]      = [[float(v) for v in row] for row in result.vcov]
+    session.e[&quot;df_r&quot;]   = int(result.df_r)
+    session.e[&quot;ll&quot;]     = float(result.llf)
+    session.e[&quot;depvar&quot;] = y_name
+
+    # 7b. HAND THE FITTED MODEL TO POST-ESTIMATION
+    #     Without this, `predict`, `margins`, `test` and `lincom` answer
+    #     &quot;needs a prior estimation&quot; even though your table printed fine.
+    session.set_estimation_model(
+        result=fit,                  # the fitted statsmodels Results, if any
+        cmd=&quot;mycmd&quot;,
+        depvar=y_name,
+        names=all_names,
+        b=session.e[&quot;b&quot;],
+        V=session.e[&quot;V&quot;],
+        index=Xdf.index,             # rows the estimation actually used
+    )
+
+    # 8. RETURN the stacked table — AURA renders it and emits AURAResult(type=&quot;table&quot;)
+    return StackedTable(
+        sub_tables=[anova, stats, coef],
+        notes=[],                                    # add post-estimation notes here
+        shared_column_widths=False,
+    )
+</code></pre>
+<h3 id="shared-estimation-helpers-coreestimationpy">Shared estimation helpers — <code>core/estimation.py</code></h3>
+<p>Do not re-implement the option plumbing every estimator needs. <code>core/estimation.py</code>
+resolves the conventions once, so all estimators agree:</p>
+<pre><code class="language-python">from core.estimation import resolve_vce, weight_column, fit_kwargs
+</code></pre>
+<ul>
+<li><code>resolve_vce(vce_value, robust=False)</code> turns <code>robust</code> / <code>vce(robust)</code> /
+  <code>vce(hc3)</code> / <code>vce(cluster v)</code> into the covariance choice, so every command
+  spells these the same way;</li>
+<li><code>weight_column(parsed, df)</code> resolves the weight clause against the data;</li>
+<li><code>fit_kwargs(cov_type, groups=None)</code> assembles what the fitting call needs.</li>
+</ul>
+<p>Using them is what makes <code>vce(hc3)</code> behave identically in your module and in
+the built-in estimators — which is the point of a shared vocabulary.</p>
+<p>An estimator that fits a design of its own uses the same helpers for what a library
+leaves to the caller:</p>
+<ul>
+<li><code>collinear_columns(X, weights=None, constant=True, left_to_right=False)</code> gives the
+  columns to leave out; with <code>left_to_right=False</code> they go by the variation left, the
+  rule of <code>regress</code> on plain variables;</li>
+<li><code>omitted_note(names)</code> writes the note above the table. Keep an omitted variable in
+  the table and in <code>e(b)</code> and <code>e(V)</code>, at 0, so that <code>esttab</code> and <code>_b[x]</code> find it;</li>
+<li><code>cov_rank(V)</code> is the rank of a covariance matrix: below the number of coefficients,
+  there is no overall test;</li>
+<li><code>set_covariance(result, V, cov_type=None)</code> gives a statsmodels result a covariance
+  computed elsewhere: its standard errors, intervals and tests then read that one.</li>
+</ul>
+<h3 id="what-the-developer-owns">What the developer owns</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Parse</td>
+<td>Decide between strict <code>args()</code> validation and raw <code>parsed.vars</code> access</td>
+</tr>
+<tr>
+<td>2. Factor expansion</td>
+<td>Reusable as is — call <code>build_design</code> from <code>core.factor_vars</code></td>
+</tr>
+<tr>
+<td>3. Estimation</td>
+<td>100 % free choice — any Python library</td>
+</tr>
+<tr>
+<td>4. ANOVA</td>
+<td>Only if the estimator produces one (OLS yes, MLE no)</td>
+</tr>
+<tr>
+<td>5. Stats labels</td>
+<td>Choose the right summary statistics for your estimator</td>
+</tr>
+<tr>
+<td>6. Coefficient table</td>
+<td>Built by helpers — only choose <code>stat_label</code> ("t" vs "z") and <code>se_label</code></td>
+</tr>
+<tr>
+<td>7. eclass storage</td>
+<td>Fixed contract — <code>e["b"]</code> (flat list), <code>e["V"]</code>, <code>e["names"]</code>, plus <code>set_estimation_model</code></td>
+</tr>
+<tr>
+<td>8. Return</td>
+<td>Just return the <code>StackedTable</code>; AURA handles rendering and exports</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-aura-provides-for-free">What AURA provides for free</h3>
+<ul>
+<li>Rendering to console (<code>render_text</code>) when the user types the command</li>
+<li>Exports to LaTeX, HTML, Markdown, CSV via <code>render_*</code> functions</li>
+<li>Factor variable row grouping with section titles</li>
+<li>Value-label substitution (<code>Wage-earner (private)</code> instead of <code>2.gse</code>)</li>
+<li>Indentation of factor levels, blank line before <code>_cons</code></li>
+<li>Column-width auto-fitting (mixed numeric / string cells)</li>
+<li>Top/bottom rules without <code>┼</code> crossings (visually closed)</li>
+</ul>
+<h3 id="value-label-retrieval">Value-label retrieval</h3>
+<p>If the dataset has <code>label define</code> / <code>label values</code> set up, the value
+labels are stored in <code>session.data_manager.label_defs</code> and accessed
+through <code>session.label_value(varname, code)</code>.  This is the right way to
+humanise factor levels in your output:</p>
+<pre><code class="language-python">lbl = session.label_value(&quot;gse&quot;, 2)        # → &quot;Wage-earner (private)&quot;
+</code></pre>
+<p>Returns the original <code>code</code> if no label is defined — the caller can
+detect this case by comparing to the input code (see the regress.auru
+example above).</p>
+<h3 id="adapting-the-pattern-to-other-estimators">Adapting the pattern to other estimators</h3>
+<table>
+<thead>
+<tr>
+<th>Estimator</th>
+<th>Changes from the OLS template</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>logit / probit</strong></td>
+<td>Replace <code>anova</code> with an LR-chi2 / pseudo-R² header.  Use <code>stat_label="z"</code>.  Store <code>e["ll"]</code>, <code>e["aic"]</code>, <code>e["bic"]</code>.</td>
+</tr>
+<tr>
+<td><strong>poisson</strong></td>
+<td>Same as logit, plus <code>e["chi2_disp"]</code> for overdispersion test.</td>
+</tr>
+<tr>
+<td><strong>tobit</strong></td>
+<td>Add sigma (auxiliary parameter) as a section in the coefficient table.  Give <code>TableSpec</code> a <code>section_titles</code> entry to head the ancillary block.</td>
+</tr>
+<tr>
+<td><strong>ivreg / 2SLS</strong></td>
+<td>Three sub-tables: instruments info, first-stage, second-stage.  All composable via <code>StackedTable</code>.</td>
+</tr>
+<tr>
+<td><strong>xtreg / panel</strong></td>
+<td>Add panel summary (N, T, balanced/unbalanced) as a separate sub-table on top.</td>
+</tr>
+</tbody>
+</table>
+<p>The skeleton above stays the same — only the content of <code>stats</code>,
+<code>coef_rows</code>, and the optional ANOVA block changes.</p>
+<hr />
+<h2 id="8-the-module-editor">8. The Module Editor</h2>
+<p>Open from <strong>Tools → Module Editor (.auru)...</strong></p>
+<h3 id="features">Features</h3>
+<ul>
+<li><strong>Multi-tab</strong> — several modules open at once, clickable <code>x</code> on each tab, <code>Ctrl+Tab</code> to cycle, dedup by path</li>
+<li>Python syntax highlighting (dark theme), line numbers</li>
+<li><strong>Icon toolbar</strong> with tooltips: New, Open, Save, Save As, Undo, Redo, Cut, Copy, Paste, Find, Comment</li>
+<li><strong>Find / Replace</strong> — <code>Ctrl+F</code>, <code>F3</code>, <code>Ctrl+H</code></li>
+<li><strong>Comment / Uncomment</strong> — <code>Ctrl+/</code> toggles a <code>#</code> prefix on the selected lines (Python convention)</li>
+<li><strong>Dirty indicator</strong> — a <code>*</code> on the tab label and window title when unsaved</li>
+<li><strong>Recent files</strong> — File → Recent files (persisted, separate from the Script Editor's list)</li>
+<li>Per-tab <strong>Test Output</strong> panel</li>
+</ul>
+<h3 id="the-toolbar-actions">The toolbar actions</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Shortcut</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Test</strong> (green)</td>
+<td>F5</td>
+<td>Sandbox: 2-pass syntax check + load + <code>run()</code> in isolation. Does <strong>not</strong> register anything. The safe way to try a module.</td>
+</tr>
+<tr>
+<td><strong>Run as command</strong> (orange)</td>
+<td>F6</td>
+<td>Force-save + 2-pass syntax check + register a <strong>developer override</strong> — this file becomes the active definition of its command name (see below).</td>
+</tr>
+<tr>
+<td><strong>Install</strong> (blue)</td>
+<td>—</td>
+<td>Copy the saved file to <code>~/AURA/modules/personal/</code> — the permanent install.</td>
+</tr>
+<tr>
+<td><strong>Generate .aurh</strong></td>
+<td>—</td>
+<td>Scaffold the module's help file next to the <code>.auru</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="three-pass-syntax-check">Three-pass syntax check</h3>
+<p>Both <strong>Test</strong> and <strong>Run as command</strong> validate the module in three passes before
+running anything (<code>core/module_check.py:check_module_source</code>):</p>
+<ol>
+<li><strong>AURA pass</strong> — checks <code>aura: … end aura</code> blocks are balanced (unclosed
+   block, or stray <code>end aura</code>).</li>
+<li><strong>Python pass</strong> — <code>compile()</code> the transformed source; a <code>SyntaxError</code>
+   is reported with its line number.</li>
+<li><strong>AURA-command pass</strong> — statically <strong>lints the commands inside each <code>aura:</code>
+   block</strong> with <code>core/script_lint.py</code> (unbalanced <code>()</code> / <code>[]</code> / quotes, an
+   unknown command, a not-allowed option, an ambiguous abbreviation) <strong>without
+   running them</strong>. A <em>missing variable is not flagged</em> — that is data-dependent
+   and decided at run time.</li>
+</ol>
+<p>The log distinguishes clearly: <code>[AURA] line X: …</code> vs <code>[Python] line Y: …</code>.</p>
+<h3 id="developer-overrides-testing-without-installing">Developer overrides — testing without installing</h3>
+<p><code>Run as command</code> (F6) registers a <strong>developer override</strong>: the engine's
+<code>_find_auru()</code> consults the override registry <strong>before</strong> the search path.</p>
+<pre><code>1. developer override         &lt;- Run as command puts your file here
+2. ~/AURA/modules/personal/
+3. ~/AURA/modules/plus/&lt;pkg&gt;/
+4. ~/AURA/modules/base/
+5. &lt;project&gt;/auru/
+</code></pre>
+<p>So your work-in-progress file at <em>any</em> path takes absolute priority over
+the installed version — the working directory wins over what is
+installed.</p>
+<p>Overrides are <strong>volatile</strong> — they live in the session only.  Re-launching
+AURA clears them; resolution then follows the normal search path again.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>which &lt;cmd&gt;</code></td>
+<td>Show how a command resolves: <code>dev-override</code> / <code>built-in</code> / <code>module</code></td>
+</tr>
+<tr>
+<td><code>discard</code></td>
+<td>Clear all developer overrides — back to the normal search path</td>
+</tr>
+</tbody>
+</table>
+<p>Typical debug loop:</p>
+<pre><code>[Module Editor]  open  C:\dev\merge.auru
+[Run as command] (F6)  -&gt; &quot;Registered 'merge' as a developer override&quot;
+[AURA prompt]    merge 1:1 id using w1 w2     &lt;- runs YOUR version
+[AURA prompt]    which merge                  &lt;- confirms the override
+[edit, F6 again]                              &lt;- hot-reload
+[AURA prompt]    discard                      &lt;- revert to the installed version
+</code></pre>
+<h3 id="developer-friendly-runtime-errors">Developer-friendly runtime errors</h3>
+<p>When a <code>.auru</code> module raises an uncaught Python exception, AURA reports a
+structured message instead of a bare exception:</p>
+<pre><code>Error in module 'merge' — KeyError: 'wage'
+  -&gt; your module:  merge.auru, line 42, in run()
+                   df_out = df[keys + [&quot;wage&quot;]]
+  -&gt; raised by:    pandas  (pandas/core/indexes/base.py)
+  Type `set tracedeep on` for the full Python traceback.
+</code></pre>
+<p>It pinpoints the line <strong>inside your module</strong> and identifies the <strong>library</strong>
+that raised the error (pandas / numpy / scipy / statsmodels / …).</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set tracedeep on</code></td>
+<td>Module errors show the full Python traceback</td>
+</tr>
+<tr>
+<td><code>set tracedeep off</code></td>
+<td>Module errors show the short structured message (default)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Renamed in v1.0.</strong> This full-traceback toggle used to be <code>set trace</code>. It is
+now <strong><code>set tracedeep</code></strong>, because <code>set trace on</code> now means <em>echo each executed
+command</em> (see §8B). <code>set tracedepth N</code> is a third, separate setting.</p>
+</blockquote>
+<p>Intentional AURA errors — <code>return error("…")</code> or raising <code>AURAError</code> /
+<code>AURAWarning</code> / <code>AURANote</code> — pass through unchanged; only <strong>uncaught Python
+exceptions</strong> get the structured treatment.</p>
+<blockquote>
+<p><strong>Note:</strong> for modules using <code>aura: … end aura</code> blocks, line numbers after
+a block may be slightly off (the block is rewritten before compilation).
+Pure-Python modules report exact line numbers.</p>
+</blockquote>
+<h3 id="the-test-directive-a-runnable-example-in-the-file">The <code># test:</code> directive — a runnable example in the file</h3>
+<p>Put a <code># test: &lt;command line&gt;</code> line near the top of the <code>.auru</code>. The sandbox — the
+Module Editor's <strong>Test</strong>, and the AI-authoring validator — runs <strong>exactly that line
+against the currently loaded data</strong>, so the whole module (output and graph path
+included) is exercised end to end without installing anything.</p>
+<pre><code class="language-python">&quot;&quot;&quot;regfit — OLS with factor support.&quot;&quot;&quot;
+# test: regfit exppc size i.zone
+</code></pre>
+<p>Use column names that exist in the loaded data; with no data loaded, omit the line —
+the sandbox has nothing to run it against. During sandbox runs AURA forces a headless
+matplotlib backend, so a module's <code>plt.show(block=False)</code> never pops a window there.</p>
+<h3 id="testing-workflow">Testing workflow</h3>
+<ol>
+<li>Write or paste the module code (or open an existing <code>.auru</code>)</li>
+<li>Load a dataset in AURA (for commands that need data)</li>
+<li>Click <strong>Test</strong> (F5) — sandbox check + run</li>
+<li>Click <strong>Run as command</strong> (F6) to make it the active command, then exercise it from the AURA prompt</li>
+<li>Read the Test Output / console — fix any errors</li>
+<li>Click <strong>Install</strong> to make the command available permanently</li>
+</ol>
+<hr />
+<h2 id="8b-debugging-and-tracing-tools">8B. Debugging and Tracing Tools</h2>
+<p>Two facilities help while writing scripts and modules: a static <strong>linter</strong> and
+<strong>execution tracing</strong>.</p>
+<h3 id="the-script-linter-corescript_lintpy">The script linter — <code>core/script_lint.py</code></h3>
+<p><code>lint_script(text) -&gt; [(level, line, msg)]</code> is a <strong>pure</strong> static analyser
+(<code>level</code> is <code>"error"</code> / <code>"warning"</code>, <code>line</code> is 1-based). The checks are chosen
+for <strong>~zero false positives</strong> (a noisy linter is worse than none):</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>⛔ error</td>
+<td>unbalanced <code>()</code> / <code>[]</code> / quotes in a command; unbalanced block braces <code>{ }</code> over the whole script; an <strong>ambiguous abbreviation</strong> the engine would reject</td>
+</tr>
+<tr>
+<td>⚠ warning</td>
+<td>an <strong>unknown command</strong>; an <strong>option not allowed</strong> by a <em>catalogued</em> command (reuses <code>option_guard.ALLOWED_OPTIONS</code>, with a "Did you mean …?")</td>
+</tr>
+</tbody>
+</table>
+<p>It uses the <strong>live inventory</strong> <code>command_names.COMMANDS</code> (populated by the engine
+at start-up, so every builtin and scanned <code>auru/*</code> is known), replays the
+preprocessor's logical-line splitting, exempts control/macro words, and strips
+the <code>quietly</code> / <code>capture</code> / <code>by:</code> / <code>svy:</code> / <code>bootstrap:</code> prefixes. It <strong>never
+checks whether a variable exists</strong> — that is data-dependent.</p>
+<p>The same function powers two surfaces:</p>
+<ul>
+<li>the Script Editor's <strong>Problems</strong> panel (live, debounced; double-click a row to
+  jump to the line; run-time errors are appended after a Run);</li>
+<li><strong>Pass 3</strong> of the Module Editor's <code>check_module_source</code> (§8), linting the
+  commands inside <code>aura:</code> blocks.</li>
+</ul>
+<h3 id="execution-tracing-set-trace">Execution tracing — <code>set trace</code></h3>
+<p><code>set trace on</code> echoes <strong>each command as it runs, with macros expanded</strong>, prefixed
+with <code>-</code> (distinct from the <code>.</code> of a typed command); loop / conditional headers
+are echoed too, so the program structure is visible. Crucially, the trace is a
+<strong>separate stream</strong>, not part of <code>session.output</code>:</p>
+<pre><code class="language-python">session.trace(text)          # writes to session._trace_sink if attached, else no-op
+session._trace_sink = sink   # the GUI wires this to a grey &quot;trace&quot; tag in the console
+</code></pre>
+<p>Because the trace never lands in <code>session.output</code>, it does not interfere with
+the Problems panel's run-time error capture (which diffs <code>session.output</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Session flag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set trace on/off</code></td>
+<td><code>_cmd_trace</code></td>
+<td>Echo each executed command (macros expanded)</td>
+</tr>
+<tr>
+<td><code>set tracedepth N</code></td>
+<td><code>_trace_depth</code></td>
+<td>Trace only down to call depth N (module sub-commands count one level deeper, indented)</td>
+</tr>
+<tr>
+<td><code>set tracedeep on/off</code></td>
+<td><code>_trace_errors</code></td>
+<td>Full Python traceback on a <strong>module</strong> error (the old <code>set trace</code>, renamed)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8c-option-validation-option_guard">8C. Option Validation — <code>option_guard</code></h2>
+<p>An unknown option should be refused, not ignored. AURA enforces this
+centrally in
+<code>core/option_guard.py</code>, called from <code>execution_engine.execute()</code> just before
+dispatch (outside the <code>svy:</code> prefix). It is <strong>opt-in</strong>: a dict
+<code>ALLOWED_OPTIONS</code> lists only the commands whose option set is <em>known and
+faithful to the handler</em> (summarize, tabulate, correlate, ttest, regress,
+logit/probit/poisson). Commands not catalogued — graphs, fluent-option commands
+— are <strong>never guarded</strong>, so there are zero false rejections.</p>
+<p>Matching is <strong>exact</strong> (keys in <code>Command.opts</code> are already lowercased; handlers
+test exact names). An unknown option raises <code>r(121) Option '…' not allowed with
+'…'</code> plus a "Did you mean …?" hint; <code>capture</code> / <code>quietly</code> swallow it as usual.</p>
+<p>To bring your command under the guard, add an entry to <code>ALLOWED_OPTIONS</code>:</p>
+<pre><code class="language-python">ALLOWED_OPTIONS[&quot;mycmd&quot;] = {&quot;detail&quot;, &quot;level&quot;, &quot;by&quot;}
+</code></pre>
+<hr />
+<h2 id="8d-fast-numeric-kernels-fastmath">8D. Fast Numeric Kernels — <code>fastmath</code></h2>
+<p>Hot numeric loops can be JIT-compiled with <strong>numba</strong>, behind a capability flag so
+AURA still runs (and tests still pass) <strong>without</strong> numba installed:</p>
+<pre><code class="language-python">from core.fastmath import njit, HAVE_NUMBA   # HAVE_NUMBA → @njit(cache=True), else no-op
+
+@njit
+def my_kernel(values, codes):
+    ...                                       # pure-numeric body, no pandas
+</code></pre>
+<p>If numba imports, <code>@njit(cache=True)</code> compiles the kernel; otherwise a no-op
+decorator runs the <em>same</em> body in pure numpy. The first shipped kernel is
+<strong><code>psu_cov</code></strong> (stratified ultimate-cluster covariance — the hot path of every
+<code>svy:</code> variance, called B times under <code>bootstrap</code>). Pattern: <strong>pre-factorise</strong>
+labels (strata / PSU) into dense integer codes <em>outside</em> numba, keep the kernel
+purely numeric, and keep a reference numpy oracle (<code>_psu_cov_reference</code>) to
+assert equality. Measured ×10 on a realistic survey design.</p>
+<h3 id="heavy-libraries-at-first-use-corelazypy">Heavy libraries at first use — <code>core/lazy.py</code></h3>
+<p>statsmodels, scipy, <code>matplotlib.pyplot</code> and numba cost about two seconds to
+import, and most sessions open a dataset long before (or without ever)
+estimating a model or drawing a figure. AURA therefore imports them at their
+first use. A module loaded at start-up — the command registry loads nearly all
+of AURA, and the DAAP shims with it — binds a stand-in at the top and uses it as
+before:</p>
+<pre><code class="language-python">from core.lazy import LazyModule
+sm = LazyModule(&quot;statsmodels.api&quot;)                  # imported on first sm.&lt;attr&gt;
+psu_cov = LazyModule(&quot;core.fastmath&quot;, &quot;psu_cov&quot;)    # imported on first call
+</code></pre>
+<p>Three rules. Use the stand-in only through attribute access or a call — never
+at import time (<code>_pdf = st.norm.pdf</code> at module level imports scipy at once),
+and never pass it as a value to the library itself. Every <code>LazyModule</code> target
+must also be listed in <code>hiddenimports</code> in <code>aura.spec</code>: PyInstaller does not see
+a module named in a string, and the built application would lack it;
+<code>tests/test_lazy.py</code> checks both that rule and that <code>import main</code> loads none of
+these libraries. A <code>.auru</code> module is loaded only when its command first runs,
+so it may import what it needs at its top as usual.</p>
+<hr />
+<h2 id="9-installing-and-distributing-modules">9. Installing and Distributing Modules</h2>
+<h3 id="manual-install">Manual install</h3>
+<pre><code>%USERPROFILE%\AURA\modules\personal\mycommand.auru
+</code></pre>
+<p>Hot-loaded on every call — no restart needed.</p>
+<h3 id="starting-a-package">Starting a package</h3>
+<p><code>pkg new</code> writes a working skeleton. It is the quickest way to get the manifest
+right, since it generates one:</p>
+<pre><code>pkg new mystats, author(&quot;A. Araar&quot;) description(&quot;Demo tools&quot;) parent(&quot;C:/repo&quot;)
+</code></pre>
+<p>It creates a directory named after the package:</p>
+<pre><code>C:/repo/mystats/
+    mystats.lst      the manifest
+    mystats.auru     a module stub
+    mystats.aurh     its help page
+    mystats.demo     a demo stub
+    README.md
+</code></pre>
+<h3 id="the-manifest-namelst">The manifest — <code>&lt;name&gt;.lst</code></h3>
+<p>The manifest is a list of <strong>tagged records</strong>: a one-letter tag, a space, then
+the value. Blank lines and lines opening with <code>#</code> are ignored. This is exactly
+what the command above produced:</p>
+<pre><code>v 0.1
+d Demo tools
+d Created on 2026-07-20 by AURA pkg new
+a A. Araar
+f mystats.auru
+f mystats.aurh
+f mystats.demo
+f README.md
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v</code></td>
+<td>Version. <code>pkg check</code> and <code>pkg update</code> compare it numerically, so <code>1.10</code> is newer than <code>1.9</code></td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>Description. Repeatable — write one line per paragraph</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>Author</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>Required third-party Python libraries, space-separated. Repeatable</td>
+</tr>
+<tr>
+<td><code>f</code></td>
+<td>A file to install. Repeatable</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>f</code> records are what make a package: <strong>only the files listed there are
+installed</strong>, and a manifest without one stops the install with "has no files
+listed". A file is fetched relative to wherever the manifest was found, and a
+path containing <code>..</code> is rejected.</p>
+<p>Declaring dependencies with <code>r</code> lets a user resolve them before running
+anything:</p>
+<pre><code>r scikit-learn
+</code></pre>
+<pre><code>pkg check-deps mystats        report what the package needs and what is missing
+pkg install-deps mystats      install the missing ones
+</code></pre>
+<blockquote>
+<p><strong>In the frozen installer this is source-only.</strong> The packaged AURA has no <code>pip</code>,
+so <code>pkg install-deps</code> is a no-op, and only the libraries AURA bundles — pandas,
+NumPy, SciPy, statsmodels, matplotlib, Plotly — are importable. A package that
+needs an unbundled library (e.g. <code>scikit-learn</code>) therefore runs only from a
+source install, or with that library added at build time. For packages you
+distribute to installer users, prefer the bundled stack.</p>
+</blockquote>
+<h3 id="the-repository-index-auracnt">The repository index — <code>aura.cnt</code></h3>
+<p>A repository is a directory or a URL holding an <code>aura.cnt</code> index beside the
+packages. Same tagged-record grammar:</p>
+<pre><code>v 1.0
+d Demo repository
+p mystats  Demo tools
+</code></pre>
+<p><code>p</code> declares one package — its name, then a description. <code>pkg dir</code> reads this
+file, so a package absent from <code>aura.cnt</code> is not listed, although it can still
+be installed by name. Note that <code>pkg new</code> does not write <code>aura.cnt</code>: it builds
+one package, while the index describes the collection, so you maintain it.</p>
+<p>Two layouts are supported. A package is looked up in this order:</p>
+<pre><code>&lt;repo&gt;/mystats/mystats.lst      per-package subdirectory — what `pkg new` builds
+&lt;repo&gt;/mystats.lst              flat
+</code></pre>
+<h3 id="package-commands">Package commands</h3>
+<pre><code>pkg new &lt;name&gt; [, author(&quot;...&quot;) description(&quot;...&quot;) parent(&quot;dir&quot;)]
+pkg from &lt;URL|path&gt;                   point at a repository
+pkg dir [from &lt;URL|path&gt;]             list the packages it offers
+pkg describe &lt;name&gt;                   read a manifest before installing
+pkg install &lt;name&gt; [from &lt;URL|path&gt;] [, replace]
+pkg list                              what is installed
+pkg check                             which installed packages have a newer version
+pkg update &lt;name|_all&gt;
+pkg check-deps &lt;name&gt;  /  pkg install-deps &lt;name&gt;
+pkg enable &lt;name&gt;  /  pkg disable &lt;name&gt;       show or hide its menu
+pkg uninstall &lt;name&gt;
+</code></pre>
+<p>A full cycle against a local directory, which is also how to rehearse a release
+before publishing it:</p>
+<pre><code>pkg from &quot;C:/repo&quot;
+pkg dir
+pkg describe mystats
+pkg install mystats
+pkg list
+</code></pre>
+<p>Packages install under <code>%USERPROFILE%\AURA\modules\plus\&lt;name&gt;\</code>, which is
+on the search path, so their commands work immediately — no restart.</p>
+<h3 id="adding-menu-entries">Adding menu entries</h3>
+<p>A package that ships an <code>aurap.menu</code> file at its root gets menu entries built
+at start-up. The file is a manifest, and AURA <strong>reads</strong> it: no package code is
+imported or executed to build a menu, so a broken entry cannot stop the
+application from starting.</p>
+<pre><code>package: mystats
+author:  A. Araar
+version: 0.1
+
+submenu Statistics &gt; &amp;My Stats
+item My Stats &gt; &quot;Summary curve&quot; : dialog mystats
+</code></pre>
+<p>Entries may go under <code>User</code> (a first-level menu reserved for packages, one
+submenu per package) or be injected into <code>Data</code>, <code>Statistics</code>, <code>Graphics</code> or
+<code>Tools</code> beneath a submenu named after the package. An item's action is
+<code>dialog &lt;cmd&gt;</code>, <code>command &lt;cmd&gt;</code> or <code>help &lt;cmd&gt;</code>; <code>&amp;</code> marks the keyboard
+accelerator. Injection only ever adds — a package cannot replace or remove a
+built-in entry.</p>
+<hr />
+<h2 id="10-complete-examples">10. Complete Examples</h2>
+<h3 id="example-1-mean-with-confidence-interval-rclass">Example 1 — Mean with confidence interval (rclass)</h3>
+<pre><code class="language-python">import numpy as np
+from scipy import stats
+from tabulate import tabulate
+from core.syntax import syntax, integer, varlist
+
+__aura_class__ = &quot;rclass&quot;
+
+
+def run(session, parsed):
+    syn = syntax(parsed, session,
+        varlist_spec = varlist(min=1, numeric=True),
+        options      = {&quot;level&quot;: integer(95, min=1, max=99)},
+    )
+    df    = syn.df
+    level = syn.opt.level
+    alpha = 1 - level / 100
+
+    rows = []
+    for var in syn.varlist:
+        s  = df[var].dropna()
+        n  = len(s)
+        m  = float(s.mean())
+        se = float(s.sem())
+        ci = stats.t.interval(1 - alpha, df=n - 1, loc=m, scale=se)
+        rows.append([var, n, round(m, 4), round(se, 4),
+                     f&quot;[{ci[0]:.4f}, {ci[1]:.4f}]&quot;])
+
+    session.r[&quot;N&quot;]    = len(df)
+    session.r[&quot;mean&quot;] = rows[0][2] if rows else None
+
+    return tabulate(rows,
+        headers=[&quot;Variable&quot;, &quot;N&quot;, &quot;Mean&quot;, &quot;Std. Err.&quot;, f&quot;[{level}% CI]&quot;],
+        tablefmt=&quot;simple&quot;)
+</code></pre>
+<p><strong>Usage:</strong> <code>mymean wage educ exper</code>, <code>mymean wage, level(99)</code></p>
+<hr />
+<h3 id="example-2-mean-comparison-across-two-datasets-eclass-sw-protocol">Example 2 — Mean comparison across two datasets (eclass, sw protocol)</h3>
+<blockquote>
+<p>The module built here, <code>diff</code>, is an <strong>example</strong> shipped as
+<code><code>examples/modules/diff.auru</code></code> — not a registered
+command (that role is filled by DAAP's <code>dimean</code>). Read it alongside the code
+below, or drop it on your adopath to run it.</p>
+</blockquote>
+<pre><code class="language-python">import numpy as np
+from auru._sw import sw_resolve
+
+__aura_class__ = &quot;eclass&quot;
+
+
+def _wmean(series, weights=None):
+    x = series.dropna().to_numpy(dtype=float)
+    if len(x) == 0:
+        return float(&quot;nan&quot;), 0
+    if weights is not None:
+        w = np.asarray(weights, dtype=float)[:len(x)]
+        return float(np.sum(x * (w / w.sum()))), len(x)
+    return float(np.mean(x)), len(x)
+
+
+def run(session, parsed):
+    if not parsed.opts.get(&quot;sw&quot;):
+        return &quot;Error: option 'sw' required.\nSyntax: diff, income1(var) income2(var) sw&quot;
+
+    try:
+        sources = sw_resolve(session, parsed.opts)
+    except ValueError as e:
+        return f&quot;Error: {e}&quot;
+
+    role = next((r for r, e in sources.items() if r != &quot;weight&quot; and len(e) &gt;= 2), None)
+    if role is None:
+        return &quot;Error: need two numbered options, e.g. income1(var) income2(var)&quot;
+
+    df_a, col_a, sid_a = sources[role][0]
+    df_b, col_b, sid_b = sources[role][1]
+
+    w_a = w_b = None
+    for df_w, col_w, sid_w in sources.get(&quot;weight&quot;, []):
+        if sid_w == sid_a:   w_a = df_w[col_w].to_numpy(dtype=float)
+        elif sid_w == sid_b: w_b = df_w[col_w].to_numpy(dtype=float)
+
+    mean_a, n_a = _wmean(df_a[col_a], w_a)
+    mean_b, n_b = _wmean(df_b[col_b], w_b)
+    diff         = mean_a - mean_b
+    pct          = diff / mean_b * 100 if mean_b != 0 else float(&quot;nan&quot;)
+
+    sep = &quot;-&quot; * 56
+    out = &quot;\n&quot;.join([
+        sep,
+        f&quot;  Mean comparison ({role})&quot;,
+        sep,
+        f&quot;  src {sid_a}  {col_a:&lt;18}  N={n_a:&gt;8,}   mean={mean_a:&gt;16,.4f}&quot;,
+        f&quot;  src {sid_b}  {col_b:&lt;18}  N={n_b:&gt;8,}   mean={mean_b:&gt;16,.4f}&quot;,
+        sep,
+        f&quot;  Diff (src{sid_a} - src{sid_b})       {diff:&gt;16,.4f}&quot;,
+        f&quot;  % change                       {pct:&gt;15.2f}%&quot;,
+        sep,
+    ])
+
+    return {&quot;meanA&quot;: mean_a, &quot;meanB&quot;: mean_b, &quot;diff&quot;: diff, &quot;pct&quot;: pct,
+            &quot;nA&quot;: n_a, &quot;nB&quot;: n_b, &quot;_output&quot;: out}
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>datasrc 1 &quot;bkf94I.aura&quot;, income(revenu) weight(pondh)
+datasrc 2 &quot;bkf98I.aura&quot;, income(revpc)  weight(pondm)
+diff, income1(revenu) income2(revpc) weight1(pondh) weight2(pondm) sw
+</code></pre>
+<hr />
+<h3 id="example-3-standalone-figure-no-data-required">Example 3 — Standalone figure (no data required)</h3>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+
+def run(session, parsed):
+    x = np.linspace(0, 10, 11)
+    y = [3.9, 4.4, 10.8, 10.3, 11.2, 13.1, 14.1, 9.9, 13.9, 15.1, 12.5]
+
+    a, b  = np.polyfit(x, y, deg=1)
+    y_est = a * x + b
+    y_err = x.std() * np.sqrt(1/len(x) +
+                               (x - x.mean())**2 / np.sum((x - x.mean())**2))
+
+    fig, ax = plt.subplots()
+    ax.plot(x, y_est, '-')
+    ax.fill_between(x, y_est - y_err, y_est + y_err, alpha=0.2)
+    ax.plot(x, y, 'o', color='tab:brown')
+    ax.set_title(&quot;Linear fit with confidence band&quot;)
+    fig.tight_layout()
+    plt.show()
+
+    return f&quot;Fit: y = {a:.4f}·x + {b:.4f}&quot;
+</code></pre>
+<hr />
+<h2 id="11-quick-reference">11. Quick Reference</h2>
+<h3 id="injected-names-no-import-needed-inside-a-auru-file">Injected names (no import needed inside a .auru file)</h3>
+<p><strong>Inputs</strong> (validators and accessors):</p>
+<ul>
+<li><code>args</code> — declarative entry point that validates everything</li>
+<li><code>varlist</code>, <code>flag</code>, <code>integer</code>, <code>real</code>, <code>string</code>, <code>varname</code>, <code>choice</code> — argument type declarations</li>
+<li><code>active_df</code> — the active pandas DataFrame</li>
+<li><code>sw_pair</code>, <code>sw_load</code>, <code>sw_resolve</code> — multi-dataset (sw protocol) helpers</li>
+</ul>
+<p><strong>Outputs</strong> (result producers):</p>
+<ul>
+<li><code>result</code> — structured result for the result panel</li>
+<li><code>text</code> — plain-text message</li>
+<li><code>warning</code> — yellow warning</li>
+<li><code>error</code> — red error (stops the command)</li>
+<li><code>note</code> — discreet informational note</li>
+</ul>
+<p><strong>Tables</strong> (rendering helpers):</p>
+<ul>
+<li><code>tables</code> (namespace) and <code>Table</code> — the table base class</li>
+<li>Builders: <code>table_from_matrix</code>, <code>table_from_dict</code>, <code>table_from_dataframe</code>, <code>table_from_coefficients</code>, <code>table_from_grouped_results</code></li>
+<li>Declarative API: <code>TableSpec</code>, <code>StackedTable</code></li>
+<li>Generic builders: <code>build_coefficient_table</code>, <code>build_estimation_header</code></li>
+<li>Renderers: <code>render_text</code>, <code>render_markdown</code>, <code>render_html</code>, <code>render_latex</code>, <code>render_csv</code></li>
+</ul>
+<p><strong>Aura blocks</strong>:</p>
+<ul>
+<li><code>run_cmd</code> — execute one AURA command from inside an <code>aura:</code> block</li>
+<li><code>_aura_scope_enter</code> / <code>_aura_scope_exit</code> — emitted automatically by the preprocessor; not called directly</li>
+</ul>
+<h3 id="aura-blocks-cheat-sheet">Aura blocks (cheat sheet)</h3>
+<pre><code class="language-python"># Simple form: AURA commands with auto-cleanup of new columns
+aura:
+    gen tmp = x + 1
+    regress y x, robust
+end aura
+
+# Bridge form: expose Python locals as temporary columns
+aura(yhat=yhat_np, lb=lb_np, ub=ub_np):
+    twoway (rarea lb ub x) (line yhat x)
+end aura
+
+# Promote a temp column to permanent (escape hatch)
+aura:
+    gen residual = y - yhat
+    permanent residual
+end aura
+
+# Python {var} is interpolated into the AURA command line
+aura:
+    keep if x &gt; {threshold}
+end aura
+
+# Programmatic single command (no scope wrap):
+run_cmd(&quot;summarize x y&quot;)
+</code></pre>
+<h3 id="args-option-types">args() option types</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Default</th>
+<th>User syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flag()</code></td>
+<td><code>bool</code></td>
+<td><code>False</code></td>
+<td><code>, detail</code></td>
+</tr>
+<tr>
+<td><code>integer(n, min=, max=)</code></td>
+<td><code>int</code></td>
+<td><code>n</code></td>
+<td><code>, level(95)</code></td>
+</tr>
+<tr>
+<td><code>real(x, min=, max=)</code></td>
+<td><code>float</code></td>
+<td><code>x</code></td>
+<td><code>, alpha(0.05)</code></td>
+</tr>
+<tr>
+<td><code>string("")</code></td>
+<td><code>str</code></td>
+<td><code>""</code></td>
+<td><code>, title(My Output)</code></td>
+</tr>
+<tr>
+<td><code>varname()</code></td>
+<td><code>str\|None</code></td>
+<td><code>None</code></td>
+<td><code>, by(region)</code></td>
+</tr>
+<tr>
+<td><code>choice(*c)</code></td>
+<td><code>str</code></td>
+<td>first</td>
+<td><code>, vce(robust)</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="args-top-level-parameters">args() top-level parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>varlist=varlist(min=, max=, numeric=, string=)</code></td>
+<td>declare varlist constraints (or <code>min=0, max=0</code> to forbid)</td>
+</tr>
+<tr>
+<td><code>options={...}</code></td>
+<td>dict of fixed-name options</td>
+</tr>
+<tr>
+<td><code>sw=True</code></td>
+<td>enable sw-protocol dynamic options (<code>role&lt;N&gt;(...)</code>)</td>
+</tr>
+<tr>
+<td><code>if_in=True</code></td>
+<td>accept <code>if exp</code> / <code>in range</code> clauses</td>
+</tr>
+<tr>
+<td><code>weights=["aweight", ...]</code></td>
+<td>accept weight clauses of these types</td>
+</tr>
+</tbody>
+</table>
+<h3 id="parsedsyntax-attributes-returned-by-args">ParsedSyntax attributes (returned by <code>args()</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a.varlist</code></td>
+<td><code>list[str]</code></td>
+<td>All variables</td>
+</tr>
+<tr>
+<td><code>a.depvar</code></td>
+<td><code>str\|None</code></td>
+<td>First variable</td>
+</tr>
+<tr>
+<td><code>a.indepvars</code></td>
+<td><code>list[str]</code></td>
+<td>Variables [1:]</td>
+</tr>
+<tr>
+<td><code>a.df</code></td>
+<td><code>DataFrame</code></td>
+<td>Data with if/in already applied</td>
+</tr>
+<tr>
+<td><code>a.obs_range</code></td>
+<td><code>tuple\|None</code></td>
+<td>(start, end)</td>
+</tr>
+<tr>
+<td><code>a.weight</code></td>
+<td><code>str\|None</code></td>
+<td>Weight variable</td>
+</tr>
+<tr>
+<td><code>a.weight_type</code></td>
+<td><code>str\|None</code></td>
+<td><code>aweight</code> / <code>pweight</code> / ...</td>
+</tr>
+<tr>
+<td><code>a.opt.&lt;name&gt;</code></td>
+<td>varies</td>
+<td>Option value (validated and typed)</td>
+</tr>
+<tr>
+<td><code>a.sw</code></td>
+<td><code>dict\|None</code></td>
+<td>sw-resolved sources (when <code>sw=True</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output-helpers">Output helpers</h3>
+<table>
+<thead>
+<tr>
+<th>Helper</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text(s)</code></td>
+<td>return a plain text block</td>
+</tr>
+<tr>
+<td><code>result(text=, kind='r', **scalars)</code></td>
+<td>return <code>_output</code> text + scalars stored in <code>r()</code> / <code>e()</code> / <code>s()</code></td>
+</tr>
+<tr>
+<td><code>warning(msg, code=, hint=)</code></td>
+<td>raise <code>AURAWarning</code> — <code>w(code); msg</code>, command continues</td>
+</tr>
+<tr>
+<td><code>error(msg, code=, hint=)</code></td>
+<td>raise <code>AURAError</code> — <code>r(code); msg</code>, command aborts</td>
+</tr>
+<tr>
+<td><code>note(msg, code=, hint=)</code></td>
+<td>raise <code>AURANote</code> — <code>n(code); msg</code> in green</td>
+</tr>
+</tbody>
+</table>
+<h3 id="session-api">Session API</h3>
+<pre><code class="language-python"># Data
+session.get_dataframe()                       # DataFrame or None
+session.set_dataframe(df)                     # replace dataset
+session.add_variable(&quot;name&quot;, series)          # add column
+session.replace_variable(&quot;name&quot;, series)      # update column
+session.drop_variables([&quot;v1&quot;, &quot;v2&quot;])          # remove columns
+session.drop_observations(mask)               # remove rows
+
+# Labels
+session.get_var_label(&quot;var&quot;)                  # &quot;label text&quot;
+session.get_value_labels(&quot;var&quot;)               # {code: &quot;label&quot;}
+session.label_value(&quot;var&quot;, code)              # &quot;Male&quot;
+session.apply_labels(series, &quot;var&quot;)           # labeled Series
+
+# Multi-dataset
+session.workspace                             # {alias: snap dict}
+session.workspace_active()                    # active alias
+session.datasources                           # {sid: {path, vars&#125;&#125;
+session.load_datasource(sid)                  # → (DataFrame, info dict)
+session.resolve_var(sid, role, cmd_val=None)  # → column name
+
+# Results
+session.r[&quot;key&quot;] = value                      # rclass
+session.e[&quot;key&quot;] = value                      # eclass
+session.post_results(dict, kind=&quot;r&quot;)          # bulk store + event
+
+# Events
+session.events.emit(&quot;data_updated&quot;, dataframe=df)
+</code></pre>
+<h3 id="aura_class-values"><strong>aura_class</strong> values</h3>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Namespace</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"rclass"</code></td>
+<td><code>session.r</code></td>
+<td>Descriptive commands, tests</td>
+</tr>
+<tr>
+<td><code>"eclass"</code></td>
+<td><code>session.e</code></td>
+<td>Estimation (regression, etc.)</td>
+</tr>
+<tr>
+<td><code>"sclass"</code></td>
+<td><code>session.s</code></td>
+<td>String / macro results</td>
+</tr>
+<tr>
+<td><em>(omit)</em></td>
+<td>—</td>
+<td>Commands with no stored results</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_output-convention">_output convention</h3>
+<p>When <code>run()</code> returns a dict and <code>__aura_class__</code> is declared:
+- <code>"_output"</code> key → displayed in console
+- All other keys → stored in the result namespace (r/e/s)
+- Omit <code>"_output"</code> → silent execution (nothing displayed)</p>
+<h3 id="sw-protocol-multi-dataset-options">sw protocol (multi-dataset options)</h3>
+<p>Option naming rule: <code>&lt;role&gt;&lt;N&gt;(varname)</code> where N is the source number.</p>
+<pre><code>income1(revenu) income2(revpc) weight1(pondh) weight2(pondm) sw
+</code></pre>
+<pre><code class="language-python">from auru._sw import sw_resolve, sw_load
+
+sources = sw_resolve(session, parsed.opts)
+# → {&quot;income&quot;: [(df1,&quot;revenu&quot;,&quot;1&quot;), (df2,&quot;revpc&quot;,&quot;2&quot;)],
+#    &quot;weight&quot;: [(df1,&quot;pondh&quot;, &quot;1&quot;), (df2,&quot;pondm&quot;,&quot;2&quot;)]}
+
+df = sw_load(session, &quot;1&quot;)   # datasrc 1, or 1st workspace slot
+</code></pre>
+<hr />
+<h2 id="12-the-auruconnect-api-reference">12. The <code>auru.connect</code> API (reference)</h2>
+<p>The injected helpers documented throughout this guide come from the
+<strong><code>auru.connect</code></strong> package. That is the <strong>stable public API</strong> for third-party
+module developers. <code>core.*</code> modules (<code>core.syntax</code>, <code>core.errors</code>,
+<code>core.output</code>) are AURA internals and may evolve.</p>
+<p>The execution engine injects the following names into every <code>.auru</code> namespace
+before executing it.</p>
+<h3 id="inputs-from-auruconnectinputs">Inputs (from <code>auru.connect.inputs</code>)</h3>
+<p>Validators and accessors for command arguments:</p>
+<ul>
+<li><code>args</code> — the main declarative entry point; validates everything</li>
+<li><code>varlist</code> — declare a variable list (min/max, numeric, factor, etc.)</li>
+<li><code>flag</code>, <code>integer</code>, <code>real</code>, <code>string</code> — option type declarations</li>
+<li><code>varname</code> — single variable name (must exist in active dataset)</li>
+<li><code>choice</code> — string option restricted to a given set of values</li>
+<li><code>active_df</code> — the active pandas DataFrame</li>
+<li><code>sw_pair</code>, <code>sw_load</code>, <code>sw_resolve</code> — multi-dataset (sw protocol) helpers</li>
+<li><code>inputs</code> — the namespace itself, for explicit <code>inputs.args(...)</code> style</li>
+</ul>
+<h3 id="outputs-from-auruconnectoutputs">Outputs (from <code>auru.connect.outputs</code>)</h3>
+<p>Result producers — wrap return values into <code>AURAResult</code> objects:</p>
+<ul>
+<li><code>result</code> — store and emit a structured result</li>
+<li><code>text</code> — plain-text message</li>
+<li><code>warning</code> — emit a warning (yellow in console)</li>
+<li><code>error</code> — emit an error (red, stops the command)</li>
+<li><code>note</code> — emit a discreet informational note</li>
+<li><code>outputs</code> — the namespace itself</li>
+</ul>
+<h3 id="graph-from-auruconnectgraph">Graph (from <code>auru.connect.graph</code>)</h3>
+<ul>
+<li><code>graph</code> — graph option translator (single namespace)</li>
+</ul>
+<h3 id="writing-a-graph-module">Writing a graph module</h3>
+<p>For graph commands, use <code>graph</code> (the third connector). It translates the
+whole graph-option vocabulary (<code>lcolor</code>, <code>lpattern</code>, <code>lwidth</code>, <code>mcolor</code>,
+<code>msymbol</code>, <code>msize</code>, <code>fcolor</code>, <code>fintensity</code>, <code>legend(pos(N))</code>, <code>title()</code>,
+<code>xtitle()</code>, ...) into matplotlib kwargs.</p>
+<pre><code class="language-python">&quot;&quot;&quot;myplot — Custom scatter with the standard graph options.&quot;&quot;&quot;
+import matplotlib.pyplot as plt
+
+def run(session, parsed):
+    a = args(parsed, session,
+        varlist = varlist(min=2, max=2, numeric=True),
+        options = graph.standard_options(),   # the whole option vocabulary
+    )
+
+    y_var, x_var = a.varlist[0], a.varlist[1]
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.scatter(a.df[x_var], a.df[y_var],
+               label=y_var,
+               **graph.scatter_kwargs(vars(a.opt)))
+    graph.apply_all(ax, vars(a.opt))        # titles + axes + legend
+    plt.show()
+    return text(f&quot;Plotted {y_var} against {x_var}.&quot;)
+</code></pre>
+<p>Note the <code>vars()</code>. The option namespace <code>a.opt</code> is convenient in Python —
+<code>a.opt.mcolor</code> — but the connector looks its options up by key, so hand it the
+underlying dictionary. Passing the namespace itself fails on the first plotted
+point with <code>'SimpleNamespace' object has no attribute 'get'</code>.</p>
+<p>Your module now accepts <code>myplot y x, mcolor(navy) msymbol(Oh) title("…")
+legend(pos(6))</code> — the same option vocabulary as any built-in graph command.</p>
+<p>So you can write <code>args(...)</code>, <code>result(...)</code>, etc. directly — no import.
+Optional explicit form for IDE autocomplete:</p>
+<pre><code class="language-python">from auru.connect import inputs, outputs   # optional; both styles run identically
+
+def run(session, parsed):
+    a = inputs.args(parsed, session, varlist=inputs.varlist(min=1))
+    return outputs.result(text=&quot;...&quot;, N=10)
+</code></pre>
+<p>A working tutorial module is included — see <code><code>auru/histo.auru</code></code>
+and its help file <code><code>auru/histo.aurh</code></code>.</p>
+<hr />
+<h2 id="13-writing-a-help-file-aurh">13. Writing a Help File (.aurh)</h2>
+<p>Every <code>.auru</code> module can ship an optional <code>.aurh</code> file (same name, same directory).<br />
+When present, <code>help &lt;module&gt;</code> opens a formatted <strong>HelpWindow</strong> instead of printing
+the docstring in the console.</p>
+<h3 id="quickest-start-scaffold-one-from-the-module-editor">Quickest start — scaffold one from the Module Editor</h3>
+<p>Open your module in the <strong>Module Editor</strong> (Tools → Module Editor) and pick
+<strong>Module → Generate .aurh help</strong>, or the help button on its toolbar. It writes
+<code>&lt;module&gt;.aurh</code> beside the module, pre-filled with the sections in order and
+an inline cheat-sheet of every tag, so there is nothing to look up while you
+fill it in.</p>
+<h3 id="why-a-dedicated-mini-format-instead-of-markdown">Why a dedicated mini-format instead of Markdown ?</h3>
+<p>The <code>.aurh</code> syntax is intentionally <strong>simpler than Markdown</strong> :</p>
+<table>
+<thead>
+<tr>
+<th><code>.aurh</code></th>
+<th>What it gives</th>
+<th>Why not Markdown</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code># Title</code></td>
+<td>Blue title bar (one line)</td>
+<td>Markdown <code>#</code> would just be a heading</td>
+</tr>
+<tr>
+<td><code>##section</code></td>
+<td>Predefined named section (description, syntax, options, …)</td>
+<td>Avoid every author inventing their own headings</td>
+</tr>
+<tr>
+<td><code>{cmd:txt}</code></td>
+<td>Bold blue mono (commands)</td>
+<td>Markdown has no semantic command color</td>
+</tr>
+<tr>
+<td><code>{opt:txt}</code></td>
+<td>Bold dark-blue mono (options)</td>
+<td>Idem</td>
+</tr>
+<tr>
+<td><code>{it:txt}</code></td>
+<td>Italic grey (metavariables)</td>
+<td>Markdown <code>*x*</code> is only italic, no color</td>
+</tr>
+<tr>
+<td><code>{res:txt}</code></td>
+<td>Green mono (<code>r(...)</code> stored results)</td>
+<td>Idem</td>
+</tr>
+<tr>
+<td><code>{help:name}</code></td>
+<td>Clickable in-app link to another help</td>
+<td>Markdown links would need to know AURA's resolver</td>
+</tr>
+<tr>
+<td><code>{url:label\|http://}</code></td>
+<td>Clickable browser link</td>
+<td>Markdown allows it but our format keeps the same <code>{ }</code> rhythm</td>
+</tr>
+</tbody>
+</table>
+<p>Result: consistency across all module help pages, no CSS, no HTML, no
+surprises.</p>
+<p>The HelpWindow viewer is <strong>separate</strong> from the new TabbedViewer/Markdown
+renderer — <code>.aurh</code> always opens in HelpWindow, <code>.md</code> always in TabbedViewer.</p>
+<h3 id="file-structure">File structure</h3>
+<pre><code># ModuleName — Short description          (title bar)
+
+##description
+Free text. Inline tags supported.
+
+##syntax
+{cmd:command} {it:varname} , {opt:option}({it:value}) [{opt:flag}]
+
+##options
+{opt:option(value)}   What it does (default X)
+{opt:flag}            Boolean; present means True
+
+##examples
+. command varname, option(value)
+. command varname, option(value) flag
+
+##stored_results
+{res:r(name)}    Description of stored scalar
+
+##remarks
+Additional notes. Cross-references: {help:ttest}
+
+##author
+Your name — Module v1.0
+</code></pre>
+<p>Lines inside <code>##examples</code> that start with <code>.</code> are rendered as command-prompt
+lines (monospace, light background). All other lines accept inline tags.</p>
+<h3 id="exampledata-make-the-examples-runnable"><code>##exampledata</code> — make the examples runnable</h3>
+<p>A help page can carry the data its own examples need. Add an <code>##exampledata</code>
+section holding ordinary AURA commands, and every <code>.</code> line under <code>##examples</code>
+becomes clickable: the reader gets a <strong>run in command window</strong> link, and a
+<strong>open dialog</strong> link for commands whose dialog can pre-fill itself.</p>
+<pre><code>##examples
+    Every numeric variable at once
+. summarize
+    One variable in detail
+. summarize wage, detail
+
+##exampledata
+clear
+set obs 200
+gen wage = 20000 + rnormal(0, 4000)
+gen educ = 8 + int(runiform()*10)
+</code></pre>
+<p>The setup commands are <strong>run, never displayed</strong> — they exist so the example has
+something to work on. Clicking a link puts the reader in <strong>demo mode</strong>: their
+own data is set aside rather than overwritten, and <code>demo end</code> restores it. That
+matters most for commands that replace the data, since the reader can look at
+the sample before transforming it.</p>
+<p>The section is also the switch. A page without <code>##exampledata</code> shows its
+examples as plain text, because a link that ran against whatever the reader
+happened to have loaded would be worse than no link at all.</p>
+<p>Two ways to supply the data, and the choice is worth making deliberately:</p>
+<ul>
+<li><strong>Generate it</strong> with <code>set obs</code> + <code>gen</code>, as above. The page is then
+  self-contained and cannot break.</li>
+<li><strong>Ship a file</strong>, loaded with <code>use "data/&lt;file&gt;"</code>. Sample data must live
+  <strong>inside AURA</strong> — <code>auru/data/</code> or <code>auru/demo_data/</code> — never at an absolute
+  path on the author's machine, which would fail for every other reader and
+  would not survive packaging.</li>
+</ul>
+<p><strong>Examples that build on each other.</strong> A click reloads the page's data, so an
+example cannot count on what an earlier click did. Consecutive example lines
+form a <strong>group</strong> instead: a click first replays, silently, the examples above
+the clicked one in its group. Write an example that needs the one above it
+(<code>predict</code> after <code>logit</code>, <code>restore</code> after <code>preserve</code>) directly under it, and
+separate independent variants with a blank line or a line of text, which starts
+a new group. The rules live in <code>core/help_examples.py</code>:</p>
+<ul>
+<li>the replay never runs a command that touches files or the system, opens a
+  window, or runs code AURA cannot inspect (<code>save</code>, <code>export</code>, <code>use</code>, <code>erase</code>,
+  <code>cd</code>, <code>shell</code>, <code>log</code>, <code>help</code>, <code>db</code>, <code>browse</code>, <code>graph save</code>, a <code>py:</code> block…, or
+  any command with an option that writes a file: <code>export()</code>, <code>xls()</code>,
+  <code>saving()</code>); such a command runs only when it is the one clicked;</li>
+<li>a block — <code>py: … end py</code>, or <code>forvalues … {</code> … <code>}</code> — is one example, run as a
+  whole, with its links under its last line;</li>
+<li>an example line holds one command: no trailing <code>//</code> comment and no
+  explanation on the same line (put it on the line above).</li>
+</ul>
+<h3 id="technote-the-method-behind-the-command"><code>##technote</code> — the method behind the command</h3>
+<p>For a command whose defensible details matter — an estimator, a variance
+formula, a bandwidth rule — <code>##technote</code> holds the technical note: what is
+computed, and under which convention. It keeps the method out of
+<code>##description</code>, which should stay short enough to answer "what is this for".</p>
+<h3 id="inline-tags">Inline tags</h3>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Renders as</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{cmd:text}</code></td>
+<td>bold blue mono</td>
+<td>command names, typed text</td>
+</tr>
+<tr>
+<td><code>{opt:text}</code></td>
+<td>bold dark-blue mono</td>
+<td>option names</td>
+</tr>
+<tr>
+<td><code>{it:text}</code></td>
+<td>italic grey</td>
+<td>placeholders / metavariables</td>
+</tr>
+<tr>
+<td><code>{res:text}</code></td>
+<td>green mono</td>
+<td>stored result names (<code>r(...)</code>)</td>
+</tr>
+<tr>
+<td><code>{bf:text}</code></td>
+<td>bold</td>
+<td>emphasis</td>
+</tr>
+<tr>
+<td><code>{err:text}</code></td>
+<td>red</td>
+<td>error references</td>
+</tr>
+<tr>
+<td><code>{help:name}</code></td>
+<td>underline link (blue)</td>
+<td>internal cross-reference; opens <code>name.aurh</code>, falls back to text help if missing</td>
+</tr>
+<tr>
+<td><code>{url:href}</code></td>
+<td>underline link (cyan-blue)</td>
+<td>external URL — opens in the system browser</td>
+</tr>
+<tr>
+<td><code>{url:label\|href}</code></td>
+<td>underline link (cyan-blue)</td>
+<td>external URL with a custom display label</td>
+</tr>
+<tr>
+<td><code>{sub:text}</code></td>
+<td>subscript</td>
+<td>formulas — <code>x{sub:i}</code></td>
+</tr>
+<tr>
+<td><code>{sup:text}</code></td>
+<td>superscript</td>
+<td>formulas — <code>σ{sup:2}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Tags do not nest: <code>{bf:… {cmd:x} …}</code> is not parsed as you would hope, so keep
+one tag per span.</p>
+<h3 id="helpwindow-features">HelpWindow features</h3>
+<ul>
+<li><strong>Back</strong> button — navigate the cross-reference history  </li>
+<li><strong>Find</strong> bar (Ctrl+F) — incremental search with yellow highlight  </li>
+<li>Resizable window, 760 x 580 default  </li>
+<li>Escape to close  </li>
+</ul>
+<h3 id="minimal-example">Minimal example</h3>
+<pre><code># hello — Greet the user
+
+##description
+Prints a greeting message to the AURA console.
+
+##syntax
+{cmd:hello} [{it:name}]
+
+##examples
+. hello
+. hello World
+
+##author
+AURA Tutorial Module v1.0
+</code></pre>
+<hr />
+<h2 id="14-writing-a-demo">14. Writing a Demo</h2>
+<p>A demo is a small directory shipped with AURA (or with a <code>.auru</code> module) that walks a user through a concept in a few minutes. The AURA shell takes care of the lifecycle — you only write three short files.</p>
+<h3 id="quickest-start-scaffold-one-in-2-seconds">Quickest start — scaffold one in 2 seconds</h3>
+<pre><code>. demo template mycmd
+demo template: created C:\…\demo\mycmd
+  Edit manifest.json, the .aur script, and add your dataset.
+  Test with:  demo start mycmd
+</code></pre>
+<p>The scaffold gives you a working demo (with a tiny placeholder CSV). Replace the data, edit the script, refine the manifest — and you are done.</p>
+<h3 id="directory-layout">Directory layout</h3>
+<pre><code>demo/&lt;name&gt;/
+  manifest.json        ← REQUIRED — metadata
+  &lt;name&gt;_data.csv      ← REQUIRED — at least one dataset (CSV or .aura)
+  &lt;name&gt;_script.aur    ← REQUIRED — at least one .aur script
+  README.md            ← OPTIONAL — pedagogical detail, shown via the banner
+</code></pre>
+<h3 id="manifest-schema-manifestjson">Manifest schema (<code>manifest.json</code>)</h3>
+<pre><code class="language-json">{
+  &quot;title&quot;:             &quot;My demo — short subtitle&quot;,
+  &quot;one_liner&quot;:         &quot;What the user will learn in 1 sentence.&quot;,
+  &quot;level&quot;:             &quot;beginner&quot;,
+  &quot;datasets&quot;:          [&quot;mycmd_data.csv&quot;],
+  &quot;scripts&quot;:           [&quot;mycmd_script.aur&quot;],
+  &quot;auto_load&quot;:         true,
+  &quot;auto_open_script&quot;:  true,
+  &quot;auto_run&quot;:          false,
+  &quot;estimated_time_min&quot;: 5
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>yes</td>
+<td>Shown in the menu and the banner</td>
+</tr>
+<tr>
+<td><code>one_liner</code></td>
+<td>recommended</td>
+<td>Shown in <code>demo list</code> and the banner</td>
+</tr>
+<tr>
+<td><code>level</code></td>
+<td>recommended</td>
+<td><code>beginner</code> / <code>intermediate</code> / <code>advanced</code></td>
+</tr>
+<tr>
+<td><code>datasets</code></td>
+<td>yes</td>
+<td>List of dataset files (CSV or .aura), paths relative to the demo dir</td>
+</tr>
+<tr>
+<td><code>scripts</code></td>
+<td>yes</td>
+<td>List of <code>.aur</code> script files, paths relative to the demo dir</td>
+</tr>
+<tr>
+<td><code>auto_load</code></td>
+<td>optional</td>
+<td>Default <code>true</code>. Load datasets into the workspace on start</td>
+</tr>
+<tr>
+<td><code>auto_open_script</code></td>
+<td>optional</td>
+<td>Default <code>true</code>. Open the scripts in the editor on start</td>
+</tr>
+<tr>
+<td><code>auto_run</code></td>
+<td>optional</td>
+<td>Default <code>false</code>. Execute scripts immediately on start (rarely useful)</td>
+</tr>
+<tr>
+<td><code>related_commands</code></td>
+<td>optional</td>
+<td>List of commands the demo covers — used by <code>demo &lt;command&gt;</code>. Auto-detected from the script if omitted</td>
+</tr>
+<tr>
+<td><code>estimated_time_min</code></td>
+<td>optional</td>
+<td>Shown to set expectations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="single-file-demos-demo-front-matter">Single-file demos — <code>@demo</code> front-matter</h3>
+<p>For a simple demo (one dataset, one script) the <code>manifest.json</code> is overkill.
+Instead, put a <code>* @demo</code> front-matter block at the top of the <code>.aur</code> script —
+the whole demo is then <strong>a single file</strong>:</p>
+<pre><code class="language-stata">* @demo
+* @title:    Tabulate basic — Frequencies and cross-tabs
+* @level:    beginner
+* @data:     tab_data.csv
+* @oneliner: One-way, two-way and chi-squared frequencies in 3 minutes.
+* @related:  tabulate, tab1, tab2
+* @time:     3
+
+* ─── Step 1 — One-way frequency ───────────────────────────────────
+tabulate region
+...
+</code></pre>
+<p>Recognised directives: <code>@demo</code> (required marker), <code>@title</code>, <code>@level</code>,
+<code>@data</code> (comma-separated), <code>@scripts</code> (defaults to the file itself),
+<code>@oneliner</code>, <code>@related</code>, <code>@time</code>.</p>
+<p><strong>Resolution rule:</strong> if a <code>manifest.json</code> exists in the demo directory it
+wins; otherwise the scanner reads the <code>@demo</code> front-matter of the first
+<code>.aur</code> file it finds.  The two forms are fully interchangeable.</p>
+<h3 id="where-demos-are-discovered">Where demos are discovered</h3>
+<p>The scanner walks (in order) :</p>
+<ol>
+<li><code>&lt;project&gt;/demo/&lt;name&gt;/</code>                — official AURA tutorials</li>
+<li><code>~/AURA/demo/&lt;name&gt;/</code>                    — your personal demos</li>
+<li><code>&lt;project&gt;/auru/&lt;module&gt;.demos/&lt;name&gt;/</code> — bundled with a <code>.auru</code> module</li>
+<li><code>~/AURA/modules/personal/&lt;module&gt;.demos/&lt;name&gt;/</code></li>
+<li><code>~/AURA/modules/plus/&lt;pkg&gt;/&lt;module&gt;.demos/&lt;name&gt;/</code></li>
+<li><code>~/AURA/modules/base/&lt;module&gt;.demos/&lt;name&gt;/</code></li>
+</ol>
+<p>Each demo is grouped by source (<code>built-in</code>, <code>personal</code>, module name, …) and runs from a command's help page or the <code>demo</code> command.</p>
+<h3 id="bundling-a-demo-with-your-auru-module">Bundling a demo with your <code>.auru</code> module</h3>
+<p>If you ship a module named <code>mycmd.auru</code>, place demos next to it under <code>mycmd.demos/</code>:</p>
+<pre><code>auru/
+  mycmd.auru
+  mycmd.aurh
+  mycmd.demos/
+    basic/
+      manifest.json
+      basic_data.csv
+      basic_script.aur
+    advanced/
+      manifest.json
+      advanced_data.csv
+      advanced_script.aur
+</code></pre>
+<p>When a user installs your package via <code>pkg</code>, all of <code>mycmd.aurh</code> + <code>mycmd.demos/</code> install together, and the demos become available under the <code>mycmd</code> group.</p>
+<h3 id="writing-a-good-demo-script">Writing a good demo script</h3>
+<p>A demo script (<code>.aur</code>) is plain AURA code with <strong>step markers</strong> as comments:</p>
+<pre><code class="language-stata">* ════════════════════════════════════════════════════════════════════
+*  Demo: My command
+*  Level: beginner    ·    Estimated time: 5 minutes
+*
+*  What you will learn:
+*    - bullet 1
+*    - bullet 2
+* ════════════════════════════════════════════════════════════════════
+
+* ─── Step 1 — One-line description ─────────────────────────────────
+describe
+summarize
+
+* ─── Step 2 — Try something simple ─────────────────────────────────
+mycmd y x
+
+* ─── Step 3 — Restrict the sample ──────────────────────────────────
+mycmd y x if region == 1
+</code></pre>
+<p>The user selects a step (one or several lines) and presses <strong>F8</strong> (Run selected). They learn by doing — not by watching.</p>
+<h3 id="safety-contract">Safety contract</h3>
+<p>The demo runtime guarantees that <strong>end</strong> restores:</p>
+<ul>
+<li>The full workspace (datasets + active alias)</li>
+<li>The current working directory</li>
+<li><code>r()</code>, <code>e()</code>, <code>s()</code> results dictionaries</li>
+</ul>
+<p>So the user can experiment freely inside a demo — <code>clear</code>, <code>drop</code>, <code>replace_active</code>, anything — knowing one click brings everything back.</p>
+<h3 id="per-command-demos-the-demo-protocol">Per-command demos — the <code>.demo</code> protocol</h3>
+<p>Alongside the name-guided system above, <code>core/demo_file.py</code> is a <strong>lighter
+layer</strong>: ship a numbered demo file <code>auru/&lt;cmd&gt;.demo</code> next to a module's <code>.auru</code>
+/ <code>.aurh</code>. Format: <code>#demo N | title</code> opens a demo, <code>*  …</code> lines are narration,
+other lines are AURA commands.</p>
+<pre><code>#demo 1 | OLS with a factor variable
+*  Regress wages on schooling and a region factor.
+use wages.csv
+regress wage educ i.region
+</code></pre>
+<p>Data resolves per-command first (<code>auru/&lt;cmd&gt;.demos/</code>) then from a shared pool
+(<code>auru/demo_data/</code>); a self-contained demo can also build its data with <code>set
+obs</code> + <code>gen</code>. Commands: <code>demo &lt;cmd&gt; list</code>, <code>demo &lt;cmd&gt;, number(#)</code> (replays:
+echoes <code>. cmd</code> + results), with options <code>interactive</code> (materialises a temporary
+script in the editor) and <code>keep</code> (copies the demo's final dataset into the
+session). The <strong>inline</strong> replay runs in a <strong>disposable sandbox</strong> Session/Engine,
+so the real session (data, <code>r/e/s</code>, macros, settings) is never touched. Demos
+run from a command's help page or the <code>demo</code> command. Example: <code>auru/regress.demo</code>.</p>
+<hr />
+<h2 id="15-auradb-the-dialog-studio">15. AURADB — the Dialog Studio</h2>
+<p><strong>AURADB</strong> (<code>auradb/</code>) is a declarative mini-language for describing a dialog
+box → parsed into a spec → rendered with a Tk <strong>auto-layout</strong> engine → and used
+to <strong>generate the AURA command line</strong>. It is an <strong>authoring tool</strong>: AURA never
+<em>executes</em> through it — the point is to produce the right syntax fast. Launch it
+from <strong>Tools → Dialog Studio</strong> in AURA, or standalone with
+<code>python -m auradb.studio &lt;file.auradb&gt;</code>.</p>
+<h3 id="the-language">The language</h3>
+<p>No pixel coordinates: you declare widgets and the engine lays them out. Decoupled components <code>parser.py → spec.py → (command.py,
+dialog.py)</code>.</p>
+<ul>
+<li><strong>Widgets</strong> — <code>TEXT</code>, <code>EDIT</code>, <code>VARLIST</code>, <code>VARNAME</code>, <code>FILE</code>, <code>CHOICE</code>
+  (combo/radio/listbox), <code>SPIN</code>, <code>CHECK</code>, <code>TEXTBOX</code>, <code>COLOR</code>, <code>EXPR</code>, <code>GROUP</code>,
+  plus the composite <strong><code>VARSELECT</code></strong> (the regress-style continuous/factor
+  selector) and <strong><code>MATRIX</code></strong> (a grid of inputs).</li>
+<li><strong>Command emission</strong> — <code>EMIT "{}"</code> feeds a widget's value into the command;
+  the assembler <code>command.py</code> builds <code>[by v:] cmd &lt;positionals&gt; [if][in]
+  [weight] [, options]</code>.</li>
+<li><strong>Declarative reactions</strong> — <code>SHOW / ENABLE &lt;widget&gt; WHEN &lt;cond&gt;</code> with compound
+  <code>AND</code> / <code>OR</code> / <code>NOT</code>; a hidden widget never leaks into the command.</li>
+<li><strong>Layout divisions</strong> — <code>ROWS(...)</code> / <code>COLS(...)</code> give a CSS-grid of cells
+  (<code>R1</code> / <code>C2</code>, nestable) addressed relative to the cell; <strong><code>TAB "name"</code></strong>
+  creates notebook pages. <code>FILL</code> / <code>LINE</code> colour any component, cell, or group.</li>
+</ul>
+<p>The full grammar is in <strong><code>auradb/SPEC.md</code></strong>; examples live in
+<code>auradb/examples/</code> (<code>regress_full.auradb</code> reproduces the regression dialog).</p>
+<h3 id="the-studio">The Studio</h3>
+<p><code>auradb/studio.py</code> is the unified tool: <strong>Code</strong> (a <code>.auradb</code> text editor with a
+Problems panel and live <code>auradb/lint.py</code> diagnostics), <strong>GUI</strong> (the visual
+editor <code>auradb/editor.py</code> — drag / resize / recolour on the <em>same</em> spec object),
+and <strong>Preview</strong> (the runtime dialog embedded). One spec, three views, kept in
+sync; <strong>Save</strong> writes the <code>.auradb</code> text (comments preserved).</p>
+<h3 id="testing-rule">Testing rule</h3>
+<p>For independent AURADB development, run <strong>only</strong> <code>tests/test_auradb.py</code> — not the
+full suite.</p>
+<hr />
+<h2 id="16-the-graph-object-model-aurg">16. The Graph Object Model (.aurg)</h2>
+<p>A <code>.aurg</code> is a saved, editable AURA graph. The model is deliberately small and
+its guiding rule is that a reopened graph is <strong>self-contained</strong>: it carries its
+own frozen data and is edited without ever touching the live workspace.</p>
+<h3 id="the-spec-coregraph_specpy">The spec — <code>core/graph_spec.py</code></h3>
+<p><code>GraphSpec</code> is a light dataclass tree with a <strong>lossless</strong> JSON round-trip
+(<code>GraphSpec.from_dict(spec.to_dict()) == spec</code>). It has two coexisting forms:</p>
+<ul>
+<li><strong>recipe</strong> — <code>source_command</code> (the AURA command that drew it) + <code>data</code> (the
+  referenced columns, frozen). Reopening re-runs the command over the frozen
+  data → an identical figure. This is the universal, lossless path.</li>
+<li><strong>structured</strong> — a list of <code>Mark</code>s (one per plotted series) plus the shared
+  blocks <code>xaxis</code> / <code>yaxis</code> / <code>y2axis</code> (<code>AxisSpec</code>), <code>legend</code> (<code>LegendSpec</code>),
+  <code>titles</code> (<code>TitleSpec</code>) and <code>overall</code> (<code>OverallSpec</code>, incl. <code>scheme</code> /
+  <code>palette</code>). A <code>Mark</code> composes the reusable <code>MarkerStyle</code> / <code>LineStyle</code> /
+  <code>FillStyle</code> blocks — the same homomorphism the GraphBuilder encodes.</li>
+</ul>
+<h3 id="saving-and-rendering">Saving and rendering</h3>
+<ul>
+<li><strong>The graphs of a session</strong> — each 2-D graph drawn is an <code>AuraGraph</code> in
+  <code>session.graphs</code> (<code>core/graphs.py</code>): its command, a copy of the columns it
+  references, frozen at draw time (<code>graph_capture.freeze_recipe</code>), its edited
+  <code>GraphSpec</code>, the place and size of its window, and a mode — <em>view</em> (its graph
+  window) or <em>edit</em> (its editor). <code>graph_capture.adopt_figure(session, fig,
+  command, data)</code> makes a drawn figure the window of such a graph: it titles the
+  window <em>Graph N — command</em>, adds the <strong>Start Graph Editor</strong> button when the
+  catalogue knows an editor for the type, and drops the graph when the window is
+  closed for good. The engine, <code>graph mpl</code>, <code>graph use</code> and the end of an edit
+  call it.</li>
+<li><strong>Edit and back</strong> — the button closes the graph window and opens the editor
+  at its place (<code>main._edit_graph</code>); closing the editor redraws the edited spec
+  with <code>commands/graph_io.draw_spec</code> (marks through the renderer; a recipe by
+  re-running its command, with the editor's common options, on its frozen data)
+  in a window at the same place and size (<code>main._end_edit</code>).</li>
+<li><strong>Saving</strong> — <code>graph save</code> and the toolbar disk icon (<code>.aurg</code> is its default
+  format) write <code>graph.current_spec()</code>: the graph as it stands, edits included.</li>
+<li><strong>Structured export</strong> — <code>modules/graph_export.spec_from_plots()</code> turns
+  GraphBuilder state into marks; <code>spec_from_command_string()</code> parses a command
+  into marks so a recipe can open object-by-object.</li>
+<li><strong>Rendering</strong> — <code>modules/graph_render.render(spec, ax)</code> draws onto a bare
+  <code>Figure</code>, reusing the engine's vocabulary and, for computed types (pie /
+  histogram / bar), <strong>delegating to the engine drawer</strong> so the object never
+  diverges from the live command.</li>
+</ul>
+<h3 id="the-catalogue-coregraph_catalogpy">The catalogue — <code>core/graph_catalog.py</code></h3>
+<p>One <code>GraphType</code> descriptor per 2-D type: <code>{family, positional, has_axes,
+computed, part_to_whole, editor, is_mark, overlay_plots}</code>. It is the single
+source of truth for dispatch and, above all, for <strong>how a saved graph reopens</strong>:
+<code>editor_for_spec(spec)</code> returns the target editor, which <code>main.open_graph</code> uses.</p>
+<p><strong>Adding a new graph type = one catalogue entry + one drawer.</strong> Everything else
+— command registration, the reopen editor, help — follows from the descriptor.</p>
+<h3 id="the-editors">The editors</h3>
+<p><code>editor</code> in the descriptor is one of: <code>object</code> (the multi-mark
+<code>gui/graph_editor.py</code>, for twoway/scatter/line/…), <code>dedicated</code> (a per-type
+window: <code>gui/pie_editor.py</code>, <code>gui/histogram_editor.py</code>, <code>gui/bar_editor.py</code>, and
+<code>gui/curve_editor.py</code> for kdensity/cdfplot; they share their frame — menu,
+preview, Titles/Style tabs, file operations — in <code>gui/recipe_editor.py</code>, and work
+on the graph object <code>core/graph_object.py</code> (graph → plots → curves, with its
+legend): each control is bound to its part of the tree with
+<code>_bind_control(var, read, write)</code>, the command is the one the editor opened with,
+changed only where a control was changed, and per-curve edits follow
+<code>Curve.ident</code> — what the curve draws, not its place),
+<code>recipe</code> (read-only preview, e.g. the 2-axes <code>barofpie</code>). Every editor is built
+on the spec's <strong>frozen data</strong> via a private <code>DataManager</code> — never the workspace.
+The dedicated editors share one layout (a fixed window; Panel A = data + a tabbed
+option notebook; Panel B = a live preview drawn by the engine drawer) and save
+back to <code>.aurg</code>. <code>help graph</code> is the user-facing counterpart.</p>
+<hr />
+<h2 id="17-ai-assisted-module-authoring">17. AI-Assisted Module Authoring</h2>
+<p>AURA can generate a new command — a <code>.auru</code> module with its <code>.aurh</code> help,
+optional <code>.auradb</code> dialog and tests — with a large language model. The subsystem
+is <code>core/ai/</code>: <strong>provider-agnostic</strong>, <strong>dependency-free</strong> (raw <code>urllib</code>, no SDK),
+and <strong>opt-in</strong> (no network until the developer enables it).</p>
+<h3 id="providers-coreaiproviderpy-configpy">Providers — <code>core/ai/provider.py</code>, <code>config.py</code></h3>
+<p>One tiny interface: <code>generate(system, user) -&gt; text</code>. Three backends: <code>anthropic</code>
+(Claude, the Messages API), <code>openai</code> (<strong>any</strong> OpenAI-compatible endpoint — cloud
+<em>or</em> a local Ollama / LM Studio), and <code>fake</code> (deterministic, offline, for tests).
+<code>make_provider(config)</code> builds one from the saved config. Gemini / OpenAI / Groq /
+Cerebras / OpenRouter / Mistral / Ollama all ride the single OpenAI-compatible
+backend — only the Base URL + model differ. Config is <code>~/AURA/config/ai.json</code>
+(<code>core/ai/config.py</code>; <code>is_ready()</code> gates on <em>enabled</em> + a key for cloud / a
+base_url for local). <strong>Tools → AI Settings</strong> (<code>gui/ai_settings_dialog.py</code>) edits
+it — a preset fills the Base URL + a default model, all editable. (Hosts behind
+Cloudflare need a browser-like User-Agent; the provider sets one.)</p>
+<h3 id="the-project-scaffold-coreaiprojectpy">The project scaffold — <code>core/ai/project.py</code></h3>
+<p>A module is written inside a <strong>project</strong> — a working folder carrying AURA's rules
+and the developer's material, so AURA-IA and an external agent (Cursor, Claude
+Code…) can share it. <code>create_project(name, location)</code> (<strong>Tools → New Module
+Project</strong>) makes <code>docs/</code> (AURA's <code>authoring/AUTHORING_*.md</code> master files copied
+in), <code>refs/</code> (reference material), <code>out/</code> (the produced files), <code>data/</code> (small
+datasets, referenced by a relative path), plus <code>project.json</code> and an <code>AGENTS.md</code>
+pointing an external agent at <code>docs/</code>. The user types only a name and a location.</p>
+<h3 id="generating-and-shipping-chatpy-generatorpy-produce-package">Generating and shipping — <code>chat.py</code> / <code>generator.py</code>, Produce Package</h3>
+<p>The Module Editor's chat (<code>core/ai/chat.py</code>, <code>generator.py</code>) generates and revises
+the module grounded on the <strong>live</strong> master files (never a stale copy), and the
+produced <code>.auru</code> runs in the session for immediate testing. <strong>Produce Package</strong>
+(<code>gui/produce_package_dialog.py</code> → <code>core/package_build.build_package</code>) turns a
+finished project into an installable package (a <code>.lst</code> manifest + the files),
+optionally with a menu entry, and can <code>pkg install</code> it.</p>
+<h3 id="validating-the-headless-test-service-and-the-two-gates">Validating — the headless test service and the two gates</h3>
+<p>Whoever drafts (AURA-IA <em>or</em> an external agent), the <strong>validation is one shared
+service</strong> — never forked. <code>core/ai/test_service.py</code> runs a module HEADLESS in an
+isolated throwaway session (the developer's workspace is untouched) and returns
+AI-legible JSON: <code>{ok, errors[], notes[], output[], graphs[], values{r,e,s&#125;&#125;</code>. It
+is built on the existing sandbox (<code>ExecutionEngine.test_module_source</code>), so it
+exercises real AURA code, not a copy.</p>
+<p>The loop runs against <strong>two gates</strong>:</p>
+<ul>
+<li><strong>Gate 1 — it RUNS.</strong> No syntax / Python error → <code>ok:true</code>. Each error carries
+  the offending line, with AURA's internal frames and absolute paths stripped.</li>
+<li><strong>Gate 2 — the NUMBERS are right.</strong> The module's own <code>tests/test_&lt;cmd&gt;.py</code>
+  encode the target from <code>refs/</code> (a reference output, a paper's table) as numeric
+  assertions; the service runs them <strong>without pytest</strong> (installable-safe, no
+  second-pytest deadlock) and reports pass/fail per case with the failing line.
+  <code>ok:true</code> is necessary but <strong>not</strong> sufficient — the tests are the target.</li>
+</ul>
+<p>The <strong>internal</strong> loop wires both gates together
+(<code>validate.py:validate_bundle(..., run_tests=True)</code> → <code>chat.respond</code> /
+<code>generator.generate_with_fixes</code> re-prompt the model until both are green). The
+<strong>external</strong> door is a project's <code>AGENTS.md</code>, which bakes a from-anywhere launcher
+(<code>aura-test</code> → <code>tools/aura_test.py</code>, self-bootstrapping <code>sys.path</code>; the
+<code>aura-test.cmd</code> wrapper runs AURA's own venv Python) so an agent like Claude Code
+or Gemini self-checks and iterates to <code>ok:true</code> + <code>tests.failed == 0</code>. Both
+orchestrators therefore honour the same contract and the same ground truth.</p>
+<p>The authoring rules the model is grounded on — the command contract, the help /
+dialog / test formats, the survey SE engine, the conventions — live in
+<code>core/ai/authoring/</code> and are exactly the files copied into a project's <code>docs/</code>.</p>
+<hr />
+<p><em>AURA v1.6 — Developer Guide</em>
+<em>For end-user documentation, see the AURA User Guide.</em></p>
+</article>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div style="max-width:22em">
+        <a class="brand" href="../index.html"><span class="mark">A</span><b>AURA</b></a>
+        <p>An open, Python-native environment for statistics, econometrics, distributive analysis and price-reform simulation. By Dr. Abdelkrim Araar.</p>
+      </div>
+      <div><h5>Product</h5><a href="../features.html">Features</a><a href="../packages.html">Packages</a><a href="../download.html">Download</a></div>
+      <div><h5>Learn</h5><a href="../commands.html">Command reference</a><a href="../learn.html#guides">Guides</a><a href="../learn.html#manuals">Manuals</a><a href="../release-notes.html">Release notes</a></div>
+      <div><h5>Project</h5><a href="../about.html">About</a><a href="../about.html#cite">How to cite</a><a href="https://www.gnu.org/licenses/gpl-3.0.html">Licence — GPLv3</a><a href="https://github.com/aabbdd12/aura/issues">Report a problem</a></div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
+      <span>AURA 1.6 · <a href="../release-notes.html">release notes</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function hideAnnounce() {
+    document.getElementById("announce").classList.add("gone");
+    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+  }
+  try {
+    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+      document.getElementById("announce").classList.add("gone");
+    }
+  } catch (e) {}
+</script>
+
+</body>
+</html>

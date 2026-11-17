@@ -1,0 +1,4314 @@
+<!-- title: User Guide — AURA | description: The AURA User Guide: the interface, the command language, data, statistics and estimation, survey data, graphics, scripts and packages. | nav: learn | out: docs/user-guide.html -->
+
+<div class="wrap docs">
+<nav class="toc" aria-label="Contents">
+<a class="l2" href="#version-16-applied-unified-research-analytics">Version 1.6 — Applied Unified Research Analytics</a>
+<a class="l2" href="#introduction">Introduction</a>
+<a class="l2" href="#1-what-is-aura">1. What is AURA?</a>
+<a class="l3" href="#purpose">Purpose</a>
+<a class="l3" href="#design-philosophy">Design philosophy</a>
+<a class="l3" href="#what-aura-is-not">What AURA is not</a>
+<a class="l2" href="#2-installation-and-launch">2. Installation and Launch</a>
+<a class="l3" href="#requirements">Requirements</a>
+<a class="l3" href="#install-and-launch">Install and launch</a>
+<a class="l3" href="#running-from-source-for-developers">Running from source (for developers)</a>
+<a class="l3" href="#source-tree-layout-for-developers">Source-tree layout (for developers)</a>
+<a class="l3" href="#user-data-directory">User data directory</a>
+<a class="l2" href="#3-interface-overview">3. Interface Overview</a>
+<a class="l3" href="#panels">Panels</a>
+<a class="l3" href="#quick-access-toolbar">Quick-access toolbar</a>
+<a class="l3" href="#keyboard-shortcuts-in-the-command-box">Keyboard shortcuts in the command box</a>
+<a class="l3" href="#right-click-menu-on-results-window">Right-click menu on Results window</a>
+<a class="l3" href="#numbers-in-tables">Numbers in tables</a>
+<a class="l2" href="#4-command-language">4. Command Language</a>
+<a class="l3" href="#general-syntax">General syntax</a>
+<a class="l3" href="#options-syntax">Options syntax</a>
+<a class="l3" href="#common-abbreviations">Common abbreviations</a>
+<a class="l3" href="#if-conditions">if conditions</a>
+<a class="l3" href="#in-range">in range</a>
+<a class="l2" href="#5-data-management">5. Data Management</a>
+<a class="l3" href="#loading-data">Loading data</a>
+<a class="l3" href="#the-aura-format">The .aura format</a>
+<a class="l3" href="#saving-data">Saving data</a>
+<a class="l3" href="#generating-and-replacing-variables">Generating and replacing variables</a>
+<a class="l3" href="#extended-generate-egen">Extended generate — egen</a>
+<a class="l3" href="#converting-and-checking-variables">Converting and checking variables</a>
+<a class="l3" href="#renaming-and-reordering-variables">Renaming and reordering variables</a>
+<a class="l3" href="#sorting-observations">Sorting observations</a>
+<a class="l3" href="#dropping-variables-and-observations">Dropping variables and observations</a>
+<a class="l3" href="#clearing-data-from-memory">Clearing data from memory</a>
+<a class="l3" href="#creating-small-test-datasets-input-set-obs-set-seed">Creating small test datasets — input, set obs, set seed</a>
+<a class="l3" href="#preserving-and-restoring-the-dataset-preserve-restore">Preserving and restoring the dataset — preserve / restore</a>
+<a class="l3" href="#compressing-memory">Compressing memory</a>
+<a class="l3" href="#finding-and-removing-duplicates-duplicates">Finding and removing duplicates — duplicates</a>
+<a class="l2" href="#6-dataset-workspace">6. Dataset Workspace</a>
+<a class="l3" href="#opening-the-workspace-dialog">Opening the workspace dialog</a>
+<a class="l3" href="#loading-datasets-into-the-workspace">Loading datasets into the workspace</a>
+<a class="l3" href="#switching-the-active-dataset">Switching the active dataset</a>
+<a class="l3" href="#workspace-commands">Workspace commands</a>
+<a class="l3" href="#declaring-data-sources-for-multi-dataset-modules">Declaring data sources for multi-dataset modules</a>
+<a class="l3" href="#behaviour-of-clear-and-file-open-with-the-workspace">Behaviour of clear and File → Open with the workspace</a>
+<a class="l3" href="#merging-datasets-merge">Merging datasets — merge</a>
+<a class="l2" href="#7-sorting-and-listing-data">7. Sorting and Listing Data</a>
+<a class="l3" href="#sort">sort</a>
+<a class="l3" href="#gsort">gsort</a>
+<a class="l3" href="#list">list</a>
+<a class="l3" href="#browse-edit">browse / edit</a>
+<a class="l2" href="#8-labels-and-metadata">8. Labels and Metadata</a>
+<a class="l3" href="#variable-labels">Variable labels</a>
+<a class="l3" href="#value-labels-three-steps">Value labels — three steps</a>
+<a class="l3" href="#listing-label-definitions">Listing label definitions</a>
+<a class="l3" href="#adding-numeric-prefixes">Adding numeric prefixes</a>
+<a class="l3" href="#dataset-notes-note-notes">Dataset notes — note / notes</a>
+<a class="l2" href="#9-exploring-data">9. Exploring Data</a>
+<a class="l3" href="#describe">describe</a>
+<a class="l3" href="#codebook">codebook</a>
+<a class="l3" href="#summarize">summarize</a>
+<a class="l3" href="#tabulate">tabulate</a>
+<a class="l3" href="#tabstat">tabstat</a>
+<a class="l3" href="#correlate">correlate</a>
+<a class="l3" href="#pwcorr">pwcorr</a>
+<a class="l3" href="#ci">ci</a>
+<a class="l3" href="#total">total</a>
+<a class="l2" href="#10-statistical-commands">10. Statistical Commands</a>
+<a class="l3" href="#regress-ols-linear-regression">regress — OLS Linear Regression</a>
+<a class="l3" href="#collinear-variables">Collinear variables</a>
+<a class="l3" href="#after-an-estimation-command">After an estimation command</a>
+<a class="l3" href="#writing-a-list-of-variables">Writing a list of variables</a>
+<a class="l3" href="#a-table-of-several-models-eststo-esttab">A table of several models — eststo / esttab</a>
+<a class="l3" href="#logit-probit-poisson">logit / probit / poisson</a>
+<a class="l3" href="#ttest">ttest</a>
+<a class="l3" href="#panel-data-xtset-xtreg">Panel data — xtset / xtreg</a>
+<a class="l3" href="#instrumental-variables-ivregress">Instrumental variables — ivregress</a>
+<a class="l3" href="#resampling-bsample">Resampling — bsample</a>
+<a class="l2" href="#11-graphics">11. Graphics</a>
+<a class="l3" href="#histogram">histogram</a>
+<a class="l3" href="#scatter-and-line">scatter and line</a>
+<a class="l3" href="#pie">pie</a>
+<a class="l3" href="#range-band-plots-lb-ub-x-family">Range / band plots (LB UB X family)</a>
+<a class="l3" href="#area-and-bar">area and bar</a>
+<a class="l3" href="#twoway-layered-plots">twoway — layered plots</a>
+<a class="l3" href="#more-options-of-each-plot-type">More options of each plot type</a>
+<a class="l3" href="#graph-builder">Graph Builder</a>
+<a class="l3" href="#common-graph-options">Common graph options</a>
+<a class="l3" href="#texts-legend-axes-regions-and-objects-added">Texts, legend, axes, regions and objects added</a>
+<a class="l3" href="#saving-and-editing-graphs-aurg">Saving and editing graphs (.aurg)</a>
+<a class="l3" href="#the-graph-editor">The Graph Editor</a>
+<a class="l3" href="#the-graphs-of-the-session">The graphs of the session</a>
+<a class="l3" href="#merging-graphs-graphmerge">Merging graphs — graphmerge</a>
+<a class="l3" href="#graph-preferences">Graph preferences</a>
+<a class="l3" href="#densities-and-distribution-curves-kdensity-cdfplot-histo">Densities and distribution curves — kdensity, cdfplot, histo</a>
+<a class="l3" href="#fitted-line-overlays-lfit-qfit-linfit">Fitted-line overlays — lfit, qfit, linfit</a>
+<a class="l3" href="#bar-of-pie-barofpie">Bar-of-pie — barofpie</a>
+<a class="l3" href="#3-d-surfaces-threeway-kdensity2d-kcdf2d-jhistogram2d">3-D surfaces — threeway, kdensity2d, kcdf2d, jhistogram2d</a>
+<a class="l2" href="#12-file-and-directory-commands">12. File and Directory Commands</a>
+<a class="l3" href="#working-directory">Working directory</a>
+<a class="l3" href="#file-operations">File operations</a>
+<a class="l3" href="#system-and-developer-utilities">System and developer utilities</a>
+<a class="l2" href="#13-scripting-with-aur-files">13. Scripting with .aur Files</a>
+<a class="l3" href="#script-syntax">Script syntax</a>
+<a class="l3" href="#line-continuation">Line continuation</a>
+<a class="l3" href="#inline-comments">Inline comments</a>
+<a class="l3" href="#delimiter-switching-delimit">Delimiter switching — #delimit</a>
+<a class="l3" href="#control-flow-and-macros">Control flow and macros</a>
+<a class="l3" href="#python-blocks-py-end-py">Python blocks — py: ... end py</a>
+<a class="l3" href="#opening-the-script-editor">Opening the Script Editor</a>
+<a class="l3" href="#script-editor-multi-tab">Script Editor — multi-tab</a>
+<a class="l3" href="#debugging-the-problems-panel">Debugging — the Problems panel</a>
+<a class="l3" href="#exporting-history-as-a-script">Exporting history as a script</a>
+<a class="l2" href="#14-package-commands">14. Package Commands</a>
+<a class="l3" href="#authoring-a-module-with-ai">Authoring a module with AI</a>
+<a class="l2" href="#15-getting-help">15. Getting Help</a>
+<a class="l3" href="#running-the-examples">Running the examples</a>
+<a class="l3" href="#error-messages">Error messages</a>
+<a class="l2" href="#16-survey-data-analysis">16. Survey Data Analysis</a>
+<a class="l3" href="#declaring-the-design">Declaring the design</a>
+<a class="l3" href="#survey-estimators">Survey estimators</a>
+<a class="l3" href="#nonlinear-combinations-nlcom">Nonlinear combinations — nlcom</a>
+<a class="l3" href="#nonlinear-expressions-of-survey-means-nlexp">Nonlinear expressions of survey means — nlexp</a>
+<a class="l2" href="#17-macros-scalars-and-matrices">17. Macros, Scalars and Matrices</a>
+<a class="l3" href="#local-and-global-macros">Local and global macros</a>
+<a class="l3" href="#scalars">Scalars</a>
+<a class="l3" href="#extended-macro-functions">Extended macro functions</a>
+<a class="l3" href="#temporary-names">Temporary names</a>
+<a class="l3" href="#writing-a-text">Writing a text — &quot;…&quot;, `&quot;…&quot;&#x27;, ¨…¨</a>
+<a class="l3" href="#reading-a-text-tokenize-gettoken">Reading a text — tokenize, gettoken</a>
+<a class="l3" href="#testing-before-acting-confirm-capture">Testing before acting — confirm, capture</a>
+<a class="l3" href="#matrices-mata-style-without-mata">Matrices — Mata-style, without mata:</a>
+<a class="l3" href="#stored-result-commands-return-ereturn-sreturn">Stored-result commands — return, ereturn, sreturn</a>
+<a class="l3" href="#building-a-matrix-from-variables-mkmat">Building a matrix from variables — mkmat</a>
+<a class="l3" href="#mixed-containers-omatrix">Mixed containers — omatrix</a>
+<a class="l2" href="#18-missing-values">18. Missing Values</a>
+<a class="l2" href="#19-appearance-and-layout">19. Appearance and Layout</a>
+<a class="l3" href="#light-and-dark-themes">Light and dark themes</a>
+<a class="l3" href="#a-layout-that-stays-put">A layout that stays put</a>
+<a class="l3" href="#the-properties-panel">The Properties panel</a>
+<a class="l2" href="#20-tracing-execution">20. Tracing Execution</a>
+<a class="l3" href="#set-trace-on-echo-every-command">set trace on — echo every command</a>
+<a class="l3" href="#set-tracedepth-n-limit-the-depth">set tracedepth N — limit the depth</a>
+<a class="l3" href="#set-tracedeep-on-full-python-traceback-on-a-module-error">set tracedeep on — full Python traceback on a module error</a>
+<a class="l2" href="#21-getting-started-with-demos">21. Getting Started with Demos</a>
+<a class="l3" href="#how-a-demo-works">How a demo works</a>
+<a class="l3" href="#available-demos">Available demos</a>
+<a class="l3" href="#currently-shipped">Currently shipped</a>
+<a class="l3" href="#the-demo-command">The demo command</a>
+<a class="l3" href="#safety">Safety</a>
+<a class="l2" href="#22-quick-reference">22. Quick Reference</a>
+<a class="l3" href="#data-management">Data management</a>
+<a class="l3" href="#demos-and-module-development">Demos and module development</a>
+<a class="l3" href="#workspace">Workspace</a>
+<a class="l3" href="#exploration">Exploration</a>
+<a class="l3" href="#statistics">Statistics</a>
+<a class="l3" href="#graphics">Graphics</a>
+<a class="l3" href="#labels">Labels</a>
+<a class="l3" href="#dataset-notes-display">Dataset notes / display</a>
+<a class="l3" href="#file-system">File system</a>
+<a class="l3" href="#script-control-flow-aur">Script control flow (.aur)</a>
+<a class="l3" href="#file-extensions">File extensions</a>
+<a class="l2" href="#appendix-a-command-reference">Appendix A. Command Reference</a>
+</nav>
+<article class="doc">
+<h1 id="aura-user-guide">AURA User Guide</h1>
+<h2 id="version-16-applied-unified-research-analytics">Version 1.6 — Applied Unified Research Analytics</h2>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p><strong>AURA</strong> — <em>Applied Unified Research Analytics</em> — is a Python-native workbench for
+<strong>applied quantitative research</strong> — data analysis, statistics, and econometrics
+across economics, the social and policy sciences, survey work, and reproducible
+empirical studies. Its design draws inspiration
+<strong>in part</strong> from established statistical software — such as Stata — for an
+ergonomic, command-driven workflow, while AURA itself is an <strong>independent</strong>
+product built on the Python scientific stack: not a clone, and not tied to any
+single package.</p>
+<p>It speaks the language that researchers already know: terse commands at a prompt,
+typed scripts that re-run end-to-end, named datasets in a workspace, and
+estimation tables that look right out of the box. Under the hood, every command
+runs on the modern Python scientific stack — <strong>pandas</strong>, <strong>statsmodels</strong>,
+<strong>scipy</strong>, <strong>matplotlib</strong> — so any AURA result is a step away from a Jupyter
+notebook, a publication-quality plot, or a CSV/Excel export.</p>
+<p>AURA is built around four ideas:</p>
+<ol>
+<li>
+<p><strong>A concise command grammar</strong>.
+   <code>[prefix:] command [varlist] [if] [in] [weight] [, options]</code> — the prefixes
+   are <code>by</code> / <code>bysort</code> (the command for each group), <code>quietly</code>, <code>capture</code>,
+   <code>svy:</code> and <code>bootstrap:</code>. Some commands also take the groups as an option:
+   <code>over()</code> on <code>summarize</code> and <code>graph bar</code>, <code>by()</code> on <code>egen</code>, <code>collapse</code> and the
+   density plots. Everything that should be one keystroke is one keystroke.</p>
+</li>
+<li>
+<p><strong>A multi-dataset workspace</strong>.
+   Several datasets can live in memory side-by-side under named aliases.
+   <code>merge</code>, <code>collapse</code>, <code>reshape</code>, and <code>append</code> of Workspace datasets, add
+   their result to the workspace as a new dataset — the original is never
+   silently overwritten. (<code>append using file</code>, as in a do-file, adds the file's
+   rows to the active dataset.)</p>
+</li>
+<li>
+<p><strong>An extensible module protocol — <code>.auru</code></strong>.
+   Every command (<code>regress</code>, <code>merge</code>, <code>egen</code>, …) is a self-contained <code>.auru</code>
+   Python file. Users and labs can drop their own modules into the search path
+   without recompiling anything. Help files (<code>.aurh</code>) follow a minimal
+   a small markup syntax — clean, scannable, never CSS.</p>
+</li>
+<li>
+<p><strong>A real GUI that stays out of the way</strong>.
+   Dialogs generate AURA commands you can copy, edit, save in a <code>.aur</code> script.
+   The active dataset, the workspace, the variable list, and the command
+   history are visible at a glance. Help and documentation open in an
+   integrated viewer with a sidebar TOC, search, and tabs.</p>
+</li>
+</ol>
+<p>This guide walks through every user-facing command, from loading data to running
+a regression to producing a publication-grade graph. The companion <em>Developer
+Guide</em> covers writing your own <code>.auru</code> modules.</p>
+<hr />
+<hr />
+<h2 id="1-what-is-aura">1. What is AURA?</h2>
+<p><strong>AURA</strong> (Applied Unified Research Analytics) is a Python-native workbench for applied quantitative analysis — statistics, econometrics, and general data analysis. Its command interface is inspired <strong>in part</strong> by established statistical software such as Stata, but is built entirely on the Python scientific ecosystem (pandas, statsmodels, scipy, matplotlib) and is AURA's own design.</p>
+<h3 id="purpose">Purpose</h3>
+<p>AURA was designed to serve two distinct audiences simultaneously:</p>
+<p><strong>For the analyst / researcher (end user)</strong>
+The analyst does not need to know Python. They type short commands — <code>summarize</code>, <code>regress</code>, <code>tabulate</code> — and get immediate results, tables, and graphs. The interface is command-driven, repeatable, and scriptable, allowing full analytical workflows to be saved and re-run.</p>
+<p><strong>For the developer / methodologist</strong>
+AURA is a protocol and a platform. Developers write <code>.auru</code> modules in plain Python, using the bundled scientific stack (pandas, NumPy, SciPy, statsmodels, matplotlib) — or, running from source, any library you install — while interacting with the user's data and session through a clean, standardised API. A module becomes a new command the moment its file is placed in the right directory — no restart, no registration, no compilation.</p>
+<p>The platform handles all the plumbing — parsing, session state, multi-dataset workspace, result storage, GUI refresh — so the developer focuses entirely on the statistical logic.</p>
+<h3 id="design-philosophy">Design philosophy</h3>
+<blockquote>
+<p>Commands are short. Results are immediate. Modules are Python.</p>
+</blockquote>
+<p>AURA does not try to replicate any existing package. It borrows selectively from the ergonomics of popular statistical software such as Stata (concise syntax, <code>if</code>/<code>in</code>/<code>weight</code> clauses, stored results <code>r()</code> / <code>e()</code>) while delegating all computation to the Python ecosystem and remaining fully open and extensible.</p>
+<h3 id="what-aura-is-not">What AURA is not</h3>
+<ul>
+<li>A clone of any single package — AURA's design borrows selectively from popular statistical software (such as Stata), but its syntax, internals, and behaviour are its own</li>
+<li>A programming language — AURA runs commands and Python modules</li>
+<li>A substitute for Python — advanced users extend AURA through Python modules</li>
+</ul>
+<hr />
+<h2 id="2-installation-and-launch">2. Installation and Launch</h2>
+<h3 id="requirements">Requirements</h3>
+<p>AURA ships as a <strong>self-contained installer for Windows</strong> — there is nothing else to install:</p>
+<ul>
+<li><strong>Windows 10 or 11 (64-bit).</strong></li>
+<li><strong>No Python, no pip, no libraries.</strong> The installer bundles its own Python runtime and every scientific library AURA uses — pandas, NumPy, SciPy, statsmodels, matplotlib, Plotly.</li>
+</ul>
+<h3 id="install-and-launch">Install and launch</h3>
+<ol>
+<li>Download <code>AURA-1.6-Setup.exe</code> from the AURA website (the <strong>Download</strong> button) or the GitHub release, and run it — a per-user install, no administrator rights needed.</li>
+<li>Launch <strong>AURA</strong> from the Start-menu or desktop shortcut.</li>
+</ol>
+<p>On a fresh PC, Windows may show a SmartScreen notice for a new, unsigned download — click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
+<h3 id="running-from-source-for-developers">Running from source (for developers)</h3>
+<p>To run or extend AURA from the source tree instead, use Python 3.15 (the runtime the installer bundles) and install the library versions AURA is built and tested with, listed in <code>requirements-lock.txt</code>:</p>
+<pre><code>pip install -r requirements-lock.txt
+python main.py
+</code></pre>
+<h3 id="source-tree-layout-for-developers">Source-tree layout (for developers)</h3>
+<p>Running from source, the project is laid out as below. An installed AURA keeps these files inside its own program folder; the files you create live under <strong>User data directory</strong> (below).</p>
+<pre><code>dev_aura/
+    core/           Engine, session, parser, syntax system
+    commands/       Built-in command handlers
+    auru/           Built-in and user modules (.auru, .py)
+    modules/        GUI components (editors, graph builder, data browser)
+    docs/           This documentation
+</code></pre>
+<h3 id="user-data-directory">User data directory</h3>
+<p>AURA stores installed modules and configuration in:</p>
+<pre><code>%USERPROFILE%\AURA\
+    modules\
+        personal\   your own modules
+        plus\       installed packages
+        base\       AURA base modules
+    config\
+        installed.json
+        repositories.json
+</code></pre>
+<hr />
+<h2 id="3-interface-overview">3. Interface Overview</h2>
+<p><img alt="AURA interface layout" src="images/interface_overview.png" /></p>
+<h3 id="panels">Panels</h3>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Review</strong></td>
+<td>History of all commands run this session. Single-click to copy to the command box; double-click to re-run. Multi-select with Ctrl / Shift; right-click for Copy / Copy All / Save / Select All.</td>
+</tr>
+<tr>
+<td><strong>Workspace</strong></td>
+<td>Every dataset currently held in memory, with a ★ marking the active one. Double-click a row to switch the active dataset — this runs <code>workspace use &lt;alias&gt;</code>, echoed and recorded in Review (a reproducible trace).</td>
+</tr>
+<tr>
+<td><strong>Variables</strong></td>
+<td>All variables in the active dataset, with type and label. Click a variable name to insert it into the command box.</td>
+</tr>
+<tr>
+<td><strong>Properties</strong></td>
+<td>Full detail of the variable selected in <strong>Variables</strong>: Name, Label, Type, Format, Value label.</td>
+</tr>
+<tr>
+<td><strong>Results window</strong></td>
+<td>All command output. Selectable text (Ctrl+A / Ctrl+C); right-click for Copy / Copy All / Save / Print / Clear.</td>
+</tr>
+<tr>
+<td><strong>Command box</strong></td>
+<td>A single, resizable, multi-line box. Type a command and press Enter to run — a long command <strong>wraps</strong> instead of scrolling out of view. <strong>Paste several lines</strong> and each complete line runs in order, as if typed and followed by Enter (a <code>{ … }</code> block runs whole; what follows the last line break stays in the box). ↑ / ↓ recall the history (from the first / last line); Tab completes variable names. Drag the divider above the box to make it taller.</td>
+</tr>
+<tr>
+<td><strong>Status bar</strong></td>
+<td>Active dataset name, observation count (<strong>Obs</strong>), variable count (<strong>Vars</strong>), dataset memory (<strong>Data</strong>), and the AURA process memory (<strong>Mem</strong>).</td>
+</tr>
+</tbody>
+</table>
+<p>The whole window can be switched between a <strong>light and a dark theme</strong>, and its
+size and panel layout are remembered between sessions — see
+<em><a href="#19-appearance-and-layout">Appearance and Layout</a></em>.</p>
+<h3 id="quick-access-toolbar">Quick-access toolbar</h3>
+<p>A toolbar under the menu bar gives one-click access to the most common actions —
+Open / Save, the data <strong>Editor</strong> / <strong>Browser</strong> / <strong>Variables</strong> manager, the
+<strong>Script</strong> / <strong>Module</strong> editors and the <strong>Graph</strong> builder, the <strong>Dialog
+Studio</strong>, <strong>Log</strong> and the <strong>AURA Viewer</strong> (html logs, pages; also Tools → AURA
+Viewer), <strong>Print</strong> / <strong>Clear</strong>. Hover any button for a tooltip.</p>
+<h3 id="keyboard-shortcuts-in-the-command-box">Keyboard shortcuts in the command box</h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enter</code></td>
+<td>Execute command</td>
+</tr>
+<tr>
+<td><code>↑</code> / <code>↓</code></td>
+<td>Navigate command history</td>
+</tr>
+<tr>
+<td><code>Tab</code></td>
+<td>Auto-complete variable name</td>
+</tr>
+<tr>
+<td><code>Ctrl+V</code></td>
+<td>Paste; several lines run in order, the last unfinished one stays</td>
+</tr>
+</tbody>
+</table>
+<h3 id="right-click-menu-on-results-window">Right-click menu on Results window</h3>
+<ul>
+<li><strong>Copy selection</strong> — copies selected text to clipboard</li>
+<li><strong>Copy all</strong> — copies the entire output</li>
+<li><strong>Save output...</strong> — saves to <code>.txt</code> or <code>.log</code></li>
+<li><strong>Print...</strong> — a print preview (zoom, one or several pages, orientation, page
+  setup); its Print button opens the printer dialog. The help window and the
+  AURA Viewer print the same way (a printer button, <strong>File → Print…</strong>, Ctrl+P):
+  a log opened by <code>view</code>, an html log with its graphs, a help page, a manual.</li>
+<li><strong>Clear console</strong> — clears display (does not affect data)</li>
+</ul>
+<h3 id="numbers-in-tables">Numbers in tables</h3>
+<p>A number in a table takes at most 10 characters, in the format of its column. A
+longer one keeps fewer decimals, then turns to scientific notation with three
+significant digits (<code>5.99e+15</code>, <code>4.60e-31</code>), so the columns never move. A number
+that is not 0 but would show as 0.000000 is written in scientific notation too,
+except in a column of four decimals or fewer (a p-value of 0.0000). <code>display</code> and
+<code>esttab</code> keep their own formats.</p>
+<hr />
+<h2 id="4-command-language">4. Command Language</h2>
+<h3 id="general-syntax">General syntax</h3>
+<pre><code>command [varlist] [if condition] [in range] [, options]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>command</code></td>
+<td><code>summarize</code></td>
+<td>Command name (abbreviations allowed)</td>
+</tr>
+<tr>
+<td><code>varlist</code></td>
+<td><code>wage educ exper</code></td>
+<td>One or more variable names</td>
+</tr>
+<tr>
+<td><code>if condition</code></td>
+<td><code>if female == 1</code></td>
+<td>Filter expression</td>
+</tr>
+<tr>
+<td><code>in range</code></td>
+<td><code>in 1/100</code></td>
+<td>Observation range (1-based)</td>
+</tr>
+<tr>
+<td><code>, options</code></td>
+<td><code>, detail level(95)</code></td>
+<td>Options after the comma</td>
+</tr>
+</tbody>
+</table>
+<h3 id="options-syntax">Options syntax</h3>
+<pre><code>, flag_option  valued_option(value)  numeric_option(3.14)
+</code></pre>
+<ul>
+<li><strong>Flag options</strong> — presence means <code>True</code>: <code>, detail</code>, <code>, noconstant</code>, <code>, force</code></li>
+<li><strong>Valued options</strong> — take an argument: <code>, level(95)</code>, <code>, by(region)</code>, <code>, lines(50)</code></li>
+</ul>
+<h3 id="common-abbreviations">Common abbreviations</h3>
+<table>
+<thead>
+<tr>
+<th>Full command</th>
+<th>Abbreviation(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>summarize</code></td>
+<td><code>sum</code></td>
+</tr>
+<tr>
+<td><code>tabulate</code></td>
+<td><code>tab</code></td>
+</tr>
+<tr>
+<td><code>describe</code></td>
+<td><code>desc</code>, <code>d</code></td>
+</tr>
+<tr>
+<td><code>regress</code></td>
+<td><code>reg</code></td>
+</tr>
+<tr>
+<td><code>correlate</code></td>
+<td><code>corr</code></td>
+</tr>
+<tr>
+<td><code>histogram</code></td>
+<td><code>hist</code></td>
+</tr>
+<tr>
+<td><code>rename</code></td>
+<td><code>ren</code></td>
+</tr>
+<tr>
+<td><code>use</code></td>
+<td><code>open</code></td>
+</tr>
+<tr>
+<td><code>dir</code></td>
+<td><code>ls</code></td>
+</tr>
+<tr>
+<td><code>erase</code></td>
+<td><code>rm</code>, <code>del</code></td>
+</tr>
+<tr>
+<td><code>copy</code></td>
+<td><code>cp</code></td>
+</tr>
+<tr>
+<td><code>frename</code></td>
+<td><code>mv</code>, <code>fren</code></td>
+</tr>
+<tr>
+<td><code>mkdir</code></td>
+<td><code>md</code></td>
+</tr>
+<tr>
+<td><code>rmdir</code></td>
+<td><code>rd</code></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>cat</code></td>
+</tr>
+<tr>
+<td><code>shell</code></td>
+<td><code>!</code></td>
+</tr>
+<tr>
+<td><code>workspace</code></td>
+<td><code>ws</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="if-conditions">if conditions</h3>
+<pre><code>summarize wage if female == 1
+tabulate educ if age &gt;= 25 &amp; age &lt;= 55
+list if zone == 1 &amp; size &gt; 4
+</code></pre>
+<p>Every command reads its condition the same way, with the expression engine that
+<code>generate</code> uses:</p>
+<ul>
+<li><strong>A missing value never passes.</strong> Where <code>wage</code> is missing, <code>wage != 0</code> is
+  missing — not true — and the observation is left out. To select missing
+  values, say so: <code>if missing(wage)</code> or <code>if wage == .</code>; <code>if !missing(wage)</code>
+  keeps the others.</li>
+<li><strong>Scalars and functions</strong> can appear in a condition: <code>if wage &gt; k</code> (after
+  <code>scalar k = 450</code>), <code>if substr(name, 1, 1) == "A"</code>.</li>
+<li><strong>A numeric variable alone</strong> is true where it is non-zero: <code>if urban</code>.</li>
+</ul>
+<h3 id="in-range">in range</h3>
+<p>Observation numbers are <strong>1-based</strong> and count the whole dataset, before any
+<code>if</code>:</p>
+<pre><code>list in 1/10          first 10 observations
+summarize in 50/100   observations 50 to 100
+browse in 1/500       open browser showing first 500 rows
+list in -10/-1        last 10 observations
+summarize in 2/l      observation 2 to the last
+</code></pre>
+<p><code>f</code> stands for the first observation, <code>l</code> for the last, and a negative number
+counts from the end (-1 is the last). The range must lie in the dataset —
+<code>in i/j</code> with i at least 1, j at least i and at most the number of observations —
+otherwise the command stops: r(198) "observation numbers out of range".</p>
+<p>With both, <code>in</code> takes the observations first and <code>if</code> filters among them:
+<code>list wage if female == 1 in 1/100</code> lists the women among the first 100
+observations.</p>
+<p>AURA reads the <code>if</code> and <code>in</code> of a command once, on the whole dataset, before the
+command runs: a mistake in the condition stops every command the same way
+(<code>if: variable wage not found</code>, r(111)). A command for which <code>if</code> or <code>in</code> has no
+meaning — <code>describe</code>, <code>sort</code>, <code>display</code>, <code>rename</code>… — refuses it: r(101) "if not
+allowed". With <code>svy:</code>, <code>if</code> and <code>in</code> define a subpopulation, like <code>subpop()</code>:
+the whole design stays for the standard errors. <code>bootstrap: command if …</code> draws
+among the selected observations only. <code>if</code> and <code>in</code> come before the comma:
+written among the options (<code>summarize wage, detail if female == 1</code>) they are
+refused, r(198).</p>
+<hr />
+<h2 id="5-data-management">5. Data Management</h2>
+<h3 id="loading-data">Loading data</h3>
+<p><strong>Interactive (file dialog):</strong></p>
+<pre><code>use
+</code></pre>
+<p><strong>With a path:</strong></p>
+<pre><code>use &quot;C:\data\survey2024.aura&quot;
+use &quot;C:\data\wages.dta&quot;
+use &quot;C:\data\panel.csv&quot;
+</code></pre>
+<p><strong>Supported formats:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.aura</code></td>
+<td>Native AURA format (Parquet + JSON metadata)</td>
+</tr>
+<tr>
+<td><code>.dta</code></td>
+<td>Stata dataset</td>
+</tr>
+<tr>
+<td><code>.csv</code></td>
+<td>Comma-separated values</td>
+</tr>
+<tr>
+<td><code>.xlsx</code> / <code>.xls</code></td>
+<td>Excel workbook</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-aura-format">The .aura format</h3>
+<p><code>.aura</code> is AURA's native dataset format. It stores the dataset (Parquet), variable labels, value label definitions, and survey metadata in a single compressed file.</p>
+<h3 id="saving-data">Saving data</h3>
+<pre><code>save
+save &quot;C:\data\survey2024.aura&quot;
+export csv
+export csv &quot;C:\data\wages.csv&quot;
+export excel
+export excel &quot;C:\data\wages.xlsx&quot;
+</code></pre>
+<p><strong>A name without an extension.</strong> <code>save survey2024</code> writes <code>survey2024.aura</code>;
+<code>use survey2024</code> reads <code>survey2024.aura</code>, or else <code>survey2024.dta</code>. Another extension
+writes that format: <code>save "survey2024.dta"</code> writes a Stata file. <code>append using wave2</code>
+adds the file <code>wave2.aura</code> (or <code>wave2.dta</code>) to the active dataset, as in a do-file;
+with names of the Workspace only, <code>append</code> stacks them into a new dataset
+(Chapter 6).</p>
+<p><strong>Overwriting is guarded.</strong> Writing <code>save</code>, <code>export</code> or <code>log using</code> to a
+<strong>named</strong> file that already exists is refused unless you add <code>, replace</code> — so a
+dataset, an export or a log is never overwritten by accident. A bare <code>save</code>
+(re-saving the file the dataset is already tied to) is allowed; <code>graph save</code>
+follows the same rule.</p>
+<p><strong>Stata files.</strong> <code>export stata "survey"</code> (or <code>export "survey.dta"</code>) writes a
+<code>.dta</code> in format 118 — the format of Stata 14 to 19, which every edition (BE,
+SE, MP) opens — with the variable and value labels. Format 119, readable by
+Stata/MP only, is used only for a dataset of more than 32,767 variables.</p>
+<h3 id="generating-and-replacing-variables">Generating and replacing variables</h3>
+<pre><code>generate lnwage = log(wage)
+generate young = (age &lt; 30)
+replace wage = wage * 1.1 if year == 2024
+replace zone = 2 in 1/100
+</code></pre>
+<p>The <code>, replace</code> option on <code>generate</code> (and <code>egen</code>) lets a single command overwrite an existing variable — useful for re-running scripts without having to drop first:</p>
+<pre><code>generate lnwage = log(wage), replace          // re-running the same script: OK
+egen wage_p75 = pctile(wage), p(75) replace   // overwrite previous wage_p75
+</code></pre>
+<p>If <code>, replace</code> is omitted and the target variable exists, the command aborts with a hint pointing to the option.</p>
+<p><strong>Types.</strong> A variable keeps one type, and <code>replace</code> (like <code>generate … if</code>)
+follows one rule:</p>
+<ul>
+<li>numbers widen: an integer variable that receives <code>1.5</code> becomes decimal;</li>
+<li>true/false values become 0/1: <code>generate adult = (age &gt;= 18) if !missing(age)</code>;</li>
+<li>text stays text, and dates stay dates;</li>
+<li>text and numbers do not mix: <code>replace wage = "n/a"</code> on a numeric <code>wage</code> is
+  refused with a <em>type mismatch</em> error, and the variable is left as it was.</li>
+</ul>
+<p><code>recode</code> follows the same rule. Its text targets are written as text, without
+the quotes — <code>recode region (1 = "north") (2/3 = "south")</code> turns <code>region</code> into a
+text variable — and a numeric variable becomes text only when every non-missing
+value receives a text; otherwise the command is refused and says how many
+values are left without one.</p>
+<h3 id="extended-generate-egen">Extended generate — <code>egen</code></h3>
+<p><code>egen</code> extends <code>generate</code> with group statistics, ranks, and row-wise operations. It dispatches over a fixed library of functions:</p>
+<pre><code>egen newvar = function(args) [if cond] [, by(groupvars) p(N)]
+</code></pre>
+<p><strong>Aggregation</strong> — collapse a single variable to a scalar (or by-group scalar):</p>
+<pre><code>egen wage_mean   = mean(wage), by(region)
+egen wage_max    = max(wage), by(region year)
+egen total_pop   = total(population)
+egen wage_p75    = pctile(wage), p(75) by(region)
+egen wage_iqr    = iqr(wage), by(region)
+</code></pre>
+<p>Available: <code>mean</code>, <code>total</code>, <code>sum</code>, <code>sd</code>, <code>min</code>, <code>max</code>, <code>median</code>, <code>count</code>, <code>pctile</code>, <code>iqr</code>.</p>
+<p><strong>Group helpers</strong> — within-group ordering and identifiers:</p>
+<pre><code>egen wage_rank   = rank(wage), by(region)      ascending rank within region
+egen first_obs   = tag(person_id)              1 for first row of each person
+egen first_yr    = tag(person_id year)         1 for first (person, year) combo
+egen group_id    = group(region year)          1-indexed unique group id
+egen seq_within  = seq(), by(person_id)        1, 2, 3 ... within each person
+egen sn          = seq()                       1, 2, 3, ... over the dataset
+</code></pre>
+<p><strong>Row functions</strong> — collapse across several variables for each observation:</p>
+<pre><code>egen rt          = rowtotal(x1 x2 x3)
+egen rm          = rowmean(x1 x2 x3)
+egen rmax        = rowmax(x1 x2 x3)
+egen nonmiss     = rownonmiss(x1 x2 x3)         count of non-missing values
+egen nmiss       = rowmiss(x1 x2 x3)            count of missing values
+</code></pre>
+<p>Available: <code>rowmean</code>, <code>rowtotal</code>, <code>rowmax</code>, <code>rowmin</code>, <code>rowsd</code>, <code>rownonmiss</code>, <code>rowmiss</code>.</p>
+<p><strong>Weights</strong></p>
+<p><code>egen</code> and <code>collapse</code> accept a weight, which is applied to the statistics for
+which weighting is defined:</p>
+<pre><code>egen wage_mean = mean(wage) [aw=popwt], by(region)
+collapse (mean) wage (sum) pop [aw=popwt], by(region)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Statistics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Weighted</strong></td>
+<td><code>mean</code>, <code>sum</code> / <code>total</code>, <code>sd</code> (and <code>var</code> in <code>collapse</code>), <code>median</code> and the percentiles, <code>count</code></td>
+</tr>
+<tr>
+<td><strong>Not weighted</strong></td>
+<td><code>min</code>, <code>max</code>, <code>iqr</code>, the rank and group helpers (<code>rank</code>, <code>group</code>, <code>seq</code>, <code>tag</code>), and the <code>row*</code> family</td>
+</tr>
+</tbody>
+</table>
+<p>The second series is not an oversight: a minimum is a value the data actually
+takes, and no weight changes which value that is. Asking for a weighted one is
+refused with a message naming the statistics that do accept a weight, rather
+than ignoring the weight in silence — a wrong number is worse than a refusal.
+Each command's help page lists its own set exactly. Both dialogs carry a
+<strong>Weights</strong> tab.</p>
+<p><strong>Notes:</strong>
+- <code>egen</code> refuses to overwrite an existing variable — pass <code>, replace</code> to overwrite (or drop it first).
+- <code>if cond</code> filters the rows that participate in the computation; rows excluded by <code>if</code> get <code>NaN</code> in the new column.
+- Use the dialog <strong>Data → Variables → Extended Generate (egen)…</strong> to build commands interactively.</p>
+<h3 id="converting-and-checking-variables">Converting and checking variables</h3>
+<pre><code>encode  strvar, gen(numvar)     text → numbered categories, keeping the text
+                                as value labels
+decode  numvar, gen(strvar)     the reverse: labels → a string variable
+destring strvar, replace        text that holds numbers → a numeric variable
+tostring numvar, replace        numeric → text
+</code></pre>
+<p><code>encode</code>/<code>decode</code> are the pair to reach for when a categorical variable
+arrives as text: <code>encode</code> makes it usable in <code>i.</code> factor notation and in
+tabulations while keeping the original wording visible as labels.</p>
+<p>Two commands check rather than change the data:</p>
+<pre><code>assert wage &gt;= 0                 stop the script if the claim is false
+assert age &lt; 120 if !missing(age)
+contract region sex              replace the data by the counts of each
+                                 combination, in a variable named _freq
+</code></pre>
+<p><code>assert</code> is what turns an assumption into something the script enforces: it
+does nothing when the claim holds and stops with an error when it does not,
+which is exactly what you want in the middle of a long pipeline.</p>
+<h3 id="renaming-and-reordering-variables">Renaming and reordering variables</h3>
+<pre><code>rename oldname newname
+rename (a b) (b a)            several at once: two variables can swap
+rename x* y*                  a pattern: x1, x2 become y1, y2
+rename *_old *
+rename *, lower               upper, lower, proper
+rename x* y*, dryrun          shows the changes without making them
+order id year region wage educ
+</code></pre>
+<p>The label, the value labels, the format, the notes and the survey design follow the
+new name. See <code>help rename</code>.</p>
+<h3 id="sorting-observations">Sorting observations</h3>
+<pre><code>sort varlist              ascending on all listed variables
+sort weight               sort by weight ascending (min first)
+sort weight size          sort by weight then size
+gsort -weight             descending by weight (max first)
+gsort -weight +size       descending weight, ascending size
+</code></pre>
+<p>After <code>sort</code>, observation numbers in <code>list in 1/10</code> reflect the new order.</p>
+<h3 id="dropping-variables-and-observations">Dropping variables and observations</h3>
+<pre><code>drop varname
+drop var1 var2 var3
+drop if wage &lt; 0
+drop if missing(wage)
+drop in 1/5
+</code></pre>
+<h3 id="clearing-data-from-memory">Clearing data from memory</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clear</code></td>
+<td>Removes the active dataset and value labels.</td>
+</tr>
+<tr>
+<td><code>clear all</code></td>
+<td>Removes everything: data, labels, stored results, macros and scalars, timers, history; clears the console and closes every graph (2-D windows and the 3-D viewer's tabs).</td>
+</tr>
+<tr>
+<td><code>clear results</code></td>
+<td>Clears stored results r(), e(), s() only.</td>
+</tr>
+<tr>
+<td><code>clear value labels</code></td>
+<td>Clears label definitions only, keeps the dataset.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="creating-small-test-datasets-input-set-obs-set-seed">Creating small test datasets — <code>input</code>, <code>set obs</code>, <code>set seed</code></h3>
+<p>For interactive exploration or quick test datasets without loading a file:</p>
+<p><strong><code>set obs N</code> — empty dataset of N rows</strong></p>
+<pre><code>clear
+set obs 100
+</code></pre>
+<p>If a dataset is already loaded, <code>set obs N</code> extends it to N rows (new rows are NaN); the count cannot shrink (use <code>drop in N+1/last</code> instead).</p>
+<p><strong><code>set seed N</code> — reproducible random numbers</strong></p>
+<pre><code>set seed 42
+</code></pre>
+<p>Affects both numpy and Python's <code>random</code> module, so any subsequent simulation is reproducible.</p>
+<p><strong><code>input ... end</code> — inline data entry</strong></p>
+<p>In a <code>.aur</code> script, write a multi-line block:</p>
+<pre><code>clear
+input id wage age
+1 10 25
+2 20 30
+3 30 35
+end
+</code></pre>
+<p>Rules:
+- The line <code>input varname1 varname2 ...</code> declares the columns.
+- Each subsequent line is one row of values, separated by whitespace.
+- <code>end</code> (alone on its line) closes the block.
+- Quoted strings are supported: <code>1 "John Doe" 30000</code>.
+- A missing value is written <code>.</code>
+- Column types are inferred per column (<code>int</code>, <code>float</code>, or <code>str</code>).
+- Comments (<code>*</code>, <code>//</code>) inside the block are ignored.</p>
+<p>The dataset created <strong>replaces</strong> any existing one — use <code>clear</code> first to start fresh.</p>
+<h3 id="preserving-and-restoring-the-dataset-preserve-restore">Preserving and restoring the dataset — <code>preserve</code> / <code>restore</code></h3>
+<p><code>preserve</code> snapshots the current dataset (data + variable labels + value labels + notes). A subsequent <code>restore</code> rolls back to that snapshot. Typical use case:</p>
+<pre><code>preserve
+keep if female == 1                  // explore a subset
+summarize wage
+regress wage age educ
+restore                              // back to the full dataset
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>preserve</code></td>
+<td>Snapshot current dataset state.  Overwrites any previous snapshot.</td>
+</tr>
+<tr>
+<td><code>restore</code></td>
+<td>Replace the active dataset with the snapshot.  <strong>One-shot</strong> (the snapshot is consumed).</td>
+</tr>
+</tbody>
+</table>
+<p>A <code>restore</code> without a prior <code>preserve</code> returns an error.</p>
+<h3 id="compressing-memory">Compressing memory</h3>
+<pre><code>compress
+</code></pre>
+<hr />
+<h3 id="finding-and-removing-duplicates-duplicates">Finding and removing duplicates — <code>duplicates</code></h3>
+<p><code>duplicates</code> reports, lists, tags or drops observations that are identical over a
+variable list (or the whole row when none is given):</p>
+<pre><code>duplicates report            how many rows are duplicated
+duplicates examples          one example row per duplicated group
+duplicates list              show all the duplicated rows
+duplicates tag dup           dup = number of copies (0 = unique)
+duplicates drop              keep one copy of each
+duplicates drop id year      duplicates over id + year only
+</code></pre>
+<p><code>report</code> / <code>examples</code> / <code>list</code> only inspect; <code>tag</code> writes a flag variable; <code>drop</code>
+is the only form that changes the data (wrap it in <code>preserve</code> / <code>restore</code> to be safe).</p>
+<h2 id="6-dataset-workspace">6. Dataset Workspace</h2>
+<p>The workspace allows you to keep <strong>multiple datasets in memory simultaneously</strong> and switch between them without reloading from disk.</p>
+<h3 id="opening-the-workspace-dialog">Opening the workspace dialog</h3>
+<p><strong>Menu:</strong> Data → Dataset Workspace...
+<strong>Command:</strong> <code>workspace open</code></p>
+<p>The dialog shows all loaded datasets with their observation count, variable count, and file path. The active dataset (used by all commands) is marked with ★.</p>
+<h3 id="loading-datasets-into-the-workspace">Loading datasets into the workspace</h3>
+<p><strong>From the dialog:</strong> click <strong>Load dataset...</strong></p>
+<p><strong>From the command line:</strong></p>
+<pre><code>workspace load &quot;C:\data\bkf94I.aura&quot;
+workspace load &quot;C:\data\bkf98I.aura&quot;
+</code></pre>
+<p>Each loaded file gets an alias based on its filename (e.g. <code>bkf94I</code>, <code>bkf98I</code>).</p>
+<h3 id="switching-the-active-dataset">Switching the active dataset</h3>
+<p><strong>From the dialog:</strong> select a row and click <strong>Activate</strong></p>
+<p><strong>From the command line:</strong></p>
+<pre><code>workspace use bkf94I
+workspace use bkf98I
+ws use bkf98I
+</code></pre>
+<p>All subsequent commands (<code>summarize</code>, <code>regress</code>, <code>sort</code>, etc.) operate on the active dataset.</p>
+<h3 id="workspace-commands">Workspace commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>workspace list</code></td>
+<td>List all datasets in workspace with obs/vars/path</td>
+</tr>
+<tr>
+<td><code>workspace active</code></td>
+<td>Show name and details of the active dataset</td>
+</tr>
+<tr>
+<td><code>workspace use &lt;alias&gt;</code></td>
+<td>Switch active dataset</td>
+</tr>
+<tr>
+<td><code>workspace load "path"</code></td>
+<td>Load a file into workspace (no switch)</td>
+</tr>
+<tr>
+<td><code>workspace drop &lt;alias&gt;</code></td>
+<td>Remove a dataset (cannot drop the active one)</td>
+</tr>
+<tr>
+<td><code>workspace clear</code></td>
+<td>Remove all non-active datasets</td>
+</tr>
+<tr>
+<td><code>workspace open</code></td>
+<td>Open the workspace dialog</td>
+</tr>
+</tbody>
+</table>
+<h3 id="declaring-data-sources-for-multi-dataset-modules">Declaring data sources for multi-dataset modules</h3>
+<p>For analytical modules that work with two or more datasets simultaneously (e.g. comparing two surveys), use <code>datasrc</code> to declare sources explicitly:</p>
+<pre><code>datasrc 1 &quot;C:\data\bkf94I.aura&quot;
+datasrc 2 &quot;C:\data\bkf98I.aura&quot;
+datasrc list
+datasrc info 1
+datasrc drop 2
+</code></pre>
+<p>Variable mappings (when the same concept has different names across datasets):</p>
+<pre><code>datasrc 1 &quot;bkf94I.aura&quot;, income(revenu) pline(seuil) weight(pondh)
+datasrc 2 &quot;bkf98I.aura&quot;, income(revpc) pline(seuilpv) weight(pondm)
+</code></pre>
+<h3 id="behaviour-of-clear-and-file-open-with-the-workspace">Behaviour of clear and File → Open with the workspace</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clear</code></td>
+<td>Removes the active dataset slot from workspace. Remaining datasets are unaffected.</td>
+</tr>
+<tr>
+<td><code>clear all</code></td>
+<td>Clears the entire workspace and all datasets from memory.</td>
+</tr>
+<tr>
+<td>File → Open Dataset</td>
+<td>Saves the current active dataset state, then loads the new file as a new workspace slot.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="merging-datasets-merge">Merging datasets — <code>merge</code></h3>
+<p><code>merge</code> combines several workspace datasets via an outer join on shared keys.
+<strong>No file paths are accepted</strong> — all datasets must already be loaded into the
+workspace.  This keeps merge fast and predictable.</p>
+<p><strong>Syntax</strong></p>
+<pre><code>merge {1:1 | 1:m | m:1 | m:m}  [keyvars]  using &lt;alias1&gt; [&lt;alias2&gt; ...]  [, options]
+</code></pre>
+<p>If <code>keyvars</code> is omitted, the datasets are merged <strong>by observation number</strong>
+(row position) — a positional merge, pairing the first row with the
+first, the second with the second, and so on.  This
+is the default rule whenever no key is supplied:</p>
+<pre><code>merge 1:1 using wave2                merge by row position (no key)
+</code></pre>
+<p><strong>Examples</strong></p>
+<pre><code>use &quot;wave1.aura&quot;                  → workspace alias 'wave1'
+use &quot;wave2.aura&quot;                  → workspace alias 'wave2'
+use &quot;wave3.aura&quot;                  → workspace alias 'wave3'
+
+merge 1:1 hh_id using wave1 wave2                       2-way merge, wave1 is prior
+merge 1:1 hh_id using wave1 wave2 wave3                 3-way merge, wave1 is prior
+merge 1:1 hh_id year using panel1 panel2                multi-key merge
+merge m:1 region using households regions               many-to-one (lookup table)
+</code></pre>
+<p><strong>The <code>prior(...)</code> option — fallback chain for variable conflicts</strong></p>
+<p>When a non-key variable appears in several datasets, the engine walks the
+<code>prior(...)</code> chain in order and takes the <strong>first non-NaN value</strong>:</p>
+<pre><code>merge 1:1 id using wave1 wave2 wave3, prior(1)         keep wave1, drop the rest
+merge 1:1 id using wave1 wave2 wave3, prior(1, 2)      keep wave1, fill NaN from wave2
+merge 1:1 id using wave1 wave2 wave3, prior(2, 1)      keep wave2, fill NaN from wave1
+merge 1:1 id using wave1 wave2 wave3, prior(1, 2, 3)   full fallback chain
+merge 1:1 id using wave1 wave2, prior(wave2)           alias instead of index
+</code></pre>
+<p>Default (<code>prior</code> omitted): <code>prior(1)</code> — the first dataset in the using list.</p>
+<table>
+<thead>
+<tr>
+<th>Option elsewhere</th>
+<th>Equivalent in AURA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(default)</td>
+<td><code>prior(1)</code></td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td><code>prior(1, 2)</code></td>
+</tr>
+<tr>
+<td><code>update replace</code></td>
+<td><code>prior(2, 1)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Other options</strong></p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>into(alias)</code></td>
+<td>Store the result under <code>&lt;alias&gt;</code> (e.g. <code>into(dtamr1)</code>)</td>
+</tr>
+<tr>
+<td><code>replace_prior</code></td>
+<td>Overwrite the prior alias in place. The default keeps the original.</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td>For matched rows where prior is missing, fill from using → code 4</td>
+</tr>
+<tr>
+<td><code>replace</code></td>
+<td>Implies <code>update</code>. On real conflicts, using replaces prior → code 5</td>
+</tr>
+<tr>
+<td><code>keep(master \| using \| match \| match_update \| match_conflict …)</code></td>
+<td>Filter rows by merge status</td>
+</tr>
+<tr>
+<td><code>nogen</code> / <code>nogenerate</code></td>
+<td>Don't create <code>_merge_&lt;alias&gt;</code> indicators</td>
+</tr>
+<tr>
+<td><code>gen(prefix)</code></td>
+<td>Custom prefix for indicator names (default <code>_merge</code>)</td>
+</tr>
+<tr>
+<td><code>keepusing(varlist)</code></td>
+<td>Import only these variables from non-prior datasets</td>
+</tr>
+<tr>
+<td><code>keepconflict</code></td>
+<td>Keep all versions of conflicting vars with <code>_&lt;alias&gt;</code> suffixes</td>
+</tr>
+<tr>
+<td><code>force</code></td>
+<td>Force the merge despite type mismatches</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Default workspace behaviour</strong></p>
+<p>The merged result is <strong>always added to the workspace as a new dataset</strong>
+(<code>merged1</code>, <code>merged2</code>, …) and becomes the active dataset.  The original
+prior dataset is preserved untouched.  Use <code>into(dtamr1)</code> to choose a
+specific name, or <code>replace_prior</code> to overwrite the prior in place.</p>
+<p><strong>The <code>_merge_&lt;alias&gt;</code> indicator</strong></p>
+<p>After <code>merge 1:1 id using wave1 wave2 wave3</code>, the result has two new
+variables <code>_merge_wave2</code> and <code>_merge_wave3</code>, each taking the conventional codes:</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>When emitted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1</code></td>
+<td>master only (prior had the row, this alias didn't)</td>
+<td>always</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>using only (this alias had the row, prior didn't)</td>
+<td>always</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>match — no fill / no conflict</td>
+<td>always</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>match_update — prior was missing, filled from using</td>
+<td>only with <code>update</code> or <code>replace</code></td>
+</tr>
+<tr>
+<td><code>5</code></td>
+<td>match_conflict — values differed, using replaced</td>
+<td>only with <code>replace</code></td>
+</tr>
+</tbody>
+</table>
+<p>For a binary merge (one using alias), the indicator is simply <code>_merge</code>
+.  Value labels are auto-attached via the dataset's
+label system.</p>
+<p><strong>Stored results</strong> (<code>r[...]</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>r["aliases"]</code></td>
+<td>All aliases involved (prior + usings)</td>
+</tr>
+<tr>
+<td><code>r["prior"]</code></td>
+<td>The prior chain used</td>
+</tr>
+<tr>
+<td><code>r["keys"]</code></td>
+<td>Merge keys</td>
+</tr>
+<tr>
+<td><code>r["into"]</code></td>
+<td>Where the result was stored</td>
+</tr>
+<tr>
+<td><code>r["N_matched"]</code></td>
+<td><code>{alias → matched count}</code> per non-prior alias</td>
+</tr>
+<tr>
+<td><code>r["N_prior_only"]</code></td>
+<td><code>{alias → prior-only count}</code></td>
+</tr>
+<tr>
+<td><code>r["N_using_only"]</code></td>
+<td><code>{alias → using-only count}</code></td>
+</tr>
+<tr>
+<td><code>r["N_total"]</code></td>
+<td>Total rows after merge</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-sorting-and-listing-data">7. Sorting and Listing Data</h2>
+<h3 id="sort">sort</h3>
+<p>Sort observations in ascending order by one or more variables:</p>
+<pre><code>sort weight
+sort weight size
+sort year region wage
+</code></pre>
+<p>After <code>sort weight</code>, the first observation has the <strong>minimum</strong> weight value.</p>
+<h3 id="gsort">gsort</h3>
+<p>Sort with mixed ascending/descending order:</p>
+<pre><code>gsort -weight          descending (largest first)
+gsort +weight          ascending (same as sort)
+gsort -weight +size    desc weight, then asc size
+</code></pre>
+<h3 id="list">list</h3>
+<p>Display observations in a formatted table. Row numbers are <strong>1-based</strong>:</p>
+<pre><code>list                   all observations (up to 500)
+list weight size       selected variables
+list in 1/10           first 10 observations
+list in 5/15           observations 5 to 15
+list if zone == 1      filtered observations
+list in 1/100, clean   plain format (no grid lines)
+</code></pre>
+<h3 id="browse-edit">browse / edit</h3>
+<p>Opens the interactive data browser:</p>
+<pre><code>browse
+edit
+browse in 1/500        show first 500 rows only
+edit in 1/200
+</code></pre>
+<p><strong>In the browser:</strong>
+- <strong>Double-click</strong> any cell to edit it. The edit generates a <code>replace varname = value in obs</code> command that goes through the command pipeline and is logged in history.
+- <strong>Copy</strong> button — copy table to clipboard
+- <strong>Sub-table</strong> — create a sub-table from selected rows
+- <strong>Filter</strong> — filter rows interactively</p>
+<hr />
+<h2 id="8-labels-and-metadata">8. Labels and Metadata</h2>
+<h3 id="variable-labels">Variable labels</h3>
+<pre><code>label var wage &quot;Monthly wage (USD)&quot;
+label var educ &quot;Years of education&quot;
+</code></pre>
+<h3 id="value-labels-three-steps">Value labels — three steps</h3>
+<pre><code>label define sexlbl 1 &quot;Male&quot; 2 &quot;Female&quot;
+label values sex sexlbl
+tabulate sex                  → shows &quot;Male&quot; / &quot;Female&quot;
+tabulate sex, nolabel         → shows 1 / 2
+</code></pre>
+<h3 id="listing-label-definitions">Listing label definitions</h3>
+<pre><code>label list
+label list sexlbl
+labelbook
+</code></pre>
+<h3 id="adding-numeric-prefixes">Adding numeric prefixes</h3>
+<pre><code>numlabel sexlbl, add          → &quot;1. Male&quot;  &quot;2. Female&quot;
+numlabel _all, add
+numlabel sexlbl, remove
+</code></pre>
+<h3 id="dataset-notes-note-notes">Dataset notes — <code>note</code> / <code>notes</code></h3>
+<p>Notes are free-text annotations attached to the active dataset. They are preserved across <code>save</code> / <code>use</code> in the <code>.aura</code> format — ideal for documenting data provenance, sampling design, or any caveat that should travel with the file.</p>
+<pre><code>note: Population sampled in 2024 in Burkina Faso
+note: Source — World Bank LSMS-ISA wave 4
+note: Variable `wage' in CFA; `educ' in years of schooling
+notes                         list all notes (numbered)
+note list                     same as `notes`
+note drop _all                clear every note
+note drop 2                   remove the second note
+</code></pre>
+<p><code>note</code>, <code>notes</code>, <code>display</code>, <code>di</code>, <code>dis</code>, <code>disp</code> are <strong>reserved keywords</strong>: they cannot be used as variable names or local-macro names. Any other word is fair game.</p>
+<hr />
+<h2 id="9-exploring-data">9. Exploring Data</h2>
+<h3 id="describe">describe</h3>
+<pre><code>describe
+describe wage educ exper
+d
+</code></pre>
+<h3 id="codebook">codebook</h3>
+<pre><code>codebook
+codebook wage sex region
+</code></pre>
+<h3 id="summarize">summarize</h3>
+<pre><code>summarize
+summarize wage educ exper
+sum wage if female == 1
+sum wage, detail
+</code></pre>
+<p><strong>Reporting by group — <code>over()</code></strong></p>
+<p><code>over()</code> breaks the statistics out by group and produces <strong>one</strong> table with a
+section per group, rather than one table per group:</p>
+<pre><code>summarize wage, over(region)
+summarize wage educ, over(region sex)          cross the two groupings
+summarize wage, over(region, nolabel descending)
+</code></pre>
+<p>Each group is headed by its value label when the variable has one, groups are
+ordered by their value, and rows missing on a grouping variable are left out.
+Three sub-options change that: <code>nolabel</code> prints the codes instead of the
+labels, <code>missing</code> keeps the missing group, and <code>descending</code> reverses the order.</p>
+<p><strong>Repeating a command for each group — <code>by</code> / <code>bysort</code></strong></p>
+<p>The prefix runs any reporting command once per group, one block of results under
+a heading such as <code>-&gt; region = North</code>. <code>bysort</code> takes the groups in the order of
+their values, <code>by</code> in the order they first appear; the dataset is not re-sorted.
+Within a group, <code>_n</code> and <code>_N</code> count the group's observations:</p>
+<pre><code>bysort region: summarize wage
+by region: count if wage &gt; 3000
+bysort hh: generate size = _N             number of persons in the household
+bysort hh: keep if _n == 1                one row per household
+bysort id (year): generate lag = wage[_n-1]    previous year, same id
+</code></pre>
+<p><code>help by</code> lists what each command does with the groups and which ones refuse the
+prefix (the graphs, which have <code>over()</code> / <code>by()</code>, and <code>in</code>).</p>
+<h3 id="tabulate">tabulate</h3>
+<pre><code>tabulate sex
+tab sex region
+tab sex, nolabel
+tab sex region, chi2
+tab sex, generate(sx)       → sx1, sx2: 1 for each level, 0 for the other
+</code></pre>
+<p>Options may be abbreviated as far as they stay distinct: <code>tab sex, m</code>, <code>sum x, d</code>,
+<code>reg y x, r</code>, <code>vce(cl psu)</code>.</p>
+<h3 id="tabstat">tabstat</h3>
+<p>A table of statistics for several variables, for the whole sample or by group. The
+statistics are those of <code>summarize</code> (and <code>summarize, detail</code> for the percentiles).</p>
+<pre><code>tabstat wage educ                              → the means
+tabstat wage educ, stats(n mean sd p50)
+tabstat wage educ, by(region) stats(mean sd)   → each region, then the total
+tabstat wage educ [aw=weight], stats(mean q) columns(statistics)
+</code></pre>
+<h3 id="correlate">correlate</h3>
+<pre><code>correlate wage educ exper
+corr wage educ, covariance
+</code></pre>
+<h3 id="pwcorr">pwcorr</h3>
+<p><code>correlate</code> drops any observation missing on <em>any</em> listed variable, so every
+cell of its matrix rests on the same sample. <code>pwcorr</code> instead uses, for each
+pair, every observation where <em>that pair</em> is present:</p>
+<pre><code>pwcorr wage educ exper
+pwcorr wage educ, sig star(0.05)
+</code></pre>
+<p><code>sig</code> prints the significance level under each coefficient and <code>star(#)</code> marks
+the ones significant at that level. Because the cells no longer share a sample,
+compare them with care — that is the price of keeping more data.</p>
+<h3 id="ci">ci</h3>
+<p>Confidence intervals for the mean of one or more variables:</p>
+<pre><code>ci wage
+ci wage educ, level(90)
+</code></pre>
+<h3 id="total">total</h3>
+<p>The total of one or more variables with its standard error — weighted when a
+weight is given (<code>fweight</code>, <code>iweight</code>, <code>pweight</code>), for each group with <code>over()</code>:</p>
+<pre><code>total wage
+total wage [pw=weight], over(region)
+total wage [pw=weight], over(region) vce(cluster village)
+</code></pre>
+<p>The standard error takes the sum of the weights as known. With a survey design
+declared by <code>svyset</code>, <code>svy: total</code> treats it as estimated: the same totals,
+other standard errors.</p>
+<hr />
+<h2 id="10-statistical-commands">10. Statistical Commands</h2>
+<h3 id="regress-ols-linear-regression">regress — OLS Linear Regression</h3>
+<pre><code>regress depvar indepvars [if] [in] [, options]
+regress wage educ exper female
+regress wage educ exper, robust
+regress wage exper i.region, vce(hc3)           # factor variable
+regress wage educ exper if region == &quot;north&quot;, vce(robust) level(90)
+</code></pre>
+<p><strong>Factor variables (<code>i.varname</code>)</strong></p>
+<p>Prefix a variable with <code>i.</code> to expand it into k-1 indicator columns
+(the smallest level is the omitted reference category):</p>
+<pre><code>regress wage age i.region              → adds k-1 region dummies
+regress wage age i.educ i.region       → multiple factors
+</code></pre>
+<p>To choose the reference, write it in the prefix: <code>ib3.region</code> (level 3),
+<code>ib(first).</code>, <code>ib(last).</code>, <code>ib(#2).</code> (the second level), or <code>ib(freq).</code> (the most
+frequent level, counted with the weights on the rows the model uses; a tie gives the
+smaller level). The fit does not change, only the level the others are compared with.
+The base level stays in <code>e(b)</code> at 0; add <code>baselevels</code> to show it as a row <code>0 (base)</code>,
+or <code>set showbaselevels on</code> for every table.</p>
+<pre><code>regress wage age ib(freq).region        → the largest region as the reference
+logit poor size ib3.gse [pw=weight]
+</code></pre>
+<p><code>2.region</code> is the indicator of region 2 alone, shown with its value label; a level
+absent from the estimation sample is refused. <code>c.age#c.age</code> is the square of age, and
+<code>c.age##c.age</code> gives age and its square:</p>
+<pre><code>regress wage c.age##c.age 2.region      → age, its square, and region 2 against the rest
+</code></pre>
+<p>In the output, the indicator levels are grouped under the variable name.
+If value labels are defined for the variable (<code>label define ...</code>), the
+labels replace the numeric codes — e.g. <code>Wage-earner (private)</code> instead
+of <code>2.gse</code>.  Otherwise the codes <code>2.gse</code>, <code>3.gse</code>, ... are displayed.</p>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>noconstant</code></td>
+<td>Suppress the intercept</td>
+</tr>
+<tr>
+<td><code>robust</code></td>
+<td>HC1 heteroskedasticity-robust standard errors</td>
+</tr>
+<tr>
+<td><code>vce(robust)</code></td>
+<td>Same as <code>, robust</code></td>
+</tr>
+<tr>
+<td><code>vce(hc3)</code></td>
+<td>HC3 robust standard errors</td>
+</tr>
+<tr>
+<td><code>vce(cluster var)</code></td>
+<td>Standard errors clustered on <code>var</code> (t with clusters − 1 degrees of freedom)</td>
+</tr>
+<tr>
+<td><code>baselevels</code></td>
+<td>Show the base level of each factor as a row <code>0 (base)</code></td>
+</tr>
+<tr>
+<td><code>level(#)</code></td>
+<td>Confidence level (default 95)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Stored results after estimation</strong> (<code>e[...]</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>e["N"]</code></td>
+<td>Number of observations</td>
+</tr>
+<tr>
+<td><code>e["r2"]</code></td>
+<td>R-squared</td>
+</tr>
+<tr>
+<td><code>e["r2_a"]</code></td>
+<td>Adjusted R-squared</td>
+</tr>
+<tr>
+<td><code>e["F"]</code></td>
+<td>F-statistic</td>
+</tr>
+<tr>
+<td><code>e["rmse"]</code></td>
+<td>Root MSE</td>
+</tr>
+<tr>
+<td><code>e["df_m"]</code> / <code>e["df_r"]</code></td>
+<td>Model / residual degrees of freedom</td>
+</tr>
+<tr>
+<td><code>e["depvar"]</code></td>
+<td>Dependent variable name</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output format</strong></p>
+<p>The header gives the analysis of variance (SS, df, MS) on the left, and Number of
+obs, F, Prob &gt; F, R-squared, Adj R-squared and Root MSE on the right, in fixed
+columns (a number too large or too small is written in scientific notation, so the
+columns never move); with robust or clustered standard errors, the title "Linear
+regression" and the statistics. Below it comes the coefficient table, with the
+variable and value labels. Use the
+right-click menu on the console (or the <code>render_latex</code> / <code>render_markdown</code>
+functions inside a <code>.auru</code> module) to export to LaTeX, Markdown, HTML, or
+CSV — all formats are produced from the same underlying <code>StackedTable</code>.</p>
+<h3 id="collinear-variables">Collinear variables</h3>
+<p>A variable that depends on the others is left out of <code>regress</code>, <code>logit</code>, <code>probit</code>,
+<code>poisson</code>, <code>svy: regress</code>, <code>xtreg</code> and <code>ivregress</code>: a note says so, and the table shows
+it at 0 with <em>(omitted)</em>. With a full set of dummies and a constant, one dummy goes.
+The fit does not change, only the reference the coefficients are read against. To
+choose it, leave that dummy out yourself. See <code>help regress</code>.</p>
+<h3 id="after-an-estimation-command">After an estimation command</h3>
+<p>Six commands read the results the last estimation stored and are typed after
+it. They have no menu entry — they belong to the flow of an analysis rather
+than to a dialog:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>predict</code></td>
+<td>Generate fitted values, residuals or other per-observation series</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>Wald test of one or more linear restrictions on the coefficients</td>
+</tr>
+<tr>
+<td><code>lincom</code></td>
+<td>Estimate, and test, a linear combination of coefficients</td>
+</tr>
+<tr>
+<td><code>nlcom</code></td>
+<td>The same for a <em>non-linear</em> combination, by the delta method</td>
+</tr>
+<tr>
+<td><code>margins</code></td>
+<td>Marginal effects and predictive margins</td>
+</tr>
+<tr>
+<td><code>estimates</code></td>
+<td>Store, replay and compare estimation results</td>
+</tr>
+</tbody>
+</table>
+<pre><code>regress wage educ exper
+predict wage_hat                    fitted values
+predict resid, residuals            residuals
+test educ = exper                   are the two coefficients equal?
+lincom educ + exper                 their sum, with a standard error
+</code></pre>
+<p><code>predict</code> computes on the data present: every observation whose regressors are
+known gets a prediction, in the estimation sample or not, also after a <code>sort</code> or a
+<code>keep</code>; <code>if</code> and <code>in</code> restrict it.</p>
+<p><code>help &lt;command&gt;</code> documents each one in full.</p>
+<h3 id="writing-a-list-of-variables">Writing a list of variables</h3>
+<p>Wherever a command takes a list of variables, a pattern or a range can stand for
+several of them:</p>
+<pre><code>summarize inc*            the variables that start with inc
+summarize *_w1            the variables that end with _w1
+summarize wave?           wave1, wave2…: exactly one character in place of the ?
+regress wage educ-exper   from educ to exper, in the order of the dataset
+keep id q1-q20 inc*       several forms in one list
+describe _all             all the variables
+summarize q1..q20         q1 to q20 by their numbers, wherever they stand
+summarize _num            all the numeric variables; _str for the text ones
+summarize x* !x3          takes out of the list what it holds so far
+</code></pre>
+<p><code>inc~me</code> stands for one variable, and is an error if several fit. <code>help varlist</code>
+gives the rules. <code>ds</code> lists variables by type, format or label, and <code>lookfor</code> finds
+them by a word in their name or label; <code>levelsof</code> lists the values of a variable.</p>
+<h3 id="a-table-of-several-models-eststo-esttab">A table of several models — eststo / esttab</h3>
+<p><code>eststo</code> stores each model as it is fitted (named est1, est2, …); <code>esttab</code> lays
+them out side by side: each coefficient with its stars and, below it, its t
+statistic, the number of observations at the bottom, the model numbers and
+dependent variables on top.</p>
+<pre><code>eststo: regress wage educ
+eststo: regress wage educ exper
+eststo: logit union educ exper
+esttab                              in the Results window
+esttab, label r2 pr2 se             labels, R-squared, standard errors
+esttab using table1.rtf, replace    for Word (.html .tex .md .csv too)
+</code></pre>
+<p><code>estadd</code> adds a result to a model, <code>cells()</code> says what each cell holds, and
+<code>estpost</code> turns descriptive results into a table:</p>
+<pre><code>estadd local controls &quot;Yes&quot; : est2 est3      a row, with stats(controls N)
+esttab, cells(b(star fmt(3)) se(par))        your own cells
+estpost summarize wage educ
+esttab ., cells(&quot;mean sd min max&quot;)           a table of means and spreads
+estpost ttest wage, by(union)
+esttab ., cells(&quot;mu_1 mu_2 b(star) t&quot;)       a difference of means
+</code></pre>
+<p><code>help esttab</code> lists the options (formats, stars, statistics, labels, files);
+<code>help estadd</code> and <code>help estpost</code> the others.</p>
+<h3 id="logit-probit-poisson">logit / probit / poisson</h3>
+<pre><code>logit depvar indepvars [if] [in] [, noconstant robust]
+probit depvar indepvars [if] [in] [, noconstant robust]
+poisson depvar indepvars [if] [in] [, noconstant robust]
+</code></pre>
+<p>The header gives the number of observations, the LR chi2 (a Wald chi2 with robust
+or clustered standard errors) and its p-value, the pseudo R-squared and the log
+likelihood, in fixed columns; below it comes the coefficient table, with the
+variable and value labels.</p>
+<h3 id="ttest">ttest</h3>
+<pre><code>ttest varname, by(groupvar)
+</code></pre>
+<hr />
+<h3 id="panel-data-xtset-xtreg">Panel data — <code>xtset</code> / <code>xtreg</code></h3>
+<p>Panel (longitudinal) data follow the same units over several periods. Declare the
+panel identifier with <code>xtset</code>, then estimate with <code>xtreg</code>:</p>
+<pre><code>xtset firm year
+xtreg profit size rd
+xtreg profit size rd, fe
+xtreg profit size rd, be
+xtreg profit size rd, re vce(robust)
+</code></pre>
+<p><code>xtset panelvar [timevar]</code> records which variable identifies the panels (and,
+optionally, time). <code>xtreg depvar indepvars [, re|fe|be]</code> then fits:</p>
+<ul>
+<li><strong><code>re</code></strong>, the default — random effects (GLS): treats the unit term as random and
+  uses within <em>and</em> between variation — more efficient when that term is
+  uncorrelated with the regressors. <code>theta</code> reports the GLS weights.</li>
+<li><strong><code>fe</code></strong> — fixed effects (within): keeps only the variation <em>within</em> each unit,
+  sweeping out anything constant about it (sector, location) so it cannot bias the
+  slopes.</li>
+<li><strong><code>be</code></strong> — between effects: the regression on the units' means (<code>wls</code> weights
+  each unit by its number of observations).</li>
+</ul>
+<p>Under the table, <code>re</code> and <code>fe</code> show <code>sigma_u</code> (the standard deviation of the unit
+effects), <code>sigma_e</code> (that of the idiosyncratic error) and <code>rho</code> (the share of the
+variance due to the unit effects); <code>fe</code> adds the F test that all unit effects are
+zero. To choose between fixed and random effects, store both and run the Hausman
+test:</p>
+<pre><code>quietly xtreg profit size rd, fe
+estimates store fixed
+quietly xtreg profit size rd, re
+hausman fixed .
+</code></pre>
+<p>A large chi2 says the random-effects assumption fails. The estimators, the variance
+components and the Hausman test are those of the linearmodels library.</p>
+<p><code>indepvars</code> accept the same factor syntax as <code>regress</code> (<code>i.var</code>, <code>2.var</code>,
+<code>c.x#i.g</code>, <code>c.x##i.g</code>, <code>c.age#c.age</code>). Options: <code>i(panelvar)</code> (name the panel
+inline; overrides <code>xtset</code>), <code>t(timevar)</code>, <code>vce(robust)</code> (cluster by panel) /
+<code>vce(cluster v)</code> (not with <code>be</code>), <code>level(#)</code>, <code>[aweight=var]</code>, <code>[pweight=var]</code>,
+<code>[fweight=var]</code> (not with <code>be</code>). Any other option is refused.</p>
+<h3 id="instrumental-variables-ivregress">Instrumental variables — <code>ivregress</code></h3>
+<p>When a regressor is <strong>endogenous</strong> (correlated with the error — chosen jointly with
+the outcome, measured with error, or a proxy for something unobserved), OLS is
+biased. <code>ivregress</code> uses an <strong>instrument</strong> — a variable that moves the endogenous
+regressor but has no direct effect on the outcome:</p>
+<pre><code>ivregress 2sls wage educ (exper = age tenure)
+ivregress gmm  wage educ (exper = age tenure), vce(robust)
+</code></pre>
+<p><code>ivregress estimator depvar [exogvars] (endog = instruments) [, options]</code> with
+<code>estimator</code> = <code>2sls</code>, <code>gmm</code> or <code>liml</code>. The exogenous regressors come first; the
+parenthesised part lists the endogenous regressor(s) <code>=</code> the excluded instruments.
+Options: <code>vce(robust)</code> / <code>vce(cluster v)</code>, <code>noconstant</code>, <code>level(#)</code>, <code>[aweight=var]</code>.
+Below the coefficients it prints an <strong>Instrument diagnostics</strong> block (weak-ID
+Cragg-Donald Wald <em>F</em> and the standard IV tests) so you can judge whether the
+instruments are strong. Estimation is delegated to the <code>linearmodels</code> library.</p>
+<h3 id="resampling-bsample">Resampling — <code>bsample</code></h3>
+<p><code>bsample [N]</code> replaces the data in memory with a sample of <code>N</code> rows drawn <strong>with
+replacement</strong> (default: the current N) — the building block of a bootstrap. Options:
+<code>strata(varlist)</code>, <code>cluster(varlist)</code>, <code>idcluster(newvar)</code>, <code>svy</code> (use the survey
+design). Wrap it in <code>preserve</code> / <code>restore</code>, or drive it from the <code>bootstrap</code> prefix,
+which resamples and re-estimates for you.</p>
+<h2 id="11-graphics">11. Graphics</h2>
+<h3 id="histogram">histogram</h3>
+<pre><code>histogram varname [, bin(#) normal]
+hist wage
+hist wage, bin(20) normal
+</code></pre>
+<h3 id="scatter-and-line">scatter and line</h3>
+<pre><code>scatter yvar xvar
+scatter wage educ if female == 1
+
+line yvar xvar
+line gdp year
+</code></pre>
+<p>Both are <strong>layers of <code>twoway</code></strong>, and writing one on its own is shorthand for a
+single-layer <code>twoway</code>: <code>scatter wage educ</code> and <code>twoway (scatter wage educ)</code>
+are the same command. They therefore accept the same options as any other
+layer, and combining them needs no new syntax — see <strong>twoway</strong> below.</p>
+<p>For the same reason <code>db scatter</code> and <code>db line</code> open the <strong>twoway</strong> dialog:
+there is one graph builder, not one per layer type.</p>
+<h3 id="pie">pie</h3>
+<pre><code>pie varname
+</code></pre>
+<h3 id="range-band-plots-lb-ub-x-family">Range / band plots (LB UB X family)</h3>
+<p>These four commands all take the same triplet — lower bound, upper bound, and x — and are typically used to draw confidence intervals or error bars.</p>
+<pre><code>rarea  ci_low ci_high x          filled band between LB and UB
+rline  ci_low ci_high x          two separate lines at LB and UB
+rcap   ci_low ci_high x          capped vertical spikes (error bars)
+rspike ci_low ci_high x          uncapped vertical spikes
+</code></pre>
+<pre><code>rarea  ci_low ci_high age, fcolor(navy%20)
+rcap   ci_low ci_high group,   lcolor(maroon) msize(small)
+rspike ci_low ci_high time,    lpattern(dash) lcolor(gs8)
+</code></pre>
+<h3 id="area-and-bar">area and bar</h3>
+<pre><code>area  yvar xvar                 filled area under the curve
+bar   yvar xvar                 bar chart (categorical x supported)
+</code></pre>
+<pre><code>area sales year, fcolor(teal) fintensity(60)
+bar  share region, fcolor(navy) lcolor(black)
+</code></pre>
+<h3 id="twoway-layered-plots">twoway — layered plots</h3>
+<p><code>twoway</code> draws several plot commands on the same axes. Each layer goes in its own parenthesised group, drawn in order (first = bottom layer).</p>
+<pre><code>twoway (rarea ci_low ci_high age) ///
+       (line yhat age) ///
+       (scatter wage age)
+</code></pre>
+<p>Each subcommand keeps its own variables and options:</p>
+<pre><code>twoway (rarea ci_low ci_high x, fcolor(navy%20) lwidth(none)) ///
+       (line yhat x, lcolor(navy) lwidth(medium)) ///
+       (scatter y x, mcolor(cranberry) msize(small)), ///
+       title(&quot;Regression with 95% CI&quot;) ///
+       legend(pos(2) size(small))
+</code></pre>
+<p>Global options after the closing parenthesis apply to the whole figure (title, legend, graphregion, etc.).</p>
+<p>The <code>graph</code> prefix is optional — <code>graph twoway (...)</code> and <code>twoway (...)</code> are equivalent. Without parentheses, <code>twoway scatter y x</code> is just shorthand for <code>scatter y x</code>.</p>
+<h3 id="more-options-of-each-plot-type">More options of each plot type</h3>
+<p>Each plot type has options of its own beyond the common vocabulary:</p>
+<table>
+<thead>
+<tr>
+<th>Plot</th>
+<th>Options</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>area</code></td>
+<td><code>color()</code> (the fill and the outline), <code>base(#)</code>, <code>cmissing(n)</code> (a gap at a missing value), <code>horizontal</code></td>
+</tr>
+<tr>
+<td><code>bar</code> (x-y)</td>
+<td><code>base(#)</code>, <code>barwidth(#)</code>, <code>stack</code>, <code>horizontal</code>, <code>place(back)</code> or <code>place(front)</code></td>
+</tr>
+<tr>
+<td><code>lfit</code>, <code>qfit</code></td>
+<td><code>range(# #)</code> (also beyond the data), <code>n(#)</code>, <code>atobs</code>, <code>estopts(noconstant)</code> (through the origin)</td>
+</tr>
+<tr>
+<td><code>rarea</code> <code>rline</code> <code>rcap</code> <code>rspike</code></td>
+<td><code>horizontal</code>, <code>cmissing(n)</code>; <code>rcap</code>: <code>msize()</code>, the width of its caps</td>
+</tr>
+<tr>
+<td><code>scatter</code></td>
+<td><code>mlabel(var)</code> with <code>mlabposition()</code> <code>mlabangle()</code> <code>mlabformat()</code>, <code>jitter(#)</code></td>
+</tr>
+<tr>
+<td><code>line</code>, <code>connected</code></td>
+<td><code>connect(J)</code> (steps), <code>cmissing(n)</code></td>
+</tr>
+<tr>
+<td><code>histogram</code></td>
+<td><code>discrete</code>, <code>gap(#)</code>, <code>addlabels</code>, <code>horizontal</code></td>
+</tr>
+<tr>
+<td><code>graph bar</code>, <code>graph hbar</code></td>
+<td><code>bargap(#)</code>, <code>outergap(#)</code>, <code>blabel(bar, format() size() color() position())</code></td>
+</tr>
+<tr>
+<td><code>pie</code></td>
+<td><code>sort</code> or <code>descending</code>, <code>plabel(name)</code> (or <code>percent</code>, <code>sum</code>, <code>none</code>, with sub-options)</td>
+</tr>
+</tbody>
+</table>
+<pre><code>area sales year, color(teal%60)
+bar sales year, base(150) barwidth(0.6)
+twoway (scatter wage educ) (lfit wage educ, range(0 20) estopts(noconstant))
+histogram educ, discrete gap(10) addlabels
+graph bar (mean) wage, over(region) bargap(20) blabel(bar, format(%9.1f) position(inside))
+pie region, sort plabel(name)
+</code></pre>
+<p>The help of each plot type (<code>help twoway</code>, <code>help histogram</code>, <code>help bar</code>,
+<code>help pie</code>) lists them all. The dialog boxes that create a graph offer its common
+options; the command line and the Graph Editor offer all of them.</p>
+<h3 id="graph-builder">Graph Builder</h3>
+<p><strong>Menu:</strong> Graphics → Graph Builder...</p>
+<p>Build charts visually without typing commands.</p>
+<h3 id="common-graph-options">Common graph options</h3>
+<p>Every graph command accepts the standard option vocabulary:</p>
+<pre><code>hist wage, fcolor(navy) lcolor(white) fintensity(80) title(&quot;Wage distribution&quot;)
+scatter wage educ, mcolor(navy) msymbol(Oh) msize(small)
+line gdp year, lcolor(maroon) lpattern(dash) lwidth(thick)
+line y1 y2 y3 year, legend(pos(6) col(3))
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Option family</th>
+<th>Options</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Titles</strong></td>
+<td><code>title("...")</code> <code>subtitle("...")</code> <code>note("...")</code> <code>caption("...")</code> <code>xtitle("...")</code> <code>ytitle("...")</code>, each with sub-options: <code>size()</code> <code>color()</code> <code>pos()</code> <code>at(x y)</code> <code>box</code></td>
+</tr>
+<tr>
+<td><strong>Line</strong></td>
+<td><code>lcolor(c)</code> <code>lpattern(p)</code> <code>lwidth(w)</code></td>
+</tr>
+<tr>
+<td><strong>Marker</strong></td>
+<td><code>mcolor(c)</code> <code>msymbol(s)</code> <code>msize(s)</code> <code>mfcolor(c)</code> <code>mlcolor(c)</code></td>
+</tr>
+<tr>
+<td><strong>Fill</strong></td>
+<td><code>fcolor(c)</code> <code>fintensity(0-100)</code> <code>color(c)</code> (the fill and the outline)</td>
+</tr>
+<tr>
+<td><strong>Legend</strong></td>
+<td><code>legend(off)</code> <code>legend(on)</code> <code>legend(order(1 "A" 2 "B"))</code> <code>legend(pos(N) ring(0))</code> <code>legend(cols(N))</code> <code>legend(at(x y))</code> <code>legend(region(...))</code></td>
+</tr>
+<tr>
+<td><strong>Axes</strong></td>
+<td><code>xscale(log)</code> <code>xscale(reverse)</code> <code>xscale(alt)</code> <code>xrange(a b [step])</code> <code>xmtick(#n)</code> — the same for y</td>
+</tr>
+<tr>
+<td><strong>X / Y tick options</strong></td>
+<td><code>xlabel(#n, nogrid labsize(s) labcolor(c) angle(d) format(%fmt))</code> <code>ylabel(...)</code></td>
+</tr>
+<tr>
+<td><strong>Graph region</strong></td>
+<td><code>graphregion(fcolor(c) lcolor(c) margin(m))</code>, <code>margin(l r b t)</code></td>
+</tr>
+<tr>
+<td><strong>Plot region</strong></td>
+<td><code>plotregion(fcolor(c) lcolor(c) lwidth(w) margin(m))</code></td>
+</tr>
+<tr>
+<td><strong>Objects added</strong></td>
+<td><code>text(y x "...")</code> <code>addline(y1 x1 y2 x2)</code> <code>addarrow(y1 x1 y2 x2)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Colors</strong>: named colours (<code>navy</code>, <code>maroon</code>, <code>cranberry</code>, <code>forest_green</code>, <code>teal</code>, <code>gold</code>, ...), grayscale <code>gs0</code>-<code>gs16</code>, hex <code>#1a476f</code>, alpha <code>navy%50</code>, RGB <code>rgb(26,71,111)</code>.</p>
+<p><strong>Line patterns</strong>: <code>solid</code> <code>dash</code> <code>dot</code> <code>dash_dot</code> <code>longdash</code> <code>shortdash</code> <code>longdash_dot</code> <code>shortdash_dot</code>.</p>
+<p><strong>Line/marker sizes</strong>: <code>vvthin</code> <code>vthin</code> <code>thin</code> <code>medthin</code> <code>medium</code> <code>medthick</code> <code>thick</code> <code>vthick</code> <code>vvthick</code> — or any number.</p>
+<p><strong>Marker symbols</strong>: <code>O</code> <code>S</code> <code>T</code> <code>D</code> <code>+</code> <code>X</code> (solid) and <code>Oh</code> <code>Sh</code> <code>Th</code> <code>Dh</code> (hollow).</p>
+<p><strong>Font sizes</strong> (<code>labsize</code>, <code>size</code>): <code>vvtiny</code> <code>vtiny</code> <code>tiny</code> <code>vsmall</code> <code>small</code> <code>medsmall</code> <code>medium</code> <code>medlarge</code> <code>large</code> <code>vlarge</code> <code>huge</code> <code>vhuge</code> — or any number (pt).</p>
+<p><strong>Margins</strong> (<code>graphregion(margin())</code>, <code>plotregion(margin())</code>): <code>zero</code> <code>vsmall</code> <code>small</code> <code>medsmall</code> <code>medium</code> <code>medlarge</code> <code>large</code> <code>vlarge</code> <code>huge</code> — or any number.</p>
+<p><strong>Legend positions</strong> (clock face, 1-12):</p>
+<pre><code>              11   12    1
+        10                    2
+         9                    3
+         8                    4
+              7    6    5
+</code></pre>
+<p>By default the legend is in the plot, where it hides the fewest points. In the plot
+(<code>ring(0)</code>), the clock points to a corner or a side: 11 and 10 the top left corner,
+12 the top, 1 and 2 the top right corner, 3 the right side, 4 and 5 the bottom
+right corner, 0 the centre. Outside (<code>ring(1)</code>): above the plot (11 12 1), on its
+right (2 3 4), below it (5 6 7) or on its left (8 9 10).</p>
+<h3 id="texts-legend-axes-regions-and-objects-added">Texts, legend, axes, regions and objects added</h3>
+<p><strong>Texts.</strong> A title, a subtitle, a note, a caption and the axis titles take
+sub-options after a comma: their size and colour, their place, a box.</p>
+<pre><code>scatter wage educ, title(&quot;Wages and schooling&quot;, size(large) color(navy)) subtitle(&quot;Survey 2024&quot;)
+scatter wage educ, title(&quot;Wages&quot; &quot;by years of schooling&quot;)          two lines
+scatter wage educ, title(&quot;Wages&quot;, pos(11)) note(&quot;Source: survey&quot;, pos(5))
+scatter wage educ, title(&quot;Wages&quot;, box fcolor(gs14) lcolor(navy) rounded)
+</code></pre>
+<p><code>pos()</code> picks a standard place: above the plot at the left (11), centre (12) or
+right (1); a note or a caption at the foot, left (7), centre (6) or right (5); an
+axis title along its axis. <code>at(x y)</code> puts the centre of the text anywhere, in
+fractions of the graph from its bottom-left corner: <code>title("Wages", at(.25 .9))</code>.</p>
+<p><strong>The room of the plot.</strong> The plot takes the room that the texts and the legend
+leave it. A part moved to a free place gives its room back; outside the plot it
+takes room where it is, on the plot it is drawn over it. A larger text takes more
+room. <code>noroom</code> draws a part over the plot wherever it is; <code>room</code> makes the plot
+leave room for it even when it sits on it.</p>
+<p><strong>Greek letters and symbols.</strong> Any text of a graph accepts matplotlib's math
+notation between dollars:</p>
+<pre><code>scatter wage educ, title(&quot;Effect of $\beta_1$ on $y^2$&quot;)
+</code></pre>
+<p><code>$\alpha$</code>, <code>$\sigma^2$</code>, <code>x$_{i}$</code>, <code>$\leq$</code>, <code>$\sum$</code> … In the Graph Editor, the
+<strong>α</strong> button beside a text composes them (see <em>The Graph Editor</em> below).</p>
+<p><strong>Legend.</strong></p>
+<pre><code>twoway (scatter wage educ) (lfit wage educ), legend(order(1 &quot;Workers&quot; 2 &quot;Fit&quot;) pos(11) ring(0) cols(1))
+twoway (scatter wage educ) (lfit wage educ), legend(pos(6) ring(1) rows(1) region(lcolor(none)) title(&quot;Series&quot;, size(small)))
+</code></pre>
+<p><code>order()</code> sets which entries show, in which order, and their texts. <code>ring(0)</code>
+puts the legend in the plot, <code>ring(1)</code> outside it, on the side <code>pos()</code> points to;
+<code>at(x y)</code> is a free place. <code>region()</code> is its frame: its fill, its outline
+(<code>lcolor(none)</code>: no frame), its margin, rounded corners.</p>
+<p><strong>Axes.</strong></p>
+<pre><code>scatter wage educ, xlabel(8(2)20, format(%9.0f) labcolor(gs6) nogrid) yscale(log) ymtick(#4)
+scatter wage educ, xlabel(10 &quot;Primary&quot; 14 &quot;Secondary&quot; 18 &quot;University&quot;) xscale(reverse)
+</code></pre>
+<p><code>xlabel()</code> says where the labels go — about n of them (<code>#6</code>), values
+(<code>0(10)100</code>), or values with their texts — and how they look; its options also
+set the ticks and the grid. <code>xscale()</code> takes <code>log</code>, <code>reverse</code>, <code>alt</code> (the other
+side), <code>off</code> and <code>noline</code>. The same options exist for y and for the right axis
+(<code>y2label()</code>, <code>y2scale()</code>).</p>
+<p><strong>Regions.</strong></p>
+<pre><code>scatter wage educ, graphregion(fcolor(gs15) margin(5 5 8 5)) plotregion(lcolor(black) margin(5))
+</code></pre>
+<p>The graph region is the whole graph; four numbers in its <code>margin()</code> fix the space
+around the plot (left, right, bottom, top, in % of the graph). The plot region is
+the plot: <code>lcolor()</code> draws its frame, <code>margin()</code> sets the space between the data
+and that frame.</p>
+<p><strong>Objects added.</strong> A text, a line or an arrow at points of the data — y, then x,
+as on the axes:</p>
+<pre><code>scatter wage educ, text(65 16 &quot;Graduates&quot;, placement(e) color(maroon)) addline(15 12 70 12, lpattern(dash)) addarrow(60 10 52 15, lcolor(navy))
+</code></pre>
+<p>Repeat <code>text()</code>, <code>addline()</code> or <code>addarrow()</code> for objects of different looks. They
+never change the range of the axes. <code>help twoway</code> documents every sub-option.</p>
+<h3 id="saving-and-editing-graphs-aurg">Saving and editing graphs (.aurg)</h3>
+<p>Any AURA graph can be saved to an <strong><code>.aurg</code></strong> file and reopened later to view or
+edit. An <code>.aurg</code> is not a picture — it is a small, self-contained <strong>recipe</strong>: the
+command that drew the graph, plus the data columns it used, frozen inside the
+file. Reopening re-runs that command over its <em>own</em> frozen data, so a saved graph
+is independent of your current dataset and always redraws the same figure.</p>
+<p><strong>Editing a graph on screen — Start Graph Editor.</strong> Each graph window holds one
+graph of the session (<em>Graph 1</em>, <em>Graph 2</em>…), with the data it was drawn from
+frozen at that moment: later changes to the dataset do not touch it. For the
+types the editors know, its toolbar has a <strong>Start Graph Editor</strong> button. The
+window gives way to the graph's editor, opened at the same place with the graph
+at the same size; close the editor and the edited graph comes back in its
+window. Closing a graph window closes that graph for good, and <code>clear all</code>
+closes every graph.</p>
+<p><strong>Saving.</strong></p>
+<pre><code>histogram exppc, normal
+graph save &quot;spending.aurg&quot;           write the current graph
+graph save &quot;spending.aurg&quot;, replace  overwrite an existing file
+graph use  &quot;spending.aurg&quot;           redraw it later, from its frozen data
+</code></pre>
+<p><code>graph save</code> writes the <strong>current</strong> graph — the last one drawn or edited — with
+its edits. The graph window's toolbar <strong>save</strong> (disk) icon also offers <code>.aurg</code>
+as its default format, alongside PNG / PDF / SVG, for <em>that</em> window's graph: the
+image formats save the picture, <code>.aurg</code> saves the editable graph.</p>
+<p><strong>Editing — File → Open Graph.</strong> Opening an <code>.aurg</code> routes it to the editor its
+type calls for. Each editor works on the graph's <em>own</em> frozen data (never the
+current workspace), shows a live preview, and saves back to <code>.aurg</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Graph</th>
+<th>Editor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pie</td>
+<td>Pie editor — category / value / nested, a <strong>palette template</strong> and a colour per slice, donut, labels, %</td>
+</tr>
+<tr>
+<td>Histogram</td>
+<td>Histogram editor — bins, y-axis type, normal &amp; kernel density overlays, colours</td>
+</tr>
+<tr>
+<td>Density / CDF (<code>kdensity</code>, <code>cdfplot</code>)</td>
+<td>Density or Cumulative Distribution editor — variables to compare, <code>by()</code> group, weight, bandwidth / x range / points (density), a colour, pattern and width per curve</td>
+</tr>
+<tr>
+<td>Bar (<code>graph bar</code> / <code>hbar</code>)</td>
+<td>Bar editor — statistic, variables, <code>over()</code> / then-by, weight, orientation, stacked / percent, value labels, a palette, and a fill, intensity, outline and outline width per series</td>
+</tr>
+<tr>
+<td>twoway / scatter / line / area / range</td>
+<td>2-D Graph editor — one editable object per plotted series, with axes / legend / titles</td>
+</tr>
+</tbody>
+</table>
+<p>The editors work in the same way: see <em>The Graph Editor</em> below. <code>help graph</code>
+documents the whole feature.</p>
+<p><strong>Raw matplotlib — <code>graph mpl</code>.</strong> For a plot the graph commands don't cover,
+<code>graph mpl &lt;python&gt;</code> runs your own <strong>matplotlib</strong> on the active dataset, with
+every column bound to its <strong>bare name</strong> (plus <code>df</code>, <code>plt</code>, <code>np</code>, and a ready
+<code>fig</code> / <code>ax</code>):</p>
+<pre><code>graph mpl ax.scatter(exppc, exp, c=zone, cmap=&quot;viridis&quot;)
+graph mpl ax.hist(exppc, bins=40); ax.set_xlabel(&quot;Spending&quot;)
+</code></pre>
+<p>The figure shows like any AURA graph and saves to <code>.aurg</code>. It is the escape
+hatch to matplotlib's full power; for reusable, AURA-styled graphs use the
+graph commands or a module. For a <strong>multi-line</strong> script (helper functions,
+many statements), keep it in a <code>.py</code> file and run <code>graph mpl using "script.py"</code>
+— a dataset is optional, so pure matplotlib runs too.</p>
+<h3 id="the-graph-editor">The Graph Editor</h3>
+<p><strong>Opening it.</strong> The <strong>Start Graph Editor</strong> button of a graph's window, or
+<strong>File → Open Graph</strong> (an <code>.aurg</code> file). The editor shows the graph in the centre,
+as its window will draw it; on the left the <strong>Quick Options</strong> panel — the data
+(variables, <code>if</code>/<code>in</code>, the weight, the plot types) and the options changed most
+often (titles, legend, ranges, colours); on the right the <strong>Objects</strong> tree, every
+part of the graph: titles, the plot region with its plots and their curves, the
+axes, the legend, the notes, the objects added. Its toolbar shows or hides the two
+panels, adds a text, a line or an arrow, and closes the editor.</p>
+<p><strong>With the mouse.</strong></p>
+<ul>
+<li>A part under the mouse is outlined; a click selects it (the Objects tree follows,
+  and the other way round).</li>
+<li>Drag a part to move it anywhere in the graph; hold <strong>Shift</strong> as you drop it to
+  put it at the nearest standard place instead.</li>
+<li>Drag the edges or the corners of the selected plot region to resize the plot.</li>
+<li><strong>Double-click</strong> a part — on the graph or in the Objects tree — to open its
+  window.</li>
+<li>A right click gives the part's menu: its properties, its standard place again,
+  and for the plot region <em>Fit the Plot to the Free Room</em> and <em>Make Room for Moved
+  Parts</em>.</li>
+</ul>
+<p><strong>A window for each part.</strong> Each part has a window of its own options: a text (its
+lines, font, size, colour, box, place), the legend (its entries, layout, text,
+title, frame, place), an axis (scale, labels, ticks, grid, line), a region (fill,
+outline, margins), a curve (by its type: markers, point labels, line, fill and
+outline, bars, the fit, the slices of a pie), an object added. What you set is
+written at once and the graph is drawn again; <strong>Cancel</strong> puts back what was there
+when the window opened. A colour left empty shows, with the word <em>auto</em>, the
+colour the graph is drawn with. A part not drawn yet (a subtitle, a caption, the
+legend of a single curve) has a grey row in the Objects tree: double-click it to
+add it. The Quick Options panel and the windows always show the same values.</p>
+<p><strong>Objects added.</strong> <strong>Add Text</strong>, <strong>Add Line</strong> and <strong>Add Arrow</strong> on the toolbar:
+click where the text goes; draw a line or an arrow with the button held from one
+end to the other (Esc: no more). They are written as <code>text()</code>, <code>addline()</code> and
+<code>addarrow()</code>, and are moved, edited and deleted like the other parts.</p>
+<p><strong>Symbols.</strong> The <strong>α</strong> button beside a text field opens <em>Insert Symbol</em>: Greek
+letters, operators, large symbols and structures (exponent, index, fraction, root,
+accents). The expression is composed apart, with its own preview; <strong>Insert</strong>
+writes it at the cursor, between dollars.</p>
+<p><strong>Everything is written in the command.</strong> Each gesture becomes an option of the
+graph's command, so the edited graph is saved as <code>.aurg</code>, drawn again by its
+command, or copied as code (<em>Copy the Graph's Code</em> in the right-click menu of its
+window). An editor changes only what you edit: anything it does not show stays as
+written, and a curve keeps its style by what it draws (removing a variable takes
+its colours with it).</p>
+<h3 id="the-graphs-of-the-session">The graphs of the session</h3>
+<p>Each graph drawn is a graph of the session, numbered <em>Graph 1</em>, <em>Graph 2</em>…</p>
+<pre><code>graph list                                   the graphs in memory: number, state, command
+graphmerge -2 -1, cols(2) title(&quot;Two views&quot;)   the last two graphs in one figure
+graph export &quot;fig.emf&quot;                       the current graph as a picture
+graph clear                                  close every graph; numbering starts again at 1
+</code></pre>
+<ul>
+<li><strong>One window for all the graphs.</strong> <code>set wingraph on</code> puts the new 2-D graphs in a
+  single <em>Graphs</em> window, one under the other (the newest on top, or at the bottom
+  with <code>set wingraph on, bottom</code>), each with its own toolbar; <code>set wingraph off</code>
+  gives each graph its own window again. The setting is kept for the next sessions.</li>
+<li><strong>Merging graphs.</strong> <code>graphmerge</code> draws several graphs in one figure: see
+  <em>Merging graphs</em> below.</li>
+<li><strong>Closed graphs.</strong> Closing a graph's window closes that graph. After
+  <code>graph mem on</code>, a closed graph stays in memory, hidden, so <code>graphmerge</code> can still
+  take it.</li>
+<li><strong>Copying a graph.</strong> The right-click menu of a graph puts it on the clipboard as
+  a picture (PNG, JPEG), as a vector drawing (SVG, or EMF for Word and PowerPoint),
+  or as the commands that draw it again (<em>Copy the Graph's Code</em>).</li>
+<li><strong>Exporting.</strong> The <strong>save</strong> icon of a graph's toolbar writes <code>.aurg</code> (the
+  editable graph) or a picture; <code>graph export "file"</code> writes the current graph as
+  a picture, PNG, PDF, SVG or EMF by the file's extension.</li>
+</ul>
+<h3 id="merging-graphs-graphmerge">Merging graphs — <code>graphmerge</code></h3>
+<p><code>graphmerge</code> draws several graphs of the session in one figure, in a grid. Each
+graph is drawn again from its own command, its frozen data and its edits — a vector
+drawing, not pasted pictures — and the figure is a graph of the session like the
+others: it is saved as <code>.aurg</code>, exported, copied, and merged again. In a new
+session, the four graphs below are Graphs 1 to 4:</p>
+<pre><code>histogram exppc if exppc &lt; 300000
+twoway scatter exppc size
+graph bar (mean) exppc, over(zone)
+kdensity exppc if exppc &lt; 300000
+graphmerge 1/4, title(&quot;Household spending&quot;) note(&quot;Source: bkf98I&quot;)
+graphmerge 1 2 3, rows(1)              one row
+graphmerge 1 2 3, cols(1)              one above the other
+graphmerge 1 2 3, holes(2)             a 2 x 2 grid, its second place empty
+graphmerge 5 4, cols(1)                the figure of four (Graph 5) over a graph
+</code></pre>
+<p><strong>Which graphs.</strong> By number (<code>graph list</code> shows them): <code>1 3 4</code>, a range <code>1/4</code>, a
+negative number counted from the last graph (<code>-1</code> the last, <code>-3/-1</code> the last three),
+or <code>_all</code>. A graph whose window was closed can still be taken after <code>graph mem on</code>.</p>
+<p><strong>The grid.</strong> About square by default; <code>rows()</code> or <code>cols()</code> set it, <code>colfirst</code> fills
+it column after column, <code>holes()</code> leaves places empty. <code>imargin()</code> sets the margin
+around each graph: <code>zero</code>, <code>tiny</code>, <code>small</code> (the default), <code>medium</code>, <code>large</code>, or a
+percentage.</p>
+<p><strong>One scale.</strong> <code>ycommon</code> and <code>xcommon</code> give the graphs of the type of the first one
+the same y and x scales, so that they compare at a glance:</p>
+<pre><code>histogram exppc if exppc &lt; 300000 &amp; zone == 1, title(&quot;Rural&quot;)
+histogram exppc if exppc &lt; 300000 &amp; zone == 2, title(&quot;Urban&quot;)
+graphmerge -2 -1, cols(1) ycommon xcommon
+</code></pre>
+<p><strong>A size for a page.</strong> The figure takes the width of a page's text (6.5 inches) and
+keeps each graph in the proportions of a graph window: one row of three graphs is a
+strip 1.4 inches high, two rows of two half a page (4.1 inches), three graphs one
+above the other a full page (9 inches). A merged figure placed in another keeps its
+own proportions: the figure of four over a graph takes nearly the whole page, the
+four on its upper half. Text and markers shrink with the graphs; <code>xsize()</code>, <code>ysize()</code>
+and <code>iscale()</code> set them yourself. In a small graph, long axis labels pass to
+scientific notation and labels that would touch are thinned out.</p>
+<p><strong>Titles, scheme, file.</strong> <code>title()</code>, <code>subtitle()</code>, <code>note()</code> and <code>caption()</code> belong to
+the whole figure; <code>scheme()</code> or <code>commonscheme</code> draws every graph with one scheme;
+<code>saving("figure.aurg", replace)</code> also saves the figure.</p>
+<p><strong>From a dialog box, and as code.</strong> <strong>Graphics → Merge Graphs...</strong> lists the graphs
+in memory and writes the command; the <em>Graphs</em> window of <code>set wingraph on</code> has a
+<strong>Merge...</strong> button. <em>Copy the Graph's Code</em>, in the right-click menu of the figure,
+gives the commands that draw it again: those of its parts, then the <code>graphmerge</code>
+that joins them. A merged figure has no editor of its own: edit a part, then merge
+again.</p>
+<h3 id="graph-preferences">Graph preferences</h3>
+<pre><code>set scheme monochrome              black and white: greys, and a dash per curve
+set graphtextsize 11               the size of the graphs' text, in points (10)
+set graphsize 6 4                  the size of a new graph, in inches (8 by 5)
+set graphprefs default             back to the defaults
+</code></pre>
+<p><code>set graphfont</code> sets the font. Add <code>, permanently</code> to keep a setting for the next
+sessions. <strong>Graphics → Graph Preferences...</strong> sets them all in one dialog box. A
+graph keeps the text size it was drawn with, also when it is opened again.</p>
+<hr />
+<h3 id="densities-and-distribution-curves-kdensity-cdfplot-histo">Densities and distribution curves — <code>kdensity</code>, <code>cdfplot</code>, <code>histo</code></h3>
+<ul>
+<li><strong><code>kdensity varlist [, options]</code></strong> — a smooth <strong>kernel-density</strong> estimate of a
+  variable's distribution (several variables overlay on one plot); weight with
+  <code>[aweight=var]</code>.</li>
+<li><strong><code>cdfplot varlist [, options]</code></strong> — the <strong>empirical CDF</strong> F(x) = P(X &lt;= x), a
+  cumulative curve; several variables overlay.</li>
+<li><strong><code>histo var</code></strong> — a quick one-variable histogram (a lightweight shorthand for
+  <code>histogram</code>).</li>
+</ul>
+<pre><code>kdensity wage
+kdensity wage if female == 1, normal
+cdfplot exppc
+</code></pre>
+<h3 id="fitted-line-overlays-lfit-qfit-linfit">Fitted-line overlays — <code>lfit</code>, <code>qfit</code>, <code>linfit</code></h3>
+<ul>
+<li><strong><code>lfit yvar xvar</code></strong> — add an <strong>OLS linear</strong> fitted line as a <code>twoway</code> layer.</li>
+<li><strong><code>qfit yvar xvar</code></strong> — add a <strong>quadratic</strong> fitted curve as a <code>twoway</code> layer.</li>
+<li><strong><code>linfit yvar xvar</code></strong> — a standalone scatter of <code>y</code> on <code>x</code> <strong>with the OLS line and
+  a confidence band</strong>.</li>
+</ul>
+<pre><code>twoway (scatter wage educ) (lfit wage educ)
+linfit wage educ
+</code></pre>
+<h3 id="bar-of-pie-barofpie">Bar-of-pie — <code>barofpie</code></h3>
+<p><code>barofpie catvar subvar [valuevar]</code> draws a <strong>pie of one categorical variable with a
+single slice expanded into a detail bar</strong>, broken down by a second variable — the
+"where does this slice come from" chart.</p>
+<h3 id="3-d-surfaces-threeway-kdensity2d-kcdf2d-jhistogram2d">3-D surfaces — <code>threeway</code>, <code>kdensity2d</code>, <code>kcdf2d</code>, <code>jhistogram2d</code></h3>
+<p>AURA renders interactive 3-D surfaces (rotate / zoom / export) in its internal viewer:</p>
+<ul>
+<li><strong><code>kdensity2d xvar yvar</code></strong> — the joint (bivariate) Gaussian <strong>kernel density</strong>.</li>
+<li><strong><code>kcdf2d xvar yvar</code></strong> — the joint (bivariate) empirical <strong>CDF</strong>.</li>
+<li><strong><code>jhistogram2d xvar yvar</code></strong> — the joint (bivariate) <strong>histogram</strong>, as 3-D bars.</li>
+<li><strong><code>threeway z1 [z2 ...] xvar yvar</code></strong> — overlay several surfaces z = f(x, y) on one
+  set of axes (the last two variables are X and Y; each earlier variable is a surface).</li>
+</ul>
+<pre><code>kdensity2d exppc size
+threeway zfe zre size exppc
+</code></pre>
+<h2 id="12-file-and-directory-commands">12. File and Directory Commands</h2>
+<h3 id="working-directory">Working directory</h3>
+<pre><code>cd                          display current directory
+cd &quot;C:\data&quot;                change directory
+cd ..                       go up one level
+dir                         list files in current directory
+dir &quot;C:\data&quot;               list files in a specific path
+dir *.aura                  filter by pattern
+ls                          alias for dir
+</code></pre>
+<h3 id="file-operations">File operations</h3>
+<pre><code>erase &quot;file.csv&quot;            delete a file
+erase &quot;file.csv&quot;, force     delete without confirmation
+copy &quot;src.csv&quot; &quot;dest.csv&quot;   copy a file
+copy &quot;src&quot; &quot;dest&quot;, replace  overwrite if destination exists
+frename &quot;old.csv&quot; &quot;new.csv&quot; rename (or move) a file
+mv &quot;old.csv&quot; &quot;new.csv&quot;      alias for frename
+mkdir &quot;dirname&quot;             create a directory
+rmdir &quot;dirname&quot;             remove an empty directory
+rmdir &quot;dirname&quot;, force      remove directory and all contents
+type &quot;file.txt&quot;             display file contents
+type &quot;file.txt&quot;, lines(50)  show first 50 lines
+cat &quot;file.txt&quot;              alias for type
+shell python --version      run an OS command
+! pip list                  alias for shell
+</code></pre>
+<hr />
+<h3 id="system-and-developer-utilities">System and developer utilities</h3>
+<p>A few commands help you navigate AURA's directories, files and modules:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sysdir</code></td>
+<td>List AURA's directories (personal modules, installed packages, base, config)</td>
+</tr>
+<tr>
+<td><code>mount [folder]</code></td>
+<td>List, add or remove a <strong>mounted</strong> folder — an extra directory AURA scans for modules</td>
+</tr>
+<tr>
+<td><code>find name.ext</code> / <code>find pkg</code></td>
+<td>Locate a file on the adopath, or list a package's files</td>
+</tr>
+<tr>
+<td><code>viewsource name.ext</code></td>
+<td>Show the source of a module / help file (read-only)</td>
+</tr>
+<tr>
+<td><code>fedit name.ext</code></td>
+<td>Open a module / script / help file in the editor that fits it</td>
+</tr>
+<tr>
+<td><code>timer on/off/list #</code></td>
+<td>Numbered timers that accumulate wall-clock time across <code>on</code> / <code>off</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="13-scripting-with-aur-files">13. Scripting with .aur Files</h2>
+<p>A <code>.aur</code> script is a plain text file with one AURA command per line.</p>
+<h3 id="script-syntax">Script syntax</h3>
+<pre><code>// This is a single-line comment
+* This is also a single-line comment
+
+/* This is a block comment
+   that can span several lines.
+   Useful for headers, notes, and disabling code. */
+
+use &quot;C:\data\survey.aura&quot;
+sort weight
+summarize exppc
+regress exppc size zone, robust
+tabulate zone
+</code></pre>
+<h3 id="line-continuation">Line continuation</h3>
+<p>Use <code>///</code> to continue a long command on the next line:</p>
+<pre><code>regress exppc size zone ///
+    age female, robust level(90)
+</code></pre>
+<h3 id="inline-comments">Inline comments</h3>
+<pre><code>sort weight   // sort ascending before listing
+list in 1/10
+</code></pre>
+<h3 id="delimiter-switching-delimit">Delimiter switching — <code>#delimit</code></h3>
+<p>By default, AURA treats each newline as a command terminator. Inside a script you can switch to semicolon-terminated commands — useful when a single command spans many lines:</p>
+<pre><code>#delimit ;
+regress wage age educ exper region
+    if year == 2024,
+    robust
+    cluster(region) ;
+summarize wage age educ ;
+#delimit cr
+describe
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Directive</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#delimit cr</code></td>
+<td>Newline-terminated (default)</td>
+</tr>
+<tr>
+<td><code>#delimit ;</code></td>
+<td>Semicolon-terminated; newlines become whitespace</td>
+</tr>
+</tbody>
+</table>
+<p>Comments (<code>*</code>, <code>//</code>, <code>/* */</code>) and line continuation behave the same in both modes.</p>
+<h3 id="control-flow-and-macros">Control flow and macros</h3>
+<p>A <code>.aur</code> script can use control structures and macros for any non-trivial workflow (loop over years, datasets, or specifications; build varlists dynamically; compute and pass scalars). The script editor detects these keywords and routes the script through the <strong>AurRuntime</strong> interpreter automatically — no separate command, no <code>do</code> prefix.</p>
+<p><strong>Macros and scalars</strong></p>
+<pre><code>local mylist &quot;wage age educ&quot;          // text macro
+local n = 10                          // numeric (still stored as text)
+local n = `n' + 1                     // expression on the right-hand side
+scalar k = 1.96                       // floating-point scalar (used in expressions)
+scalar threshold = k * 0.05
+</code></pre>
+<ul>
+<li>Reference a local macro with backticks-and-apostrophe: <code>`mylist'</code></li>
+<li>Reference a scalar by its bare name inside an expression: <code>n * k + 1</code></li>
+<li>Macros nest: <code>local greeting "Hello</code>name'"`</li>
+<li>The right-hand side of <code>=</code> is an expression, with all of AURA's functions (<code>help functions</code>). One that cannot be computed is an error, never an empty macro.</li>
+<li><code>`++i'</code> adds 1 and gives the value; <code>`*'</code> gives all the numbered macros; <code>c(N)</code>, <code>c(k)</code>, <code>c(os)</code>, <code>$S_DATE</code> give values of the system. See <code>help macro</code>.</li>
+</ul>
+<p><strong>Loops</strong></p>
+<pre><code>forvalues i = 1/5 {                   // 1, 2, 3, 4, 5
+    use &quot;wave`i'.aura&quot;
+    summarize wage
+}
+
+forvalues i = 2(2)10 {                // 2, 4, 6, 8, 10  (step = 2)
+    summarize x`i'
+}
+
+forvalues i = 10(-1)1 {               // 10, 9, ..., 1
+    display &quot;Year `i'&quot;
+}
+
+foreach v of varlist wage age educ {  // iterate over a literal varlist
+    summarize `v', detail
+}
+
+foreach v of local mylist {           // iterate over a previously-defined local
+    regress wage `v', robust
+}
+
+foreach n of numlist 1 3 5 10 100 {
+    summarize x in 1/`n'
+}
+
+foreach w in North &quot;South coast&quot; {    // any words
+    display &quot;`w'&quot;
+}
+
+foreach r of levels region {          // the values of a variable
+    count if region == `r'
+}
+
+foreach v of newlist z1 z2 {          // names that must be free
+    gen `v' = 0
+}
+</code></pre>
+<p><code>continue</code> goes on to the next round, and <code>continue, break</code> leaves the loop. See
+<code>help foreach</code>, <code>help forvalues</code>, <code>help while</code>.</p>
+<p><strong>Conditionals and while</strong></p>
+<pre><code>if `n' &gt; 5 {
+    display &quot;Many observations&quot;
+}
+else {
+    display &quot;Few&quot;
+}
+
+while `n' &gt; 0 {
+    display &quot;`n' iterations left&quot;
+    local n = `n' - 1
+}
+</code></pre>
+<p>On one line, and with several cases:</p>
+<pre><code>if `n' &gt; 5 display &quot;Many observations&quot;
+
+if `grade' &gt;= 16 {
+    display &quot;A&quot;
+}
+else if `grade' &gt;= 10 {
+    display &quot;B&quot;
+}
+else display &quot;C&quot;
+</code></pre>
+<p>See <code>help if</code>.</p>
+<p><strong>display — printing to the console</strong></p>
+<pre><code>display &quot;Hello world&quot;
+display &quot;Iteration &quot; `i' &quot; of &quot; `N'
+display &quot;wage * 2 = &quot; `wage_obs' * 2          // expressions are evaluated
+</code></pre>
+<p>A text and an expression can follow one another in any number, and a format or a
+directive applies where it stands:</p>
+<pre><code>display &quot;mean: &quot; %9.2f 1234.5678
+display &quot;name&quot; _col(12) &quot;value&quot;
+display _dup(20) &quot;-&quot;
+display &quot;first&quot; _n &quot;second&quot;
+display as error &quot;something is wrong&quot;
+</code></pre>
+<p>A text may hold layout tags such as <code>{hline 20}</code> or <code>{col 10}</code>. See <code>help display</code>.</p>
+<p><strong>Putting it together — typical economic workflow</strong></p>
+<pre><code>* Sensitivity analysis: re-run a regression across multiple waves and controls
+local controls &quot;age educ exper&quot;
+local outcome &quot;wage&quot;
+scalar alpha = 0.05
+
+forvalues year = 2018/2024 {
+    use &quot;wave`year'.aura&quot;
+    summarize `outcome', detail
+    if `year' &gt;= 2020 {
+        foreach v of local controls {
+            regress `outcome' `v' if region == 1, robust
+        }
+    }
+    display &quot;── Wave `year' done (alpha = &quot; alpha &quot;) ──&quot;
+}
+</code></pre>
+<p><strong>What the Results window shows</strong></p>
+<p>Each statement of a script is shown before it runs, with a <code>.</code>, the lines of a block
+numbered, and kept in Review. The body of a loop is shown once, as written, and not
+at each round:</p>
+<pre><code>. forvalues i = 1/3 {
+  2.     display `i'
+  3. }
+1
+2
+3
+</code></pre>
+<p>Two settings change this, for the rest of the session (put them in <code>start.aur</code> to
+have them at each launch):</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set showcmd off</code></td>
+<td>The window shows results only, not the command lines. Review and the log keep them.</td>
+</tr>
+<tr>
+<td><code>set showline on</code></td>
+<td>In a <code>.aur</code> script, the first result of each command starts with the number of its line: <code>4: N=2</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Together they give a short listing where each result says which line made it.</p>
+<p><strong>Caveats and limits</strong></p>
+<ul>
+<li>Block syntax requires the opening <code>{</code> at the <strong>end</strong> of the header line: <code>forvalues i = 1/10 {</code> — not on a separate line.</li>
+<li>In the condition of <code>while</code> and <code>if</code>, a number that is not 0 is true and a missing value is false. <code>&amp;</code>, <code>|</code> and <code>!</code> are <em>and</em>, <em>or</em>, <em>not</em>.</li>
+<li>A variable in such a condition counts by its first observation. To test every row, use <code>count if</code>.</li>
+<li>In the window, the <strong>Stop</strong> button ends a loop that does not stop by itself.</li>
+<li>AURA's existing <code>if</code> clause (<code>summarize x if x &gt; 0</code>) is unrelated — that's a per-command filter and works exactly as before.</li>
+</ul>
+<h3 id="python-blocks-py-end-py">Python blocks — <code>py:</code> ... <code>end py</code></h3>
+<p>A <strong><code>py:</code> block</strong> runs raw <strong>Python</strong> inside an <code>.aur</code> script, with every column of
+the active dataset bound to its <strong>bare name</strong> (a numeric array). It is AURA's
+escape hatch for anything the built-in commands don't cover: AURA is Python-native,
+so you drop straight into Python and back without leaving your workflow. Like
+<code>forvalues</code>, it is a <em>script</em> construct — it spans several lines, so it lives in a
+script or the Script Editor (or is pasted, lines and all, into the command box).</p>
+<pre><code>py:
+    z = exppc * 2            # exppc is a column -&gt; available by its bare name
+    df[&quot;z&quot;] = z              # put it back -&gt; kept when the block ends
+end py
+</code></pre>
+<p>Inside the block you have every <strong>variable</strong> of the active dataset (as a numpy
+array), the whole dataset <code>df</code>, <code>np</code> and <code>pd</code>, and an <strong><code>aura</code></strong> bridge back to
+AURA. Comments use Python's <code>#</code>.</p>
+<p><strong>Keeping a variable — the data contract.</strong> A value you compute is kept only if you
+put it back. <code>df["z"] = ...</code> adds a quick, <em>bare</em> column; for a first-class AURA
+variable (with a label and a display format), use <code>aura.set_var</code>:</p>
+<pre><code>py:
+    import numpy as np
+    aura.set_var(&quot;logexp&quot;, np.log(exppc), label=&quot;Log spending&quot;, format=&quot;%9.3f&quot;)
+end py
+</code></pre>
+<p>When the block ends, AURA adopts whatever <code>df</code> now holds — edits in place, a
+rebind, new or dropped columns, added rows — and surviving columns keep their
+labels. A value computed but never put back simply vanishes at <code>end py</code>.</p>
+<p><strong>The <code>aura</code> bridge</strong> is deliberately narrow — it does not turn into a second
+language:</p>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aura.run("gen z = exppc*2")</code></td>
+<td>run any AURA command from Python (labels, formats and the Review trace all apply)</td>
+</tr>
+<tr>
+<td><code>aura.set_var(name, values [, label=, format=])</code></td>
+<td>add or replace a labelled, formatted variable</td>
+</tr>
+<tr>
+<td><code>aura.scalar(name, value)</code></td>
+<td>post a scalar into AURA's namespace</td>
+</tr>
+<tr>
+<td><code>aura.getvar(name)</code></td>
+<td>a column as a numpy array</td>
+</tr>
+</tbody>
+</table>
+<p>Prefer <code>aura.run</code> / <code>aura.set_var</code> for data you want to <strong>keep and trace</strong>; a bare
+<code>df[...] = ...</code> is for scratch. Don't reimplement <code>gen</code> / <code>egen</code> in Python — call
+them through <code>aura.run</code>.</p>
+<p><strong>Output and errors.</strong> Anything the block <code>print</code>s appears in the <strong>Results</strong>
+window. A Python error is reported with the offending block line; turn on
+<code>set tracedeep on</code> for the full Python traceback. When you run a script from the
+Script Editor, errors are listed in its <strong>Problems</strong> panel (with a line number to
+jump to), which keeps the Results window for real output. <code>help py</code> documents the
+block.</p>
+<h3 id="opening-the-script-editor">Opening the Script Editor</h3>
+<p><strong>Menu:</strong> Tools → Script Editor</p>
+<h3 id="script-editor-multi-tab">Script Editor — multi-tab</h3>
+<p>The Script Editor opens several <code>.aur</code> files at once, each in its own tab.</p>
+<table>
+<thead>
+<tr>
+<th>Button / shortcut</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New (Ctrl+T)</td>
+<td>New empty tab</td>
+</tr>
+<tr>
+<td>Open (Ctrl+O)</td>
+<td>Open a <code>.aur</code> file in a new tab</td>
+</tr>
+<tr>
+<td>Save (Ctrl+S) / Save As</td>
+<td>Save the active tab</td>
+</tr>
+<tr>
+<td>Close tab (Ctrl+W)</td>
+<td>Close the active tab</td>
+</tr>
+<tr>
+<td>Undo (Ctrl+Z) / Redo (Ctrl+Y)</td>
+<td>Standard undo / redo</td>
+</tr>
+<tr>
+<td>Cut / Copy / Paste</td>
+<td>Standard clipboard actions</td>
+</tr>
+<tr>
+<td>Find (Ctrl+F) / Find next (F3)</td>
+<td>Search in the active tab</td>
+</tr>
+<tr>
+<td>Replace (Ctrl+H)</td>
+<td>Find + replace bar (Replace, Replace All)</td>
+</tr>
+<tr>
+<td>Comment (Ctrl+/)</td>
+<td>Toggle <code>*</code> comment on the selected lines</td>
+</tr>
+<tr>
+<td>▶ Run All (F5)</td>
+<td>Execute the whole active script</td>
+</tr>
+<tr>
+<td>▶ Run Selection (F8)</td>
+<td>Execute only the selected lines</td>
+</tr>
+<tr>
+<td>🐞 Debug (Ctrl+D)</td>
+<td>Show / hide the Problems panel (static analysis)</td>
+</tr>
+<tr>
+<td>Ctrl+Tab / Ctrl+Shift+Tab</td>
+<td>Cycle between tabs</td>
+</tr>
+</tbody>
+</table>
+<p>Other conveniences:
+- <strong>Dirty indicator</strong> — a <code>*</code> prefixes the tab label and window title when the file has unsaved changes.
+- <strong>Recent files</strong> — File → Recent files lists the last 10 scripts opened (persisted across sessions).
+- <strong>Middle-click</strong> on a tab closes it.
+- Opening the same file twice focuses the existing tab instead of duplicating it.</p>
+<h3 id="debugging-the-problems-panel">Debugging — the Problems panel</h3>
+<p>The Script Editor has a built-in debugger. Click <strong>🐞 Debug</strong> (or View → Debug
+Panel, <strong>Ctrl+D</strong>) to show the <strong>Problems</strong> panel at the bottom.</p>
+<p><strong>Static analysis — no execution.</strong> As you type, AURA flags the issues it can
+detect <em>without running</em> the script. The checks are deliberately conservative —
+chosen to give essentially no false positives:</p>
+<table>
+<thead>
+<tr>
+<th>Icon</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>⛔ Error</td>
+<td>Unbalanced <code>()</code> / <code>[]</code> / quotes in a command, unbalanced block braces <code>{ }</code> over the whole script, or an <strong>ambiguous command abbreviation</strong> (one the engine would reject).</td>
+</tr>
+<tr>
+<td>⚠ Warning</td>
+<td>An <strong>unknown command</strong>, an <strong>option not allowed</strong> by a catalogued command (with a "Did you mean …?" hint), or a <strong>macro defined nowhere in the script</strong>.</td>
+</tr>
+</tbody>
+</table>
+<p>Double-click a problem to jump to its line. The status line summarises the
+count — green (no problem), orange (warnings), red (errors).</p>
+<p><strong>Run-time errors.</strong> Some problems depend on the data and cannot be known in
+advance — <em>no data in memory</em>, <em>variable not found</em>, a bad expression in
+<code>generate</code>. These appear in the Problems panel <strong>after you Run</strong> the script;
+the line numbers point back into the source where possible. A script stops at its
+first error, and the Results window says so in one line
+(<code>r(111) line 5: script stopped (see Problems)</code>). To go on after a command that may
+fail, put <code>capture</code> before it.</p>
+<p>The same static checks run inside <code>aura: … end aura</code> blocks in the <strong>Module
+Editor</strong> (Tools → Module Editor). There a <em>missing variable is not flagged</em> —
+that is data-dependent and decided at run time.</p>
+<h3 id="exporting-history-as-a-script">Exporting history as a script</h3>
+<p><strong>Menu:</strong> Tools → Export History</p>
+<hr />
+<h2 id="14-package-commands">14. Package Commands</h2>
+<pre><code>pkg from URL                install from repository
+pkg dir                     list available packages
+pkg describe packagename    show package details
+pkg install packagename     install a package
+pkg install packagename, replace   reinstall/update
+pkg list                    list installed packages
+pkg uninstall packagename   remove a package
+</code></pre>
+<h3 id="authoring-a-module-with-ai">Authoring a module with AI</h3>
+<p>AURA can help you <strong>write a new command</strong> (a <em>module</em>) with a large language
+model, and it stays <strong>provider-agnostic</strong>: Claude, Gemini, OpenAI, a free tier
+(Groq / Cerebras / OpenRouter / Mistral), or a <strong>local</strong> model (Ollama / LM
+Studio). It is <strong>opt-in</strong> — nothing talks to the network until you turn it on.</p>
+<p><strong>1. Configure a provider — Tools → AI Settings.</strong> Tick <em>Enable AI module
+generation</em>, pick a <strong>Provider</strong> preset (it fills the Base URL and a default
+Model, both editable), and enter your <strong>API key</strong> for a cloud provider — or leave
+the key empty and set the Base URL for a local model. Saved to
+<code>~/AURA/config/ai.json</code>.</p>
+<p><strong>2. Start a project — Tools → New Module Project.</strong> Give a <strong>name</strong> and a
+<strong>location</strong>; AURA creates the project folder for you:</p>
+<table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docs/</code></td>
+<td>AURA's authoring rules, copied in (the command contract, the help / dialog / test formats, the conventions)</td>
+</tr>
+<tr>
+<td><code>refs/</code></td>
+<td><em>your</em> reference material — papers, target outputs, an <code>.ado</code> / <code>.py</code> to port, data samples</td>
+</tr>
+<tr>
+<td><code>out/</code></td>
+<td>the produced files: <code>cmd.auru</code>, <code>cmd.aurh</code>, an optional <code>cmd.auradb</code>, <code>tests/</code></td>
+</tr>
+<tr>
+<td><code>data/</code></td>
+<td>small demo / test datasets, referenced with a <strong>relative</strong> path</td>
+</tr>
+</tbody>
+</table>
+<p>A <code>project.json</code> and an <code>AGENTS.md</code> are written too, so an <strong>external</strong> AI tool
+(Cursor, Claude Code…) reads the <em>same</em> folder and the same rules — the two are
+composable.</p>
+<p><strong>3. Generate and revise — the Module Editor chat.</strong> The Module Editor
+(Tools → Module Editor) has a chat that generates the module and revises it on
+request, grounded on the live authoring rules; the produced <code>.auru</code> runs in the
+session so you can test it right away.</p>
+<p><strong>4. Ship it — Produce Package.</strong> When the module is finished, <strong>Produce
+Package</strong> turns the project into an installable AURA package (a <code>.lst</code> manifest
+plus the files), optionally with a main-menu entry, and can install it at once
+with <code>pkg install</code>.</p>
+<p>The architecture is covered in the Developer Guide.</p>
+<hr />
+<h2 id="15-getting-help">15. Getting Help</h2>
+<pre><code>help                        overview — all built-in commands and topics
+help &lt;command&gt;              details for a built-in command (e.g. help regress)
+help &lt;topic&gt;                a transversal topic: workspace, sw, syntax, errors
+help modules                list installed .auru modules; [aurh] marker
+                            indicates a formatted help window is available
+help &lt;module&gt;               module documentation
+</code></pre>
+<p>When a module ships an <code>.aurh</code> file (formatted help), <code>help &lt;module&gt;</code> opens
+a dedicated window with:</p>
+<ul>
+<li>color-coded sections (Description / Syntax / Options / Examples / ...)</li>
+<li>clickable cross-references (<code>{help:other_command}</code>) and external URLs</li>
+<li>Ctrl+F search, Back navigation, Esc to close</li>
+</ul>
+<h3 id="running-the-examples">Running the examples</h3>
+<p>The examples on a help page are not just text to read — most pages can <strong>run
+them for you</strong>. Under each example line the help window offers two links:</p>
+<ul>
+<li><strong>run in command window</strong> — copies the line into the command box and runs it;</li>
+<li><strong>open dialog</strong> — opens that command's dialog, already filled in with the
+  example, for the commands that have one.</li>
+</ul>
+<p>Clicking either one first loads the page's own sample data, so the example has
+something to run on: <code>help expand</code> works on a small household file, <code>help
+regress</code> on a payroll extract. This is <strong>demo mode</strong> — your own data is put
+aside, not overwritten, and <code>demo end</code> puts it back.</p>
+<p><strong>Examples that build on each other.</strong> Consecutive example lines form a
+<strong>group</strong>; a blank line or a line of text starts a new one. Clicking an example
+first replays, silently, the examples above it in its group — so an example
+that uses a variable, a scalar or a model created just above (<code>predict</code> after
+<code>logit</code>, <code>restore</code> after <code>preserve</code>) works on its own. The replay never runs a
+command that touches your files or the system (<code>save</code>, <code>export</code>, <code>erase</code>, <code>cd</code>,
+<code>shell</code>, <code>log</code>…), opens a window (<code>help</code>, <code>db</code>, <code>browse</code>…) or runs Python code:
+such a command runs only when it is the one you click. A multi-line example — a
+<code>py:</code> block, a <code>forvalues</code> loop — runs as a whole.</p>
+<p>That matters most for the commands that replace the data. <code>expand</code>, <code>collapse</code>,
+<code>reshape</code>, <code>merge</code> and <code>append</code> all transform the dataset rather than adding to
+it, so their pages open the dialog on the sample data and let you look at it
+<em>before</em> the transformation.</p>
+<p>A page offers these links when it ships sample data of its own; pages that do
+not simply show the examples as text.</p>
+<p>When no <code>.aurh</code> is available, <code>help &lt;module&gt;</code> falls back to printing the
+module docstring in the console.</p>
+<h3 id="error-messages">Error messages</h3>
+<p>Error codes are grouped by severity:</p>
+<pre><code>r(101);  At most 0 variable(s) allowed; got 1.
+r(111);  Variable 'zz' not found.
+         Hint: Did you mean 'z2'?
+r(121);  Unknown option: 'lvl'.
+         Hint: Did you mean 'level'?
+r(126);  Option 'level' must be &lt;= 99; got 200.
+w(201);  Variable 'wage' has no variation.
+n(0);    Done — 6 observations processed.
+</code></pre>
+<ul>
+<li><code>r(N);</code> = blocking error (red)</li>
+<li><code>w(N);</code> = warning (red, command continues)</li>
+<li><code>n(N);</code> = informational note (green)</li>
+</ul>
+<p>Type <code>help errors</code> for the full list of codes.</p>
+<hr />
+<h2 id="16-survey-data-analysis">16. Survey Data Analysis</h2>
+<p>AURA estimates population quantities from complex-survey data using
+Taylor-linearized (linearization) standard errors, the default for the
+<code>svy:</code> prefix.</p>
+<h3 id="declaring-the-design">Declaring the design</h3>
+<pre><code>svyset psu [pw=weight], strata(strata) fpc(fpc)
+svydes
+</code></pre>
+<p><code>svyset</code> records the sampling weight, PSUs/clusters, strata and an optional
+finite-population correction. <code>svydes</code> describes the declared design. When a
+<code>.dta</code> file already carries an svyset design, AURA imports it automatically on
+<code>use</code> (and via <strong>File ▸ Open Data</strong>). See <code>help svyset</code>, <code>help svydes</code>.</p>
+<h3 id="survey-estimators">Survey estimators</h3>
+<pre><code>svy: mean income food
+svy: total income
+svy: ratio food/income
+svy: proportion sex
+svy, subpop(urban): mean income
+svy, level(90): mean income
+</code></pre>
+<p>Each posts <code>e(b)</code> (point estimates), <code>e(V)</code> (the full covariance matrix),
+<code>e(names)</code> and <code>e(df_r)</code> (design df = #PSUs − #strata). See <code>help svy</code>.</p>
+<h3 id="nonlinear-combinations-nlcom">Nonlinear combinations — <code>nlcom</code></h3>
+<p><code>nlcom</code> computes a (possibly nonlinear) function of the posted estimates with a
+delta-method standard error (numeric Jacobian):</p>
+<pre><code>svy: mean food income
+nlcom (share: food/(food+income))
+nlcom (food/income - 1)^2
+</code></pre>
+<h3 id="nonlinear-expressions-of-survey-means-nlexp">Nonlinear expressions of survey means — <code>nlexp</code></h3>
+<p><code>nlexp</code> estimates a function of the <strong>survey means</strong> of variables, in one line.
+Mark the per-observation transform with <code>mean(...)</code>, brackets <code>[...]</code>, or
+Mata-style colon operators <code>(:* :/ :^)</code> — the three are equivalent:</p>
+<pre><code>svy: nlexp food/size                              // = mean(food)/mean(size)
+svy: nlexp mean(size*(z-exppc)/z) / mean(size)
+svy: nlexp [size*(z-exppc)/z] / [size]
+svy: nlexp (size :* (z-exppc) :/ z) / size, expname(gap)
+</code></pre>
+<p>See <code>help nlcom</code>, <code>help nlexp</code>.</p>
+<h2 id="17-macros-scalars-and-matrices">17. Macros, Scalars and Matrices</h2>
+<p>AURA provides macros, scalars and (numpy-backed) matrices, usable at
+the console and in <code>.aur</code> scripts.</p>
+<h3 id="local-and-global-macros">Local and global macros</h3>
+<pre><code>local controls &quot;age educ exper&quot;
+regress wage `controls'
+global pl = 80000
+gen poor = exppc &lt; $pl
+</code></pre>
+<p>A <strong>local</strong> (<code>local name …</code>, referenced <code>`name'</code>) belongs to its script or module;
+at the console it stays from one command to the next. A <strong>global</strong>
+(<code>global name …</code>, referenced <code>$name</code> or <code>${name}</code>) persists for the session.
+Assignment distinguishes text from value: <code>local x "2+2"</code> stores the text,
+<code>local x = 2+2</code> stores the result; <code>local ++i</code> increments. See <code>help local</code>, <code>help global</code>.</p>
+<h3 id="scalars">Scalars</h3>
+<pre><code>scalar z = 80000
+display &quot;poverty line = &quot; z
+gen poor = exppc &lt; z
+</code></pre>
+<p>A <code>scalar</code> is a persistent number, referenced by its bare name inside any
+expression. See <code>help scalar</code>.</p>
+<h3 id="extended-macro-functions">Extended macro functions</h3>
+<pre><code>local k : word count `controls'
+local first : word 1 of `controls'
+local u : list uniq mylist
+local t : type wage
+local lab : variable label wage
+local txt : label sexlbl 1
+</code></pre>
+<p>They read the attributes of variables and work on lists and texts: <code>word count</code>,
+<code>word # of</code>, <code>list</code> (<code>uniq sort dups first last rest reverse join filter prefix suffix
+posof == === in</code>), <code>subinstr</code>, <code>length</code>, <code>piece</code>, <code>copy</code>, <code>display</code>, <code>all</code>, <code>dir</code>,
+<code>variable/value label</code>, <code>label</code>, <code>type</code>, <code>format</code>. See <code>help macro</code>.</p>
+<p>A macro never defined gives nothing, and the Problems panel warns about it in a
+script. With <code>set strictmacros on</code> it is an error, r(111).</p>
+<h3 id="temporary-names">Temporary names</h3>
+<p><code>tempvar</code>, <code>tempname</code> and <code>tempfile</code> create unique throw-away names that are
+cleaned up when the program/script ends.</p>
+<h3 id="writing-a-text">Writing a text — <code>"…"</code>, <code>`"…"'</code>, <code>¨…¨</code></h3>
+<pre><code>display &quot;plain text, macros replaced: `n'&quot;
+display `&quot;it may hold &quot;double quotes&quot;, macros replaced: `n'&quot;'
+display ¨exact: &quot;quotes&quot;, `n', $x and {hline 5} stay as they are¨
+</code></pre>
+<p><code>¨…¨</code> is exact: nothing in it is replaced, and it may run over several lines. On a
+French keyboard, press the ¨ key, then the space bar. Inside quotes everything is
+text, <code>//</code> and <code>///</code> included: to write a long text on two lines, close it and join
+two texts, with <code>+</code> in an expression:</p>
+<pre><code>display &quot;first part &quot; ///
+        &quot;second part&quot;
+gen s = &quot;first part &quot; + ///
+        &quot;second part&quot;
+</code></pre>
+<p>A double quote never closed is an error, r(198). To show a macro that holds quotes,
+write <code>display `"`x'"'</code> or <code>display `x:q'</code>. See <code>help quotes</code>.</p>
+<h3 id="reading-a-text-tokenize-gettoken">Reading a text — <code>tokenize</code>, <code>gettoken</code></h3>
+<pre><code>tokenize &quot;2021,,Dakar&quot;, parse(&quot;,&quot;) clean      // `1' 2021, `2' empty, `3' Dakar
+tokenize &quot;2021,Dakar&quot;, parse(&quot;,&quot;) clean into(year city)
+gettoken first rest : mylist                  // the first word, and the rest
+</code></pre>
+<h3 id="testing-before-acting-confirm-capture">Testing before acting — <code>confirm</code>, <code>capture</code></h3>
+<pre><code>capture confirm variable income
+if _rc != 0 {
+    generate income = wage * 12
+}
+</code></pre>
+<p><code>confirm</code> checks a variable, a new name, a number, a file, a matrix or a scalar, and
+fails with a return code a script can read. After <code>capture</code>, <code>_rc</code> holds the code and
+<code>_rcmsg</code> the message. <code>error #</code> stops a script with a chosen code. <code>unab</code> writes out
+a list of variables in a macro, and <code>numlist</code> a list of numbers.</p>
+<h3 id="matrices-mata-style-without-mata">Matrices — Mata-style, without <code>mata:</code></h3>
+<p>Matrices are numpy arrays (fast, no size limit). You operate on them with
+ordinary command lines:</p>
+<pre><code>matrix A = (1,2 \ 3,4)             // , = columns, \ = rows
+matrix X = data(educ exper)        // data columns -&gt; matrix
+matrix y = data(wage)
+matrix beta = invsym(X'*X)*X'*y    // OLS by hand; ' = transpose, * = product
+matrix V = e(V)                    // pull a posted result
+matrix C = A[2, .]                 // 1-based indexing; '.' = whole dim
+matrix list beta
+svmat beta, names(b)               // matrix -&gt; variables
+</code></pre>
+<p>Operators: <code>'</code> <code>*</code> <code>+ -</code> <code>:* :/ :^</code> <code>^</code> <code>\</code> <code>,</code> <code>[i,j]</code>. Functions: <code>I J inv
+invsym rows cols trace det diag cholesky eigenvalues</code>. The data bridge accepts
+<code>if</code>/<code>in</code>: <code>data(inc, in(1/100) if(inc&lt;1000))</code>. Loops use AURA's own
+<code>forvalues</code>/<code>foreach</code>. See <code>help matrix</code>.</p>
+<h3 id="stored-result-commands-return-ereturn-sreturn">Stored-result commands — <code>return</code>, <code>ereturn</code>, <code>sreturn</code></h3>
+<p>Every command leaves results behind: <code>r()</code> for descriptive commands, <code>e()</code> for
+estimators, <code>s()</code> for settings. Inspect and post them with:</p>
+<ul>
+<li><strong><code>return list</code></strong> / <code>return dir</code> — show the active result set / list the archive.</li>
+<li><strong><code>return scalar name = exp</code></strong>, <code>return matrix name = M</code> — post an r-class result.</li>
+<li><strong><code>ereturn list</code></strong> / <code>ereturn scalar name = exp</code> — the e-class counterpart.</li>
+<li><strong><code>sreturn list</code></strong> / <code>sreturn string name = "text"</code> — the s-class counterpart.</li>
+</ul>
+<p>AURA keeps a small <strong>archive</strong> of recent result sets, so <code>r(summarize, mean)</code> or
+<code>e(regress, N)</code> can reach a specific earlier command, not only the latest one.</p>
+<h3 id="building-a-matrix-from-variables-mkmat">Building a matrix from variables — <code>mkmat</code></h3>
+<p><code>mkmat varlist [, options]</code> builds a matrix from the columns of a variable list —
+the inverse of <code>svmat</code>, which writes a matrix back into variables.</p>
+<h3 id="mixed-containers-omatrix">Mixed containers — <code>omatrix</code></h3>
+<p>An <strong><code>omatrix</code></strong> is a labelled 2-D table that may hold a <strong>mix of numbers and
+strings</strong> (rows x columns), meant for transport rather than algebra:</p>
+<pre><code>omatrix T = data(name age wage)
+omatrix list T
+</code></pre>
+<h2 id="18-missing-values">18. Missing Values</h2>
+<p>A missing value means <em>unknown</em>, and AURA carries that through
+consistently — including in comparisons, where several other packages do not.</p>
+<ul>
+<li><strong>Calculations propagate missing.</strong> <code>gen y = x*2</code> is missing wherever <code>x</code> is
+  missing — "missing in, missing out".</li>
+<li><strong>Comparisons propagate missing (missing is NOT +∞).</strong> <code>gen flag = (x&lt;0)</code> is
+  <em>missing</em> where <code>x</code> is missing — not 0 and not 1, because the relation is
+  unknown. This is the deliberate departure: it avoids the classic trap in
+  packages where <code>.</code> ranks as the largest number, so that <code>x &gt; 1000</code> silently
+  counts the rows where <code>x</code> is unknown. A comparison with <code>.</code> itself has no answer
+  either: <code>5 &lt; .</code> is missing, and <code>x &lt; .</code> is refused (write <code>!missing(x)</code>).</li>
+<li><strong><code>if</code> excludes missing.</strong> A row whose condition is missing is dropped:
+  <code>summarize x if x&gt;1000</code> ignores observations with missing <code>x</code>.</li>
+<li><strong>Summaries ignore missing.</strong> <code>summarize</code> reports the count it actually used.</li>
+</ul>
+<p>Test for missing explicitly with <code>missing()</code> / <code>mi()</code>, or the <code>.</code> literal:</p>
+<pre><code>gen m = missing(x)            // 1 where x is missing
+gen keep = 1 if !missing(x)   // ! is logical not
+gen a = 1 if x==.             // x==.  is rewritten to missing(x)
+gen b = 1 if x!=.             // x!=.  -&gt;  !missing(x)
+</code></pre>
+<p>For matrices, <code>data(x)</code> keeps missing as NaN (so you see it); pull a clean
+sample explicitly with <code>data(x, if(!missing(x)))</code>.</p>
+<h2 id="19-appearance-and-layout">19. Appearance and Layout</h2>
+<h3 id="light-and-dark-themes">Light and dark themes</h3>
+<p><strong>Menu:</strong> Tools → Appearance → Light / Dark</p>
+<p>AURA ships a light and a dark theme. Switching recolours the whole window in
+place — the panels, the console, the command box, estimation tables, and the
+Workspace / Variables / Properties trees. Your choice is remembered between
+sessions.</p>
+<h3 id="a-layout-that-stays-put">A layout that stays put</h3>
+<p>AURA remembers, from one session to the next:</p>
+<ul>
+<li>the main window's size and position (and whether it was maximised);</li>
+<li>the size of every panel — the dividers of the Review / Workspace / Variables /
+  Properties column, and of the Results / Command split that lets you resize the
+  command box;</li>
+<li>the active theme.</li>
+</ul>
+<p>These are written to <code>~/AURA/config/layout.json</code> when you close AURA and
+restored on the next launch. If a saved layout would place the window
+off-screen (after switching monitors, say), AURA brings it back into view
+automatically — the close button is never lost behind a screen edge.</p>
+<h3 id="the-properties-panel">The Properties panel</h3>
+<p>Select a variable in the <strong>Variables</strong> panel and the <strong>Properties</strong> panel just
+below it shows the full per-variable detail: <strong>Name</strong>, <strong>Label</strong>,
+<strong>Type</strong>, <strong>Format</strong>, and <strong>Value label</strong> — the format and value-label fields
+that the compact Variables list does not have room for.</p>
+<h2 id="20-tracing-execution">20. Tracing Execution</h2>
+<p>When you want to see exactly what AURA runs — to follow a script with loops and
+macros, or to watch a module — turn on tracing. These are <code>set</code> commands, so
+they work at the console and inside scripts alike.</p>
+<h3 id="set-trace-on-echo-every-command"><code>set trace on</code> — echo every command</h3>
+<pre><code>set trace on
+forvalues i = 1/3 {
+    summarize x in 1/`i'
+}
+set trace off
+</code></pre>
+<p>With tracing on, AURA echoes each command as it runs, <strong>with its macros already
+expanded</strong>, prefixed with a <code>-</code> (distinct from the <code>.</code> of a command you typed).
+Loop and conditional headers are shown too (<code>- forvalues i = 1/3 {</code> … <code>- }</code>), so
+the structure of the program is visible, and the body is traced once per
+iteration with the real value of <code>`i'</code>. The trace is its own stream: it
+never mixes into stored results or the Problems panel.</p>
+<h3 id="set-tracedepth-n-limit-the-depth"><code>set tracedepth N</code> — limit the depth</h3>
+<p><code>set tracedepth N</code> traces only down to call depth <code>N</code>. Commands that a module
+runs internally — an <code>aura:</code> block, a sub-command — count as one level deeper
+and are indented; loop iterations stay at the top level. Use it to keep the
+trace readable when a command calls into modules.</p>
+<h3 id="set-tracedeep-on-full-python-traceback-on-a-module-error"><code>set tracedeep on</code> — full Python traceback on a module error</h3>
+<p><code>set tracedeep on/off</code> is a different setting: it controls how much detail you
+get <strong>when a <code>.auru</code> module raises an error</strong>. Off (the default), the error is a
+short, friendly message naming your module, the offending line, and which
+library raised it. On, it appends the full Python traceback — useful while
+developing a module.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set trace on/off</code></td>
+<td>Echo each executed command, macros expanded</td>
+</tr>
+<tr>
+<td><code>set tracedepth N</code></td>
+<td>Trace only down to call depth N</td>
+</tr>
+<tr>
+<td><code>set tracedeep on/off</code></td>
+<td>Full Python traceback on a module error</td>
+</tr>
+<tr>
+<td><code>set showcmd on/off</code></td>
+<td>Show the command lines in the Results window, or only the results</td>
+</tr>
+<tr>
+<td><code>set showline on/off</code></td>
+<td>In a <code>.aur</code> script, start each result with the number of its line</td>
+</tr>
+</tbody>
+</table>
+<h2 id="21-getting-started-with-demos">21. Getting Started with Demos</h2>
+<p>AURA ships with <strong>guided demos</strong> — small self-contained tutorials that load a sample dataset, open a step-by-step script in the editor, and let the user explore at their own pace. Each demo can be started in one click and undone in another.</p>
+<h3 id="how-a-demo-works">How a demo works</h3>
+<ol>
+<li>Start a demo from <strong>Help → Getting Started</strong> (or type <code>demo start &lt;name&gt;</code> at the prompt). Per-command demos (e.g. <code>demo regress</code>) run from the prompt, or from a command's own help page.</li>
+<li>AURA <strong>preserves</strong> your current workspace, then <strong>loads</strong> the demo's dataset(s) into the workspace and <strong>opens</strong> the demo script in the editor.</li>
+<li>A <strong>blue banner</strong> appears at the top with the title of the demo and a red <strong>End demo</strong> button.</li>
+<li>You run the script line by line (select a step, then <strong>F8</strong> or <strong>Run selected</strong>) and watch the output in the Results window.</li>
+<li>When done, click <strong>End demo</strong> (or type <code>demo end</code>). Your previous workspace is restored exactly as it was.</li>
+</ol>
+<h3 id="available-demos">Available demos</h3>
+<p>The menu is auto-generated from a scan of standard locations:</p>
+<ul>
+<li><code>demo/</code> in the AURA project — official tutorials</li>
+<li><code>~/AURA/demo/</code> — your personal demos</li>
+<li><code>&lt;module&gt;.demos/</code> next to a <code>.auru</code> module — demos bundled with that module</li>
+<li><code>~/AURA/modules/.../*.demos/</code> — demos installed via <code>pkg</code></li>
+</ul>
+<h3 id="currently-shipped">Currently shipped</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Level</th>
+<th>What it teaches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>intro</code></td>
+<td>beginner</td>
+<td>First steps: <code>describe</code>, <code>list</code>, <code>summarize</code>, <code>tabulate</code>, basic <code>regress</code></td>
+</tr>
+</tbody>
+</table>
+<p>More demos can be added by anyone — see <em>Developer Guide → Writing Demos</em>.</p>
+<h3 id="the-demo-command">The <code>demo</code> command</h3>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>demo</code> / <code>demo list</code></td>
+<td>List all available demos with their one-liner</td>
+</tr>
+<tr>
+<td><code>demo start &lt;name&gt;</code></td>
+<td>Start the demo (preserve + load + open script)</td>
+</tr>
+<tr>
+<td><code>demo end</code></td>
+<td>End the active demo, restore the previous workspace</td>
+</tr>
+<tr>
+<td><code>demo active</code></td>
+<td>Show information about the currently active demo</td>
+</tr>
+<tr>
+<td><code>demo template &lt;name&gt;</code></td>
+<td>Scaffold a new demo folder under <code>demo/&lt;name&gt;/</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="safety">Safety</h3>
+<ul>
+<li>The current workspace is preserved before the demo runs, so you can experiment freely.</li>
+<li>Only one demo can be active at a time — start a new one only after ending the previous.</li>
+<li>All temporary datasets, modified <code>r()</code> / <code>e()</code> results, and the working directory are restored at the end of a demo.</li>
+</ul>
+<hr />
+<h2 id="22-quick-reference">22. Quick Reference</h2>
+<h3 id="data-management">Data management</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Abbreviation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>use</code></td>
+<td><code>open</code></td>
+<td>Load a dataset</td>
+</tr>
+<tr>
+<td><code>save</code></td>
+<td>—</td>
+<td>Save as .aura</td>
+</tr>
+<tr>
+<td><code>export csv</code></td>
+<td>—</td>
+<td>Export to CSV</td>
+</tr>
+<tr>
+<td><code>export excel</code></td>
+<td>—</td>
+<td>Export to Excel</td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td>—</td>
+<td>Clear active dataset</td>
+</tr>
+<tr>
+<td><code>clear all</code></td>
+<td>—</td>
+<td>Clear everything</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td>—</td>
+<td>Sort observations ascending</td>
+</tr>
+<tr>
+<td><code>gsort</code></td>
+<td>—</td>
+<td>Sort with +/- direction</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>—</td>
+<td>Reorder variables</td>
+</tr>
+<tr>
+<td><code>rename</code></td>
+<td><code>ren</code></td>
+<td>Rename a variable</td>
+</tr>
+<tr>
+<td><code>generate</code></td>
+<td><code>gen</code></td>
+<td>Create a new variable</td>
+</tr>
+<tr>
+<td><code>egen</code></td>
+<td>—</td>
+<td>Extended generate (group stats, ranks, row ops)</td>
+</tr>
+<tr>
+<td><code>replace</code></td>
+<td>—</td>
+<td>Replace variable values</td>
+</tr>
+<tr>
+<td><code>set obs</code></td>
+<td>—</td>
+<td>Create / extend dataset to N rows</td>
+</tr>
+<tr>
+<td><code>set seed</code></td>
+<td>—</td>
+<td>Set numpy / random seed</td>
+</tr>
+<tr>
+<td><code>input ... end</code></td>
+<td>—</td>
+<td>Inline data entry (multi-line block)</td>
+</tr>
+<tr>
+<td><code>preserve</code> / <code>restore</code></td>
+<td>—</td>
+<td>Snapshot and roll back the dataset</td>
+</tr>
+<tr>
+<td><code>merge</code></td>
+<td>—</td>
+<td>Combine workspace datasets (N-way, with prior chain)</td>
+</tr>
+<tr>
+<td><code>append</code></td>
+<td>—</td>
+<td>Add a file's rows to the active dataset, or stack Workspace datasets (with a <code>_src</code> indicator)</td>
+</tr>
+<tr>
+<td><code>drop</code></td>
+<td>—</td>
+<td>Drop variables or observations</td>
+</tr>
+<tr>
+<td><code>keep</code></td>
+<td>—</td>
+<td>Keep only listed variables, or <code>keep if</code> / <code>keep in</code></td>
+</tr>
+<tr>
+<td><code>count</code></td>
+<td>—</td>
+<td>Number of obs (with optional <code>if</code> / <code>in</code>), stored in <code>r["N"]</code></td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td>—</td>
+<td>Display format (<code>format inc %9.2f</code>)</td>
+</tr>
+<tr>
+<td><code>recode</code></td>
+<td>—</td>
+<td>Rule-based value transforms <code>(a/b=c) (else=x)</code> with <code>gen()</code></td>
+</tr>
+<tr>
+<td><code>collapse</code></td>
+<td>—</td>
+<td>Aggregate dataset: <code>(mean) x, by(g)</code>; result → new workspace alias (<code>collapsed1</code>, …) or <code>into(name)</code>; <code>replace_active</code> for in-place</td>
+</tr>
+<tr>
+<td><code>reshape long/wide</code></td>
+<td>—</td>
+<td>Convert between long/wide panel formats; result → new workspace alias (<code>reshaped1</code>, …) or <code>into(name)</code>; <code>replace_active</code> for in-place</td>
+</tr>
+<tr>
+<td><code>destring</code></td>
+<td>—</td>
+<td>string → numeric (with <code>force</code>, <code>ignore("$,")</code>, <code>percent</code>)</td>
+</tr>
+<tr>
+<td><code>recast</code></td>
+<td>—</td>
+<td>Change dtype (<code>byte int long float double str</code>, with <code>force</code>)</td>
+</tr>
+<tr>
+<td><code>compress</code></td>
+<td>—</td>
+<td>Reduce memory usage</td>
+</tr>
+<tr>
+<td><code>quietly</code> / <code>qui</code></td>
+<td>—</td>
+<td>Prefix: suppress output of the wrapped command</td>
+</tr>
+<tr>
+<td><code>capture</code> / <code>cap</code></td>
+<td>—</td>
+<td>Prefix: swallow errors, store <code>_rc</code> in <code>s["_rc"]</code></td>
+</tr>
+<tr>
+<td><code>log using "file"</code></td>
+<td>—</td>
+<td>Capture session output to a file; <code>log close/on/off/query</code>; a <code>.hlog</code> file (or option <code>html</code>) also holds the graphs drawn, under their commands</td>
+</tr>
+<tr>
+<td><code>inspect</code></td>
+<td>—</td>
+<td>Quick variable synopsis (signs, integers, missing, mini-histogram)</td>
+</tr>
+<tr>
+<td><code>compare</code></td>
+<td>—</td>
+<td>Diff between two variables (counts + min/mean/max)</td>
+</tr>
+<tr>
+<td><code>isid</code></td>
+<td>—</td>
+<td>Check that varlist uniquely identifies observations</td>
+</tr>
+<tr>
+<td><code>cf</code></td>
+<td>—</td>
+<td>Compare two workspace datasets cell-by-cell</td>
+</tr>
+<tr>
+<td><code>view "file"</code></td>
+<td>—</td>
+<td>Open a file in the integrated viewer. Routes: <code>.md</code>/<code>.aurh</code> → rendered with tables/sections, <code>.log</code>/<code>.smcl</code>/<code>.txt</code> → monospace + highlight, <code>.hlog</code> (an html log) / <code>.html</code> → AURA Viewer, other → OS app</td>
+</tr>
+<tr>
+<td><code>view help [developer]</code></td>
+<td>—</td>
+<td>Open the AURA User Guide or Developer Guide</td>
+</tr>
+</tbody>
+</table>
+<h3 id="demos-and-module-development">Demos and module development</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>demo</code> / <code>demo list</code></td>
+<td>List the available guided demos</td>
+</tr>
+<tr>
+<td><code>demo start &lt;name&gt;</code></td>
+<td>Start a demo (preserve workspace, load data, open script)</td>
+</tr>
+<tr>
+<td><code>demo &lt;command&gt;</code></td>
+<td>List the demos that cover a given command</td>
+</tr>
+<tr>
+<td><code>demo end</code></td>
+<td>End the active demo, restore the previous workspace</td>
+</tr>
+<tr>
+<td><code>demo active</code></td>
+<td>Show the currently active demo</td>
+</tr>
+<tr>
+<td><code>demo template &lt;name&gt;</code></td>
+<td>Scaffold a new demo folder</td>
+</tr>
+<tr>
+<td><code>which &lt;command&gt;</code></td>
+<td>Show how a command resolves: <code>dev-override</code> / <code>built-in</code> / <code>module</code></td>
+</tr>
+<tr>
+<td><code>discard</code></td>
+<td>Clear all developer module overrides (back to the search path)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="workspace">Workspace</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Abbreviation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>workspace list</code></td>
+<td><code>ws list</code></td>
+<td>List all datasets</td>
+</tr>
+<tr>
+<td><code>workspace active</code></td>
+<td><code>ws active</code></td>
+<td>Show active dataset</td>
+</tr>
+<tr>
+<td><code>workspace use &lt;alias&gt;</code></td>
+<td><code>ws use</code></td>
+<td>Switch active dataset</td>
+</tr>
+<tr>
+<td><code>workspace load "path"</code></td>
+<td><code>ws load</code></td>
+<td>Load into workspace</td>
+</tr>
+<tr>
+<td><code>workspace drop &lt;alias&gt;</code></td>
+<td><code>ws drop</code></td>
+<td>Remove from workspace</td>
+</tr>
+<tr>
+<td><code>workspace open</code></td>
+<td><code>ws open</code></td>
+<td>Open workspace dialog</td>
+</tr>
+<tr>
+<td><code>datasrc</code></td>
+<td>—</td>
+<td>Declare multi-dataset sources</td>
+</tr>
+</tbody>
+</table>
+<h3 id="exploration">Exploration</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Abbreviation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>describe</code></td>
+<td><code>d</code>, <code>desc</code></td>
+<td>Variable list with types</td>
+</tr>
+<tr>
+<td><code>codebook</code></td>
+<td>—</td>
+<td>Detailed variable report</td>
+</tr>
+<tr>
+<td><code>summarize</code></td>
+<td><code>sum</code></td>
+<td>Descriptive statistics</td>
+</tr>
+<tr>
+<td><code>tabulate</code></td>
+<td><code>tab</code></td>
+<td>Frequency tables</td>
+</tr>
+<tr>
+<td><code>correlate</code></td>
+<td><code>corr</code></td>
+<td>Correlation matrix</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td><code>l</code></td>
+<td>Display observations (1-based)</td>
+</tr>
+<tr>
+<td><code>levelsof</code></td>
+<td><code>lev</code></td>
+<td>The distinct values of a variable</td>
+</tr>
+<tr>
+<td><code>ds</code></td>
+<td>—</td>
+<td>Variables by type, format or label</td>
+</tr>
+<tr>
+<td><code>lookfor</code></td>
+<td><code>loo</code></td>
+<td>Variables by a word in their name or label</td>
+</tr>
+<tr>
+<td><code>browse</code></td>
+<td>—</td>
+<td>Read-only data browser (<code>edit</code> = the editable editor)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="statistics">Statistics</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>regress</code> / <code>reg</code></td>
+<td>OLS regression</td>
+</tr>
+<tr>
+<td><code>logit</code></td>
+<td>Binary logit</td>
+</tr>
+<tr>
+<td><code>probit</code></td>
+<td>Binary probit</td>
+</tr>
+<tr>
+<td><code>poisson</code></td>
+<td>Count model</td>
+</tr>
+<tr>
+<td><code>ttest</code></td>
+<td>t-test</td>
+</tr>
+</tbody>
+</table>
+<h3 id="graphics">Graphics</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Abbreviation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>histogram</code></td>
+<td><code>hist</code></td>
+<td>Histogram</td>
+</tr>
+<tr>
+<td><code>scatter</code></td>
+<td>—</td>
+<td>Scatter plot</td>
+</tr>
+<tr>
+<td><code>line</code></td>
+<td>—</td>
+<td>Line plot</td>
+</tr>
+<tr>
+<td><code>pie</code></td>
+<td>—</td>
+<td>Pie chart</td>
+</tr>
+<tr>
+<td><code>rarea</code></td>
+<td>—</td>
+<td>Filled band between LB and UB</td>
+</tr>
+<tr>
+<td><code>rline</code></td>
+<td>—</td>
+<td>Two lines at LB and UB</td>
+</tr>
+<tr>
+<td><code>rcap</code></td>
+<td>—</td>
+<td>Capped vertical spikes (error bars)</td>
+</tr>
+<tr>
+<td><code>rspike</code></td>
+<td>—</td>
+<td>Uncapped vertical spikes</td>
+</tr>
+<tr>
+<td><code>area</code></td>
+<td>—</td>
+<td>Filled area under curve</td>
+</tr>
+<tr>
+<td><code>bar</code></td>
+<td>—</td>
+<td>Bar chart</td>
+</tr>
+<tr>
+<td><code>twoway (...) (...)</code></td>
+<td>—</td>
+<td>Layered plots on shared axes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="labels">Labels</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>label var</code></td>
+<td>Set variable label</td>
+</tr>
+<tr>
+<td><code>label define</code></td>
+<td>Define a value label set</td>
+</tr>
+<tr>
+<td><code>label values</code></td>
+<td>Assign label set to variable</td>
+</tr>
+<tr>
+<td><code>label list</code></td>
+<td>List label definitions</td>
+</tr>
+<tr>
+<td><code>labelbook</code></td>
+<td>Full label report</td>
+</tr>
+<tr>
+<td><code>numlabel</code></td>
+<td>Add/remove numeric prefix</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dataset-notes-display">Dataset notes / display</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Abbreviation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>note: &lt;text&gt;</code></td>
+<td>—</td>
+<td>Add a dataset annotation</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>—</td>
+<td>List notes (also: <code>note list</code>)</td>
+</tr>
+<tr>
+<td><code>note drop _all</code></td>
+<td>—</td>
+<td>Clear all notes</td>
+</tr>
+<tr>
+<td><code>note drop &lt;N&gt;</code></td>
+<td>—</td>
+<td>Remove the Nth note</td>
+</tr>
+<tr>
+<td><code>display "..."</code></td>
+<td><code>di</code>, <code>dis</code>, <code>disp</code></td>
+<td>Print a literal message</td>
+</tr>
+</tbody>
+</table>
+<h3 id="file-system">File system</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Abbreviation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cd</code></td>
+<td>—</td>
+<td>Change / display directory</td>
+</tr>
+<tr>
+<td><code>dir</code></td>
+<td><code>ls</code></td>
+<td>List files</td>
+</tr>
+<tr>
+<td><code>erase</code></td>
+<td><code>rm</code>, <code>del</code></td>
+<td>Delete a file</td>
+</tr>
+<tr>
+<td><code>copy</code></td>
+<td><code>cp</code></td>
+<td>Copy a file</td>
+</tr>
+<tr>
+<td><code>frename</code></td>
+<td><code>mv</code>, <code>fren</code></td>
+<td>Rename / move a file</td>
+</tr>
+<tr>
+<td><code>mkdir</code></td>
+<td><code>md</code></td>
+<td>Create directory</td>
+</tr>
+<tr>
+<td><code>rmdir</code></td>
+<td><code>rd</code></td>
+<td>Remove directory</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>cat</code></td>
+<td>Display file contents</td>
+</tr>
+<tr>
+<td><code>shell</code></td>
+<td><code>!</code></td>
+<td>Run OS command</td>
+</tr>
+</tbody>
+</table>
+<h3 id="script-control-flow-aur">Script control flow (.aur)</h3>
+<table>
+<thead>
+<tr>
+<th>Construct</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>local name = expr</code> or <code>local name "text"</code></td>
+<td>Define a text/numeric local macro</td>
+</tr>
+<tr>
+<td><code>scalar name = expr</code></td>
+<td>Define a floating-point scalar</td>
+</tr>
+<tr>
+<td><code>`name'</code></td>
+<td>Expand a local macro inline</td>
+</tr>
+<tr>
+<td><code>forvalues i = a/b { ... }</code></td>
+<td>Loop over integers (step 1)</td>
+</tr>
+<tr>
+<td><code>forvalues i = a(s)b { ... }</code></td>
+<td>Loop with step <code>s</code> (negative for descending)</td>
+</tr>
+<tr>
+<td><code>foreach v of varlist v1 v2 { ... }</code></td>
+<td>Iterate over a literal varlist</td>
+</tr>
+<tr>
+<td><code>foreach v of local mylist { ... }</code></td>
+<td>Iterate over the words of a local</td>
+</tr>
+<tr>
+<td><code>foreach n of numlist 1 3 5 { ... }</code></td>
+<td>Iterate over an explicit number list</td>
+</tr>
+<tr>
+<td><code>if cond { ... } else { ... }</code></td>
+<td>Conditional execution</td>
+</tr>
+<tr>
+<td><code>while cond { ... }</code></td>
+<td>Bounded loop (50 000 iter cap)</td>
+</tr>
+<tr>
+<td><code>py:</code> ... <code>end py</code></td>
+<td>Run raw Python inside a script (dataset columns by their bare names)</td>
+</tr>
+<tr>
+<td><code>display "..."</code>expr<code></code></td>
+<td>Print to console; expressions evaluated</td>
+</tr>
+</tbody>
+</table>
+<h3 id="file-extensions">File extensions</h3>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.aura</code></td>
+<td>Data</td>
+<td>Native AURA dataset</td>
+</tr>
+<tr>
+<td><code>.aur</code></td>
+<td>Script</td>
+<td>AURA command script</td>
+</tr>
+<tr>
+<td><code>.auru</code></td>
+<td>Module</td>
+<td>AURA user module (Python)</td>
+</tr>
+<tr>
+<td><code>.dta</code></td>
+<td>Data</td>
+<td>Stata dataset (import only)</td>
+</tr>
+<tr>
+<td><code>.aurh</code></td>
+<td>Help</td>
+<td>Formatted help for a command or module</td>
+</tr>
+<tr>
+<td><code>.auradb</code></td>
+<td>Dialog</td>
+<td>AURADB dialog definition</td>
+</tr>
+<tr>
+<td><code>.aurg</code></td>
+<td>Graph</td>
+<td>Saved graph recipe (command + frozen data)</td>
+</tr>
+<tr>
+<td><code>.demo</code></td>
+<td>Demo</td>
+<td>Per-command demo script</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="appendix-a-command-reference">Appendix A. Command Reference</h2>
+<p>Full syntax for every command is available in-app via <code>help &lt;command&gt;</code>. This list is generated from the help files.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>append</code></td>
+<td>Add the rows of a file, or stack datasets of the Workspace</td>
+</tr>
+<tr>
+<td><code>area</code></td>
+<td>twoway layer</td>
+</tr>
+<tr>
+<td><code>assert</code></td>
+<td>Check that a condition holds for every observation</td>
+</tr>
+<tr>
+<td><code>bar</code></td>
+<td>bar charts (graph bar / hbar) and twoway bar layer</td>
+</tr>
+<tr>
+<td><code>barofpie</code></td>
+<td>Pie chart with one slice expanded into a detail bar</td>
+</tr>
+<tr>
+<td><code>bootstrap</code></td>
+<td>bootstrap a command's coefficients</td>
+</tr>
+<tr>
+<td><code>browse</code></td>
+<td>Open the interactive data browser</td>
+</tr>
+<tr>
+<td><code>bsample</code></td>
+<td>draw a bootstrap sample (sampling with replacement)</td>
+</tr>
+<tr>
+<td><code>by</code></td>
+<td>repeat a command for each group</td>
+</tr>
+<tr>
+<td><code>capture</code></td>
+<td>run a command without stopping on its error</td>
+</tr>
+<tr>
+<td><code>cd</code></td>
+<td>Change or display the current working directory</td>
+</tr>
+<tr>
+<td><code>cdfplot</code></td>
+<td>Empirical cumulative distribution curve (1-D)</td>
+</tr>
+<tr>
+<td><code>cf</code></td>
+<td>Compare the active dataset with another workspace alias</td>
+</tr>
+<tr>
+<td><code>ci</code></td>
+<td>Confidence intervals for means</td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td>Drop data and / or session state from memory</td>
+</tr>
+<tr>
+<td><code>codebook</code></td>
+<td>Detailed per-variable summary</td>
+</tr>
+<tr>
+<td><code>collapse</code></td>
+<td>Aggregate the active dataset into summary statistics</td>
+</tr>
+<tr>
+<td><code>compare</code></td>
+<td>Compare two numeric variables observation by observation</td>
+</tr>
+<tr>
+<td><code>compress</code></td>
+<td>Reduce variable storage types where safely possible</td>
+</tr>
+<tr>
+<td><code>confirm</code></td>
+<td>Check that something exists or has the right form</td>
+</tr>
+<tr>
+<td><code>contract</code></td>
+<td>Replace the data by the frequency of each combination</td>
+</tr>
+<tr>
+<td><code>copy</code></td>
+<td>Copy a file on disk</td>
+</tr>
+<tr>
+<td><code>correlate</code></td>
+<td>Pairwise correlations (or covariances) of numeric variables</td>
+</tr>
+<tr>
+<td><code>count</code></td>
+<td>Number of observations</td>
+</tr>
+<tr>
+<td><code>datasrc</code></td>
+<td>Register and manage data sources for multi-dataset analyses</td>
+</tr>
+<tr>
+<td><code>db</code></td>
+<td>Open a command's dialog box</td>
+</tr>
+<tr>
+<td><code>decode</code></td>
+<td>String variable from a labelled numeric variable</td>
+</tr>
+<tr>
+<td><code>demo</code></td>
+<td>Guided demonstrations</td>
+</tr>
+<tr>
+<td><code>describe</code></td>
+<td>Summary of a dataset's variables</td>
+</tr>
+<tr>
+<td><code>destring</code></td>
+<td>Convert string variables to numeric</td>
+</tr>
+<tr>
+<td><code>dir</code></td>
+<td>List files in a directory</td>
+</tr>
+<tr>
+<td><code>discard</code></td>
+<td>Drop all developer module overrides</td>
+</tr>
+<tr>
+<td><code>display</code></td>
+<td>Show texts and values</td>
+</tr>
+<tr>
+<td><code>drop</code></td>
+<td>Drop variables or observations</td>
+</tr>
+<tr>
+<td><code>ds</code></td>
+<td>List variables by name, type or label</td>
+</tr>
+<tr>
+<td><code>duplicates</code></td>
+<td>Report, tag, list, or drop duplicate observations</td>
+</tr>
+<tr>
+<td><code>edit</code></td>
+<td>Open the data editor in edit mode</td>
+</tr>
+<tr>
+<td><code>egenerate</code></td>
+<td>Extended generate (group, row and value-matching functions)</td>
+</tr>
+<tr>
+<td><code>encode</code></td>
+<td>Numeric variable from a string variable, with value labels</td>
+</tr>
+<tr>
+<td><code>erase</code></td>
+<td>Delete a file from disk</td>
+</tr>
+<tr>
+<td><code>ereturn</code></td>
+<td>Post and list estimation (e-class) results</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td>Stop with a chosen return code</td>
+</tr>
+<tr>
+<td><code>estadd</code></td>
+<td>Add results to estimates</td>
+</tr>
+<tr>
+<td><code>estimates</code></td>
+<td>Store models and build comparison tables</td>
+</tr>
+<tr>
+<td><code>estpost</code></td>
+<td>Descriptive results as estimates</td>
+</tr>
+<tr>
+<td><code>eststo</code></td>
+<td>Store estimates for a table</td>
+</tr>
+<tr>
+<td><code>esttab</code></td>
+<td>Table of estimation results</td>
+</tr>
+<tr>
+<td><code>expand</code></td>
+<td>Duplicate observations</td>
+</tr>
+<tr>
+<td><code>export</code></td>
+<td>Write the active dataset to a foreign format</td>
+</tr>
+<tr>
+<td><code>fedit</code></td>
+<td>Open a file in the appropriate AURA editor</td>
+</tr>
+<tr>
+<td><code>find</code></td>
+<td>Locate a file or list a package on the AURA adopath</td>
+</tr>
+<tr>
+<td><code>foreach</code></td>
+<td>Repeat commands for each item of a list</td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td>Set the display format of one or more variables</td>
+</tr>
+<tr>
+<td><code>forvalues</code></td>
+<td>Repeat commands over a range of numbers</td>
+</tr>
+<tr>
+<td><code>frename</code></td>
+<td>Rename (or move) a file on disk</td>
+</tr>
+<tr>
+<td><code>functions</code></td>
+<td>Functions for generate / replace expressions</td>
+</tr>
+<tr>
+<td><code>generate</code></td>
+<td>Create a new variable</td>
+</tr>
+<tr>
+<td><code>gettoken</code></td>
+<td>Take the first word of a macro</td>
+</tr>
+<tr>
+<td><code>global</code></td>
+<td>Define a global macro</td>
+</tr>
+<tr>
+<td><code>graph</code></td>
+<td>Save, reopen and edit AURA graphs (.aurg)</td>
+</tr>
+<tr>
+<td><code>graphmerge</code></td>
+<td>One figure of several graphs</td>
+</tr>
+<tr>
+<td><code>gsort</code></td>
+<td>Generalised sort with mixed ascending / descending keys</td>
+</tr>
+<tr>
+<td><code>hausman</code></td>
+<td>Hausman specification test (fixed against random effects)</td>
+</tr>
+<tr>
+<td><code>help</code></td>
+<td>Open a help page or list installed modules</td>
+</tr>
+<tr>
+<td><code>histo</code></td>
+<td>Quick histogram of one variable</td>
+</tr>
+<tr>
+<td><code>histogram</code></td>
+<td>Histogram of a numeric variable</td>
+</tr>
+<tr>
+<td><code>if</code></td>
+<td>Choose rows, or choose which commands run</td>
+</tr>
+<tr>
+<td><code>import</code></td>
+<td>Import foreign-format data</td>
+</tr>
+<tr>
+<td><code>input</code></td>
+<td>Inline data entry with optional type declarations</td>
+</tr>
+<tr>
+<td><code>inspect</code></td>
+<td>Quick numerical synopsis of one or more variables</td>
+</tr>
+<tr>
+<td><code>isid</code></td>
+<td>Check that varlist uniquely identifies the observations</td>
+</tr>
+<tr>
+<td><code>ivregress</code></td>
+<td>Instrumental-variables regression (2SLS / GMM / LIML)</td>
+</tr>
+<tr>
+<td><code>jhistogram2d</code></td>
+<td>Joint (bivariate) histogram, 3-D</td>
+</tr>
+<tr>
+<td><code>kcdf2d</code></td>
+<td>Joint (bivariate) empirical CDF, 3-D</td>
+</tr>
+<tr>
+<td><code>kdensity</code></td>
+<td>Kernel density curve (1-D)</td>
+</tr>
+<tr>
+<td><code>kdensity2d</code></td>
+<td>Joint (bivariate) Gaussian kernel density, 3-D</td>
+</tr>
+<tr>
+<td><code>keep</code></td>
+<td>Keep variables or observations; drop the rest</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>Variable and value labels</td>
+</tr>
+<tr>
+<td><code>labelbook</code></td>
+<td>Detailed report of every value-label set</td>
+</tr>
+<tr>
+<td><code>levelsof</code></td>
+<td>List the distinct values of a variable</td>
+</tr>
+<tr>
+<td><code>lfit</code></td>
+<td>Linear-fit line overlay (twoway)</td>
+</tr>
+<tr>
+<td><code>lincom</code></td>
+<td>Linear combination of coefficients</td>
+</tr>
+<tr>
+<td><code>line</code></td>
+<td>Line plot of y against x</td>
+</tr>
+<tr>
+<td><code>linfit</code></td>
+<td>Linear fit with confidence band</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td>Print observations to the console</td>
+</tr>
+<tr>
+<td><code>local</code></td>
+<td>Define a local macro</td>
+</tr>
+<tr>
+<td><code>log</code></td>
+<td>Capture session output to a text file</td>
+</tr>
+<tr>
+<td><code>logit</code></td>
+<td>Logistic (logit) regression</td>
+</tr>
+<tr>
+<td><code>lookfor</code></td>
+<td>Find variables by a word in their name or label</td>
+</tr>
+<tr>
+<td><code>macro</code></td>
+<td>Manipulate and list macros</td>
+</tr>
+<tr>
+<td><code>margins</code></td>
+<td>Average marginal effects</td>
+</tr>
+<tr>
+<td><code>matrix</code></td>
+<td>Mata-style matrix algebra (numpy-backed)</td>
+</tr>
+<tr>
+<td><code>mean</code></td>
+<td>Means of variables</td>
+</tr>
+<tr>
+<td><code>merge</code></td>
+<td>Combine workspace datasets with an outer join on shared keys</td>
+</tr>
+<tr>
+<td><code>mkdir</code></td>
+<td>Create a directory</td>
+</tr>
+<tr>
+<td><code>mkmat</code></td>
+<td>Build a matrix from variables</td>
+</tr>
+<tr>
+<td><code>mount</code></td>
+<td>Register a developer folder AURA searches</td>
+</tr>
+<tr>
+<td><code>nlcom</code></td>
+<td>Nonlinear combinations of estimates (delta method)</td>
+</tr>
+<tr>
+<td><code>nlexp</code></td>
+<td>Nonlinear expression of survey means (one line)</td>
+</tr>
+<tr>
+<td><code>note</code></td>
+<td>Dataset and per-variable annotations</td>
+</tr>
+<tr>
+<td><code>numlabel</code></td>
+<td>Show numeric codes alongside value labels</td>
+</tr>
+<tr>
+<td><code>numlist</code></td>
+<td>Write out a list of numbers</td>
+</tr>
+<tr>
+<td><code>omatrix</code></td>
+<td>bi-indexed, mixed (values or strings) container</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>Reorder variables in the dataset</td>
+</tr>
+<tr>
+<td><code>pie</code></td>
+<td>Pie chart of category shares</td>
+</tr>
+<tr>
+<td><code>pkg</code></td>
+<td>Manage AURA module packages</td>
+</tr>
+<tr>
+<td><code>poisson</code></td>
+<td>Poisson regression (count data)</td>
+</tr>
+<tr>
+<td><code>predict</code></td>
+<td>Post-estimation predictions</td>
+</tr>
+<tr>
+<td><code>preserve</code></td>
+<td>Snapshot the current dataset state</td>
+</tr>
+<tr>
+<td><code>probit</code></td>
+<td>Probit regression</td>
+</tr>
+<tr>
+<td><code>pwcorr</code></td>
+<td>Pairwise correlations</td>
+</tr>
+<tr>
+<td><code>py</code></td>
+<td>Run raw Python on the active dataset (a script block)</td>
+</tr>
+<tr>
+<td><code>qfit</code></td>
+<td>Quadratic-fit line overlay (twoway)</td>
+</tr>
+<tr>
+<td><code>quietly</code></td>
+<td>Run a command without showing its output</td>
+</tr>
+<tr>
+<td><code>quotes</code></td>
+<td>The three ways to write a text</td>
+</tr>
+<tr>
+<td><code>range</code></td>
+<td>Range / dispersion report for numeric variables</td>
+</tr>
+<tr>
+<td><code>rarea</code></td>
+<td>twoway layer</td>
+</tr>
+<tr>
+<td><code>rcap</code></td>
+<td>twoway layer</td>
+</tr>
+<tr>
+<td><code>recast</code></td>
+<td>Change the storage type of one or more variables</td>
+</tr>
+<tr>
+<td><code>recode</code></td>
+<td>Transform numeric values according to a list of rules</td>
+</tr>
+<tr>
+<td><code>regress</code></td>
+<td>Linear regression (OLS)</td>
+</tr>
+<tr>
+<td><code>rename</code></td>
+<td>Rename variables</td>
+</tr>
+<tr>
+<td><code>replace</code></td>
+<td>Overwrite values of an existing variable</td>
+</tr>
+<tr>
+<td><code>reshape</code></td>
+<td>Convert between wide and long formats</td>
+</tr>
+<tr>
+<td><code>restore</code></td>
+<td>Roll the active dataset back to the last preserve snapshot</td>
+</tr>
+<tr>
+<td><code>return</code></td>
+<td>Stored results (r/e/s) and their archive</td>
+</tr>
+<tr>
+<td><code>rline</code></td>
+<td>twoway layer</td>
+</tr>
+<tr>
+<td><code>rmdir</code></td>
+<td>Remove a directory</td>
+</tr>
+<tr>
+<td><code>rspike</code></td>
+<td>twoway layer</td>
+</tr>
+<tr>
+<td><code>save</code></td>
+<td>Save the active dataset as a .aura archive</td>
+</tr>
+<tr>
+<td><code>scalar</code></td>
+<td>Define a scalar</td>
+</tr>
+<tr>
+<td><code>scatter</code></td>
+<td>Scatter plot of y against x</td>
+</tr>
+<tr>
+<td><code>set</code></td>
+<td>Configure session-level settings</td>
+</tr>
+<tr>
+<td><code>shell</code></td>
+<td>Run an operating-system command</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td>Sort observations in ascending order</td>
+</tr>
+<tr>
+<td><code>sreturn</code></td>
+<td>Post and list stored-settings (s-class) results</td>
+</tr>
+<tr>
+<td><code>summarize</code></td>
+<td>Summary statistics</td>
+</tr>
+<tr>
+<td><code>svmat</code></td>
+<td>Save a matrix's columns as variables</td>
+</tr>
+<tr>
+<td><code>svy</code></td>
+<td>Survey-weighted estimation</td>
+</tr>
+<tr>
+<td><code>svydes</code></td>
+<td>Describe the survey design</td>
+</tr>
+<tr>
+<td><code>svyset</code></td>
+<td>Declare the survey design</td>
+</tr>
+<tr>
+<td><code>sysdir</code></td>
+<td>show AURA's system directories</td>
+</tr>
+<tr>
+<td><code>tabstat</code></td>
+<td>Table of summary statistics</td>
+</tr>
+<tr>
+<td><code>tabulate</code></td>
+<td>One-way and two-way frequency tables</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>Wald test that coefficients are zero</td>
+</tr>
+<tr>
+<td><code>threeway</code></td>
+<td>Overlay several 3-D surfaces on one set of axes</td>
+</tr>
+<tr>
+<td><code>timer</code></td>
+<td>time the execution of AURA code</td>
+</tr>
+<tr>
+<td><code>tokenize</code></td>
+<td>Split a text into numbered local macros</td>
+</tr>
+<tr>
+<td><code>tostring</code></td>
+<td>Convert numeric variables to string</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>Totals and their standard errors</td>
+</tr>
+<tr>
+<td><code>ttest</code></td>
+<td>One-sample and two-sample t-tests</td>
+</tr>
+<tr>
+<td><code>twoway</code></td>
+<td>Layer several plots on one set of axes</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>Display the contents of a text file</td>
+</tr>
+<tr>
+<td><code>unab</code></td>
+<td>Write out a list of variables in a macro</td>
+</tr>
+<tr>
+<td><code>unicode</code></td>
+<td>Encodings in a do-file</td>
+</tr>
+<tr>
+<td><code>use</code></td>
+<td>Load a dataset</td>
+</tr>
+<tr>
+<td><code>varlist</code></td>
+<td>Lists of variables</td>
+</tr>
+<tr>
+<td><code>view</code></td>
+<td>Open a file in AURA's help window, the AURA Viewer, or its own application</td>
+</tr>
+<tr>
+<td><code>viewsource</code></td>
+<td>Inspect the source of a module or help file (read-only)</td>
+</tr>
+<tr>
+<td><code>which</code></td>
+<td>Show how a command resolves</td>
+</tr>
+<tr>
+<td><code>while</code></td>
+<td>Repeat commands as long as a condition holds</td>
+</tr>
+<tr>
+<td><code>workspace</code></td>
+<td>Manage the multi-dataset workspace</td>
+</tr>
+<tr>
+<td><code>xtreg</code></td>
+<td>Panel-data regression (random, fixed and between effects)</td>
+</tr>
+<tr>
+<td><code>xtset</code></td>
+<td>Declare panel (longitudinal) data</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>AURA v1.6 — User Guide</em>
+<em>For module development, see the AURA Developer Guide.</em></p>
+</article>
+</div>

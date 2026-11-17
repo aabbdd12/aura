@@ -1,0 +1,393 @@
+<!-- title: Release notes — AURA | description: What each AURA release added and corrected. | nav: learn | out: release-notes.html -->
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Release notes</p>
+    <h1>What changed in AURA</h1>
+    <p>Additions and corrections in each release. The latest installer is on the <a href="download.html">download page</a>; earlier installers stay on <a href="https://github.com/aabbdd12/aura/releases">GitHub</a>.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap" style="max-width:960px">
+<article class="release" id="v1.6">
+    <div class="rel-head">
+      <h2>AURA 1.6</h2>
+      <span class="rel-date">Released 17/11/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.6">Download 1.6 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>SUBSIM: the impact of a price reform.</b> A package of AURA (<b>Statistics &rarr; SUBSIM</b>) to simulate the effects of changing the prices of goods and their subsidies on households:
+        <ul>
+          <li>price schedules by blocks — increasing or volume-differentiated, a structure per block, a fee, a schedule per group — declared with <code>pschset</code> and described or drawn with <code>pschdes</code> (the tariffs, the cost of a quantity, the average price);</li>
+          <li><code>subsim</code>: for each item and scenario, the change in well-being, poverty, inequality, quantities and the government's revenue, by group; the tables, a summary with the transfer that keeps poverty at its level (to everyone or to a group), ten figures, and an Excel workbook;</li>
+          <li>the indirect effects of price shocks through an input-output table (<code>pciom</code>, and <code>subsim</code> with the shocks of each scenario), in the short or the long run;</li>
+          <li>the measures of well-being: first order, second order (consumer surplus, equivalent and compensating variations, with matrices of price and income elasticities), and the exact equivalent and compensating variations of a Cobb-Douglas or CES model;</li>
+          <li>dialog boxes, and a user manual (<code>subsimmanual</code>).</li>
+        </ul></li>
+      <li><b>The Graph Editor works with the mouse.</b> On the graph, a part — a title, the legend, an axis, the plot region, a curve, a bar, a slice — is selected with a click and moved by dragging (Shift: back to a standard place); the plot region is resized by its edges. A double-click opens the part's own window, rich in options, which writes at once and puts things back on Cancel. The <b>Objects</b> tree lists every part, and a grey row adds one that is not drawn yet. The toolbar adds <b>texts, lines and arrows</b> at points of the data, and <b>Insert Symbol</b> composes Greek letters and formulas. A colour left empty shows the colour drawn. Every gesture is written in the graph's command, so an edited graph is reproducible.</li>
+      <li><b>Many new graph options</b>, on the command line and in the editor:
+        <ul>
+          <li>texts: <code>title("&hellip;", size() color() pos() at() box font() angle() &hellip;)</code>, two lines <code>title("a" "b")</code>, and math notation between dollars (<code>$\beta_1$</code>);</li>
+          <li>the legend: <code>order()</code>, <code>ring()</code>, <code>at()</code>, <code>cols()</code>, <code>rows()</code>, <code>region()</code>, <code>title()</code>, gaps and keys;</li>
+          <li>the axes: <code>reverse</code>, <code>alt</code>, <code>noline</code>, <code>xlabel(#n &hellip;)</code> or labels with their texts, <code>format()</code>, <code>labcolor()</code>, ticks, grid lines, minor ticks;</li>
+          <li>the regions: <code>margin(l r b t)</code>, fill opacity, outline;</li>
+          <li>each plot type: <code>area</code> (<code>color()</code>, <code>cmissing()</code>, <code>horizontal</code>), x-y <code>bar</code> (<code>base()</code>, <code>barwidth()</code>, <code>horizontal</code>, <code>place()</code>), <code>lfit</code>/<code>qfit</code> (<code>range()</code>, <code>n()</code>, <code>atobs</code>, <code>estopts(noconstant)</code>), the range plots (<code>horizontal</code>), <code>scatter</code> (point labels' place, angle and format, <code>jitter()</code>), <code>line</code> (<code>connect(J)</code>, <code>cmissing()</code>), <code>histogram</code> (<code>discrete</code>, <code>gap()</code>, <code>addlabels</code>, <code>horizontal</code>), <code>graph bar</code> (<code>bargap()</code>, <code>outergap()</code>, value labels' format, size, colour and place), <code>pie</code> (<code>sort</code>, <code>plabel()</code>, each slice's intensity and outline);</li>
+          <li>objects added: <code>text()</code>, <code>addline()</code>, <code>addarrow()</code>.</li>
+        </ul></li>
+      <li><b>The graphs of the session:</b> <code>set wingraph on</code> puts the graphs in one window, one under the other; <code>graph list</code>, <code>graph mem on</code>, <code>graph clear</code>; <b><code>graphmerge</code></b> draws several graphs in one figure, sized for a page, and a merged figure can be merged again; a right click copies a graph as a picture (PNG, JPEG), a vector drawing (SVG, or EMF for Word and PowerPoint) or the commands that draw it; <code>graph export "fig.emf"</code>.</li>
+      <li><b>Graph preferences:</b> <code>set scheme</code>, <code>set graphfont</code>, <code>set graphtextsize</code>, <code>set graphsize</code> (<code>, permanently</code> keeps them), and <b>Graphics &rarr; Graph Preferences...</b>.</li>
+      <li><b>Estimation:</b>
+        <ul>
+          <li>the header of <code>regress</code>, and of <code>logit</code>, <code>probit</code> and <code>poisson</code>, in fixed columns: the analysis of variance and the statistics, the chi2 test, the pseudo R² and the log likelihood;</li>
+          <li><code>xtreg, be</code> (between effects, <code>wls</code>), <code>theta</code> with random effects, and under the table <code>sigma_u</code>, <code>sigma_e</code>, <code>rho</code> and, with fixed effects, the F test that all unit effects are zero;</li>
+          <li><b><code>hausman</code></b>: fixed against random effects, on two stored <code>xtreg</code> estimations;</li>
+          <li><code>2.race</code>: the indicator of one level, shown with its value label;</li>
+          <li><code>uniform()</code> as the former name of <code>runiform()</code>; an unknown function stops with r(133).</li>
+        </ul></li>
+      <li><b>Printing:</b> a print preview (zoom, pages, orientation, page setup) before printing the Results window, the help window and the <b>AURA Viewer</b>: a log, an html log with its graphs, a help page, a manual. The AURA Viewer also has a <b>Find</b> field with a match counter.</li>
+      <li><b>File &rarr; View</b> has two entries: a text log or a help file (the help window), or an html log with its graphs (the AURA Viewer).</li>
+      <li><b>Numbers in tables:</b> a number keeps its column's format when it fits in 10 characters; a longer one gets fewer decimals, then scientific notation with three digits (<code>5.99e+15</code>, <code>1.30e-09</code>), so the columns never move.</li>
+    </ul>
+
+    <h3>Fixed &mdash; results that change</h3>
+    <ul>
+      <li><b><code>predict</code> after a <code>sort</code> wrote the predictions on the wrong rows</b>, without a word, and after a <code>keep</code> it stopped with an unreadable error. <code>predict</code> now computes each prediction from the data in memory, with the model's coefficients.</li>
+      <li><b><code>c.age#c.age</code> was dropped without a word</b> from every estimation (<code>regress</code>, <code>logit</code>, <code>probit</code>, <code>poisson</code>, <code>xtreg</code>, <code>ivregress</code>, <code>svy: regress</code>): the square of age now enters the model, and <code>c.age##c.age</code> gives age and its square.</li>
+      <li><b>A perfect fit in <code>regress</code></b> (residuals that are only rounding) reports a residual sum of squares of 0, a Root MSE of 0, and missing F, standard errors, t, p and intervals, instead of immense numbers.</li>
+      <li><b><code>xtreg</code> ignored an option it did not know</b> (<code>be</code> gave fixed effects, <code>vce(hc3)</code> the conventional variance): any other option is now refused.</li>
+      <li><b>Graphs:</b>
+        <ul>
+          <li>a legend in the plot (<code>ring(0)</code>) now sits at the corner or side its clock position points to (11 was the top centre, 2 the middle of the right side);</li>
+          <li>a legend is painted whole, on white: it was 80 % opaque, so the curves and colours behind it showed through;</li>
+          <li>histograms and scatter plots kept an empty band at the top and on the right (labels beyond the axis, never drawn, were counted);</li>
+          <li>a title with sub-options (<code>title("Wages", size(small))</code>) showed them as text;</li>
+          <li>a note or a caption no longer overlaps the title of the x axis;</li>
+          <li><code>twoway scatter y x</code> (without parentheses) showed no curve in the editor.</li>
+        </ul></li>
+      <li><b>The data editor</b> wrote a variable whose display format is <code>%8.0g</code> or <code>%10.0g</code> — common in <code>.dta</code> files — with a single significant digit: 20 showed as <code>2e+01</code>. It now shows every digit the number needs.</li>
+      <li><b>AURA Viewer:</b> Ctrl+F, Ctrl+R, F9 and Ctrl+Tab did nothing (each was declared twice).</li>
+    </ul>
+
+    <h3>Changes to know</h3>
+    <ul>
+      <li><b><code>xtreg</code> estimates random effects by default</b> (it estimated fixed effects when neither <code>fe</code> nor <code>re</code> was given).</li>
+      <li><b><code>predict</code> predicts every observation whose regressors are known</b>, in the estimation sample or not; <code>if</code> and <code>in</code> restrict it. Residuals are computed where the dependent variable is known.</li>
+      <li><b>The tables of <code>logit</code>, <code>probit</code> and <code>poisson</code></b> write the labels as <code>regress</code> does, the constant last.</li>
+      <li><b>A point label</b> (<code>mlabel()</code>) is written with the format <code>%9.0g</code> by default: <code>2016</code>, no longer <code>2016.0</code>.</li>
+      <li><b>The editors' Quick Options panel</b> follows the component windows and the mouse; the regions' options moved to their window (double-click the region).</li>
+      <li><b>The capitals of the help pages' syntax lines</b> now show each command's real minimal abbreviation (some had grown longer with new commands: <code>date</code> for <code>datest</code>).</li>
+    </ul>
+
+    <h3>For developers</h3>
+    <ul>
+      <li>The graph engine names each part it draws (<code>set_gid</code>): <code>text:title</code>, <code>legend</code>, <code>axis:x</code>, <code>plotregion</code>, <code>graphregion</code>, <code>curve:&lt;n&gt;</code>, <code>added:text:&lt;k&gt;</code>; the editor's mouse layer (<code>gui/graph_pick.py</code>) and the component windows (<code>gui/*_props.py</code>) work on these names, and write through <code>RecipeEditor.write_text</code>, <code>write_legend</code>, <code>write_options</code>, <code>write_curve</code>, <code>write_added</code>.</li>
+      <li><code>gui.qt_print.launch(text, title)</code> prints a text through the preview from any Tk window.</li>
+      <li><code>tools/mark_aurh_abbrev.py</code> puts right a syntax line whose capitals no longer match the abbreviation, and a test checks every page.</li>
+    </ul>
+  </article>
+
+  <article class="release" id="v1.5">
+    <div class="rel-head">
+      <h2>AURA 1.5</h2>
+      <span class="rel-date">Released 09/11/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.5">Download 1.5 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>Tables of several models: <code>eststo</code>, <code>esttab</code>, <code>estadd</code>, <code>estpost</code>.</b> Store models, then write them side by side in the Results window or in a file (text, CSV, LaTeX, HTML, RTF for Word, Markdown): stars, standard errors or t, statistics, labels, groups of models, <code>cells()</code>, matrices. <code>estpost</code> turns <code>summarize</code>, <code>tabulate</code>, <code>ttest</code> and <code>correlate</code> into tables of the same kind.</li>
+      <li><b><code>by</code> and <code>bysort</code>:</b> repeat a command for each group (<code>bysort zone: summarize size</code>); <code>_n</code> and <code>_N</code> count within the group in <code>generate</code> and <code>replace</code>.</li>
+      <li><b><code>total</code>:</b> totals and their standard errors, by group (<code>over()</code>), with weights or clusters.</li>
+      <li><b><code>tabstat</code>:</b> a table of statistics for several variables, for the whole sample or by group.</li>
+      <li><b>The reference level of a factor:</b> <code>ib3.x</code> (level 3), <code>ib(first).x</code>, <code>ib(last).x</code>, <code>ib(#2).x</code>, <code>ib(freq).x</code> (the most frequent level, counted with the weights on the rows the model uses), in every estimator. <b><code>baselevels</code></b> shows the reference as a row <code>0 (base)</code>; <code>set showbaselevels on</code> does it for every table.</li>
+      <li><b>Lists of variables:</b> <code>x*</code>, <code>x?y</code>, <code>a-b</code>, <code>q1..q20</code>, <code>_num</code>, <code>_str</code>, and <code>x* !x3</code> to leave one out, in the estimators, the summaries and the data commands. <code>rename</code> in groups: <code>rename (a b) (b a)</code>, <code>rename x* y*</code>.</li>
+      <li><b>A log with the graphs:</b> <code>log using "results.hlog"</code> keeps the text of the Results window and every graph drawn while it is open, under the command that drew it. <b>Tools &rarr; AURA Viewer</b> opens it.</li>
+      <li><b>Scripts and macros:</b>
+        <ul>
+          <li><code>continue</code>, <code>continue, break</code>, <code>if</code> on one line, <code>else</code> and <code>else if</code>, <code>foreach … in / of global / of newlist / of numlist / of levels</code>, <code>noisily</code>;</li>
+          <li>counters <code>`++i'</code>, <code>`*'</code>, <code>c()</code>, <code>$S_DATE</code>, <code>$S_TIME</code>, and more macro functions (<code>: list</code>, <code>: piece</code>, <code>: display</code>, <code>subinstr</code>&hellip;);</li>
+          <li><code>display</code> with formats (<code>%9.2f</code>), columns, colours and layout tags;</li>
+          <li>three ways to write a text: <code>"…"</code>, <code>`"…"'</code> (may contain <code>"</code>), and <code>¨…¨</code>, taken exactly as written;</li>
+          <li><code>gettoken</code>, <code>tokenize</code>, <code>unab</code>, <code>numlist</code>, <code>confirm</code>, <code>levelsof</code>, <code>ds</code>, <code>lookfor</code>, <code>error</code>;</li>
+          <li>modules: <code>namelist</code>, <code>name</code> and <code>anything</code> in <code>syntax</code>, and <code>aura.local()</code>.</li>
+        </ul></li>
+      <li><b><code>set showcmd off</code></b> hides the command lines in the Results window; <b><code>set showline on</code></b> starts each result of a script with its line number.</li>
+      <li><b>Do-files run with fewer changes:</b>
+        <ul>
+          <li><code>save name</code> writes <code>name.aura</code>, and <code>use name</code> reads <code>name.aura</code>, else <code>name.dta</code>;</li>
+          <li><code>append using file</code> adds a file to the active dataset;</li>
+          <li>options abbreviate as far as they stay distinct (<code>sum x, d</code>, <code>tab g, m</code>, <code>reg y x, r</code>, <code>vce(cl psu)</code>);</li>
+          <li><code>tab g, generate(g)</code> creates one indicator per level;</li>
+          <li><code>#delimit;</code> without a space;</li>
+          <li>the <code>unicode</code> lines of a do-file run (<code>unicode convertfile</code> converts a file's encoding).</li>
+        </ul></li>
+      <li><b><code>use "https://…"</code></b> reads a dataset from a web address.</li>
+    </ul>
+
+    <h3>Fixed &mdash; results that change</h3>
+    <ul>
+      <li><b>Collinear variables are left out</b> of <code>regress</code>, <code>logit</code>, <code>probit</code>, <code>poisson</code>, <code>svy: regress</code>, <code>xtreg</code> and <code>ivregress</code>: a note says so and the table shows the variable at 0, <i>(omitted)</i>. Before, <code>regress</code> gave one solution among many (other coefficients, other stars, without a word), the maximum-likelihood models gave no standard errors, and the others stopped on an error.</li>
+      <li><b>Robust and clustered standard errors of <code>regress</code>:</b> p-values and intervals now use Student's t, with clusters − 1 degrees of freedom for <code>vce(cluster)</code>; before, the normal law gave intervals too narrow, most with few clusters.</li>
+      <li><b><code>logit</code>, <code>probit</code>, <code>poisson</code> with <code>[pweight=]</code>: the standard errors were too small</b>, by a factor of 1.7 to 1.9 in our checks; they are now computed with the weight squared in the robust formula. The factors of <code>vce(robust)</code> and <code>vce(cluster)</code> were also corrected, and a weighted <code>probit</code> uses the observed information.</li>
+      <li><b>Frequency weights:</b> <code>regress … [fw=]</code> counts the copies of each row (N, degrees of freedom, standard errors); <code>logit</code>, <code>probit</code>, <code>poisson</code> report N as the sum of the weights.</li>
+      <li><b><code>svy: regress</code></b> reports the adjusted Wald test, F(k, d − k + 1), and an uncentred R² without a constant.</li>
+      <li><b><code>xtreg</code>:</b> fixed effects report a constant; robust and clustered standard errors, t and degrees of freedom, <code>pw</code>, <code>fw</code>, the overall test and the three R² were corrected.</li>
+      <li><b><code>ivregress gmm</code></b> reports robust standard errors by default; a negative R² is left missing.</li>
+      <li><b><code>noconstant</code></b> with dummies that add up to one no longer counts a hidden constant.</li>
+      <li><b>The Print button of the installed AURA</b> opened AURA again instead of the print dialog; it now prints.</li>
+      <li><b>Help:</b> every command opens a page (<code>help more</code>, <code>help connected</code>, <code>help tempname</code>&hellip;), <code>help set</code> documents <code>set more</code> and <code>set pagesize</code>, and no link of a page leads nowhere.</li>
+      <li><b>Comparisons with a missing value:</b> <code>x &lt; 5</code> is missing where <code>x</code> is missing, also for a constant or a macro; <code>x &lt; .</code> is refused, with a hint to write <code>!missing(x)</code>.</li>
+    </ul>
+
+    <h3>Changes to know</h3>
+    <ul>
+      <li><b><code>e(b)</code> and <code>e(V)</code> hold the base level of each factor, at 0</b> (the order of <code>e(names)</code> changes): a script that reads <code>e(b)</code> by position must take it into account; reading by name (<code>_b[2.zone]</code>) is not affected.</li>
+      <li><b>A level of a factor absent from the estimation sample no longer appears</b>; a base level the sample does not have (<code>ib7.g</code>) is refused, r(175).</li>
+      <li><b>A script of the editor stops at its first error</b>; <code>capture</code> lets it go on. A <code>local</code> typed at the console stays for the next commands.</li>
+      <li><b>A <code>"</code> never closed is refused</b>, r(198), and <code>label variable x "a" "b"</code> too.</li>
+      <li><b><code>append</code></b> with a file, or with a single name, adds to the active dataset in place; with several names of the Workspace it still builds a new dataset.</li>
+      <li><b><code>save x.dta</code></b> writes a real Stata-format file.</li>
+      <li><b><code>tabulate</code>'s shortest form is now <code>tabu</code></b>, since <code>tabstat</code> begins the same way; <code>tab</code> still works.</li>
+      <li><b>The window of each tool</b> (script editor, module editor, data editor, variables manager, AI settings) opens once, at its size.</li>
+      <li><b>AURA loads its libraries when it starts</b>, and the start-up screen names each one (statsmodels, SciPy, matplotlib, numba): the start takes a second or two longer, and the first estimation or graph no longer waits.</li>
+    </ul>
+
+    <h3>For developers</h3>
+    <ul>
+      <li>Shared estimation helpers in <code>core/estimation.py</code>: <code>collinear_columns</code>, <code>omitted_note</code>, <code>cov_rank</code>, <code>set_covariance</code>, <code>bases_shown</code>, <code>zero_row</code>; <code>core.factor_vars.build_design(…, keep_base=True)</code> and <code>usable_rows</code>.</li>
+      <li>Option abbreviations are declared in <code>core.option_guard.ABBREVIATIONS</code>.</li>
+      <li>New in modules: <code>namelist()</code>, <code>name()</code>, <code>anything()</code> in <code>args()</code>, and <code>aura.local()</code>.</li>
+    </ul>
+  </article>
+
+  <article class="release" id="v1.41">
+    <div class="rel-head">
+      <h2>AURA 1.41</h2>
+      <span class="rel-date">Released 02/11/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.41">Download 1.41 &rarr;</a>
+    </div>
+    <p>A corrective release of 1.4.</p>
+
+    <h3>Fixed</h3>
+    <ul>
+      <li><b>The main window opened twice at launch</b> (1.4): it appeared for a moment at a default size, then again at the size you left it. It now appears once, at its size; the AURA logo stays its icon.</li>
+      <li><b><code>if</code> or <code>in</code> written after the comma was ignored without a word:</b> in <code>summarize wage, detail if female == 1</code> the condition was read as an option, which no command reads, and the command ran on every observation. It is now refused, r(198): a condition or a range comes before the options.</li>
+      <li><b><code>capture twoway (&hellip;)</code> let an error through</b> (and <code>quietly twoway (&hellip;)</code> was not quiet): the prefixes of a layered graph were lost. <code>_rc</code> now holds the error's number, as for any command.</li>
+    </ul>
+  </article>
+
+  <article class="release" id="v1.4">
+    <div class="rel-head">
+      <h2>AURA 1.4</h2>
+      <span class="rel-date">Released 01/11/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.4">Download 1.4 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>One rule for <code>if</code> and <code>in</code>.</b> The selection written with a command is evaluated once, on the whole dataset, before the command runs, and every command that takes <code>if</code>/<code>in</code> uses it. A condition with an unknown name stops every command the same way: <code>if: variable zz not found</code>, r(111).</li>
+      <li><b>Survey estimation on a subpopulation.</b> <code>svy: mean</code>, <code>total</code>, <code>ratio</code>, <code>proportion</code>, <code>regress</code> and <code>nlexp</code> with <code>if</code>/<code>in</code> estimate on the subpopulation: the whole design is kept, the observations outside count for nothing (combined with <code>subpop()</code> when both are given). The header shows the population size of the whole sample, then the subpopulation's number of observations and size.</li>
+      <li><b>Strata with a single sampling unit</b> are treated as certainty units (they add nothing to the variance), and a note under the table says how many there are &mdash; for <code>svy:</code> and for the distributive-analysis commands.</li>
+      <li><b>Paste several lines</b> into the command window: each complete line runs in order, as if typed and followed by Enter; a <code>{ &hellip; }</code> block runs whole, a <code>local</code> is seen by the next line, and what follows the last line break stays in the box.</li>
+      <li><b>Faster:</b> distributive-analysis curves with a confidence band, 2 to 4 times (<code>cdomc</code> 1.4&nbsp;s &rarr; 0.3&nbsp;s, <code>clorenz</code>, <code>cfgt</code>, <code>itargetg</code>, <code>itargetc</code>&hellip;); <code>collapse</code> and <code>egen &hellip; by()</code> with weights, and <code>egen &hellip; by()</code> without, in one pass over all the groups (100&nbsp;000 observations in 10&nbsp;000 groups: 2.2&nbsp;s &rarr; 0.01&nbsp;s); <code>cpropoord, smooth(yes)</code>, 16 to 50 times; <code>efgtid</code> and <code>efgtgd</code>, about 1.5 times.</li>
+      <li><b>The AURA logo</b> is the main window's icon from the start (the window showed a feather until another window opened).</li>
+      <li><b>Smaller installer:</b> 245&nbsp;MB. Chromium's translations (AURA's interface is in English), Qt's translations, Chromium's developer tools and V8's debug snapshot are no longer shipped.</li>
+    </ul>
+
+    <h3>Fixed &mdash; results that change</h3>
+    <ul>
+      <li><b><code>if</code> and <code>in</code> were ignored without a word by about 90 commands</b>, which then worked on every observation. Among them: the <code>svy:</code> estimators, <code>svydes</code>, <code>predict</code> (now only the selected observations get a prediction), <code>linfit</code>, <code>encode</code>, <code>decode</code>, and <code>bootstrap: cmd if &hellip;</code> (the draws are now made among the selected observations).</li>
+      <li><b>An option after a condition holding a comma was lost</b> by several commands: in <code>ci x if mod(_n, 2) == 1, level(90)</code> the <code>level(90)</code> was ignored (also <code>collapse</code>, <code>decode</code>, <code>egen</code>, <code>encode</code>, <code>recode</code>, <code>reshape</code>, <code>tostring</code>&hellip;).</li>
+      <li><b><code>cpropoord, smooth(yes)</code>:</b> an observation far from all the others (the largest expenditure of a survey, for instance) received a missing smoothed value; it now receives its own value, the rule already used when the local regression cannot be solved.</li>
+    </ul>
+
+    <h3>Changes to know</h3>
+    <ul>
+      <li><b>A command that does not use <code>if</code> or <code>in</code> now refuses them</b> &mdash; r(101) &ldquo;if not allowed with &hellip;&rdquo; &mdash; instead of ignoring them: <code>describe</code>, <code>sort</code>, <code>display</code>, <code>margins</code>, <code>test</code>, <code>lincom</code>, <code>nlcom</code>, <code>estimates</code>, <code>export</code>, <code>use</code>, <code>svyset</code>, <code>xtset</code>&hellip; A script that relied on the condition being ignored stops there.</li>
+      <li><b>The distributive-analysis commands take no <code>if</code> or <code>in</code>, by design:</b> <code>hgroup()</code> gives the results by group, and the commands comparing two distributions take <code>cond1()</code> and <code>cond2()</code>. The refusal says so.</li>
+      <li><b><code>svy: &hellip; if</code> is a subpopulation, not a selection of rows.</b> To estimate on the selected rows alone, as a separate sample, use <code>keep if &hellip;</code> first.</li>
+      <li><code>ipov</code> and <code>dimean</code> exist in one version only, the distributive-analysis one (same results).</li>
+      <li>The <code>egen</code> message counts the values created.</li>
+    </ul>
+
+    <h3>For developers</h3>
+    <ul>
+      <li>A command receives its selection in <b><code>parsed.sample</code></b> (a boolean Series over the whole dataset); <code>core.qualifiers.TAKES_IFIN</code> lists AURA's commands that take <code>if</code>/<code>in</code>. A module from outside AURA that is given <code>if</code>/<code>in</code> and does not read them gets an error instead of its results.</li>
+      <li>Statistics by group in one pass: <code>core.summary_stats.grouped</code>; compiled kernels <code>core.fastmath.local_poly</code> and <code>core.fastmath.group_percentile</code>; DAAP's variance uses <code>core.fastmath.psu_cov</code>.</li>
+    </ul>
+  </article>
+
+  <article class="release" id="v1.3">
+    <div class="rel-head">
+      <h2>AURA 1.3</h2>
+      <span class="rel-date">Released 29/10/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.3">Download 1.3 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>Graph editors on the graph object.</b> The pie, 2-D, histogram, bar, density and cumulative-distribution editors change only what you edit: a reference line, axis labels or an option of your own stay in the graph as written. A curve keeps its style by what it draws &mdash; removing a variable takes its colours with it. Density and CDF graphs have their own editors. On a small screen the editors' left panel scrolls.</li>
+      <li><b>Zoom, move and margins are kept.</b> What you do with the toolbar of a graph window or of an editor's preview is written into the graph (<code>xrange()</code>, <code>yrange()</code>, <code>graphregion(margin())</code>) and kept by the editor, <code>graph save</code> and <code>.aurg</code>.</li>
+      <li><b>Distributive-analysis curves are graphs of the session.</b> The curves of <code>clorenz</code>, <code>cfgt</code>, <code>diclorenz</code>, <code>itargetg</code> and the other distributive-analysis commands, and the graphs of <code>datest</code> and <code>quinsh</code>, are drawn by AURA's 2-D engine: Start Graph Editor edits them, <code>graph save</code> writes them.</li>
+      <li><b>Black and white.</b> <code>scheme(monochrome)</code> gives each curve its dash and each band its grey; <code>scheme(daspmono)</code> is the look of the distributive-analysis curves in black and white. Choosing a black-and-white scheme in an editor offers to put the colours written in the graph back to automatic.</li>
+      <li><b>New graph options:</b> <code>pstyle(p#)</code> (a layer takes the style of plot #), an opacity alone (<code>mcolor(%35)</code>, the plot's own colour at 35&nbsp;%), <code>xsize()</code>/<code>ysize()</code>, <code>xscale(off|alt)</code>/<code>yscale(off|alt)</code>, <code>scheme(dasp)</code>.</li>
+      <li><b><code>in</code> ranges:</b> <code>f</code> (first), <code>l</code> (last) and negative numbers counted from the end &mdash; <code>list in -10/-1</code>, <code>summarize in 2/l</code>. Weights may be written with spaces: <code>[fweight = w]</code>.</li>
+      <li><b><code>_rc</code></b> after <code>capture</code> holds the number of the error (111 for a variable not found&hellip;) and is read by name: <code>if _rc != 0 { &hellip; }</code>. New page <code>help capture</code>.</li>
+      <li><b><code>import delimited|excel|spss|sas [using] file</code></b> is accepted; the format still comes from the extension.</li>
+      <li><b>Start-up banner</b> in the Results window: version, licence, the Python and Windows running AURA, first steps. <code>set checkupdates on</code> (off by default) makes AURA look for a newer release when it starts.</li>
+      <li><b>Data editor:</b> scrolling about three times faster on large datasets (15&nbsp;000 &times; 450: 25&nbsp;ms per step instead of 67&ndash;77&nbsp;ms).</li>
+      <li><b>Freeze record:</b> if AURA's window stops answering for 10 seconds, where it is stuck is written to <code>~/AURA/logs/hangs.log</code> (nothing is shown).</li>
+    </ul>
+
+    <h3>Fixed &mdash; results that change</h3>
+    <ul>
+      <li><b><code>regress</code>, <code>xtreg</code> and <code>ivregress</code> ignored <code>if</code> and <code>in</code>:</b> they estimated on every observation. They now estimate on the observations selected.</li>
+      <li><b><code>&amp;</code>, <code>|</code> and <code>!</code></b> with <code>_n</code>, <code>_N</code>, a function, a subscript, or as soon as any scalar was defined, were read in the wrong order: <code>x &lt; 100 &amp; sex == 1</code> failed, <code>abs(x) &lt; 100 &amp; sex</code> gave 0. They now come after the comparisons everywhere, and they are logical: a non-zero number is true, so <code>x &lt; 100 &amp; sex</code> with <code>sex</code> coded 1/2 keeps both codes (it kept only the odd ones).</li>
+      <li><b>Zero weights:</b> <code>regress</code>, <code>logit</code>, <code>probit</code>, <code>poisson</code>, <code>xtreg</code> and <code>ivregress</code> refused them; the rows with a zero (or missing) weight are now left out, as <code>summarize</code>, <code>collapse</code> and <code>egen</code> already did. A non-integer frequency weight, silently accepted by <code>regress</code> and <code>logit</code>, is refused.</li>
+      <li><b><code>twoway</code> layers</b> now take successive colours: <code>twoway (line y1 x) (line y2 x)</code> drew two lines of the same colour (two solid black lines in monochrome).</li>
+      <li><b>Data editor:</b> after scrolling past a missing value, some cells could appear blank.</li>
+      <li><code>set graphfont ""</code> now restores the default font; <code>legend(order(1 "CI (95%)" &hellip;))</code> reads a label holding parentheses.</li>
+    </ul>
+
+    <h3>Changes to know</h3>
+    <ul>
+      <li>An <code>in</code> range must lie in the dataset (<code>in i/j</code> with 1 &le; i &le; j &le; number of observations): otherwise the command stops with r(198) &ldquo;observation numbers out of range&rdquo; &mdash; it used to select nothing, or be cut at the last observation.</li>
+      <li>A file not found is r(601) (it was r(603)).</li>
+      <li>New dialog-box files are written as <code>AURADB 1.0</code>, the format of the 1.x series; files in <code>AURADB 0.3</code> (the same format) open unchanged.</li>
+    </ul>
+
+    <h3>For developers</h3>
+    <ul>
+      <li>One rule for weights: <code>core.weights.weight_rows</code>; the number of an error: <code>core.errors.error_code</code>; the colours written in a graph: <code>core.graph_object.Graph.colours</code>.</li>
+    </ul>
+  </article>
+
+  <article class="release" id="v1.2">
+    <div class="rel-head">
+      <h2>AURA 1.2</h2>
+      <span class="rel-date">Released 26/10/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.2">Download 1.2 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>Python 3.15.</b> AURA now runs on Python 3.15.2, supported until October 2031 (1.1 used Python 3.13, supported until October 2029), and its windows on Tcl/Tk 9.0.4. pandas, NumPy, SciPy, statsmodels, linearmodels, matplotlib, Plotly and Qt keep the versions of 1.1.</li>
+      <li>Commands and results do not change: the examples of the help pages give the same output as in 1.1.</li>
+    </ul>
+
+    <h3>For developers</h3>
+    <ul>
+      <li>Running AURA from source needs Python 3.15; <code>pip install -r requirements-lock.txt</code> installs the library versions AURA is built and tested with (the User Guide said Python 3.10 or later).</li>
+    </ul>
+  </article>
+
+  <article class="release" id="v1.1">
+    <div class="rel-head">
+      <h2>AURA 1.1</h2>
+      <span class="rel-date">Released 26/10/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.1">Download 1.1 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>Edit a graph where it is.</b> Each 2-D graph window has a <b>Start Graph Editor</b> button: the window gives way to the graph&rsquo;s editor, at the same place and size; close the editor and the edited graph comes back in its window. Each window keeps its own graph, on the data it was drawn from, whatever changes in the dataset afterwards. <code>graph save</code> writes the current graph with its edits, and <code>clear all</code> closes every graph. Edited graphs keep AURA&rsquo;s look (light grid, open frame).</li>
+      <li><b>Help examples that build on each other.</b> Clicking an example first replays, silently, the examples above it in its group, so <code>predict</code> after <code>logit</code> or <code>restore</code> after <code>preserve</code> works on its own; a <code>py:</code> block or a <code>forvalues</code> loop runs as a whole. The replay never runs a command that touches your files or the system. 51 more help pages now carry sample data, so their examples can be run.</li>
+      <li><b>Faster start-up:</b> the window is ready in about 2.4&nbsp;s (3.4&nbsp;s for 1.02 on the same machine). The statistical and graphics libraries are loaded when they are first needed, so the first estimation of a session takes about a second longer.</li>
+      <li><b>Updated foundations:</b> Python 3.13.17; pandas 3.1, NumPy 2.5, SciPy 1.18, statsmodels 0.15, linearmodels 7.1, matplotlib 3.11, Plotly 7.1, Qt 6.12 (PySide6, with Chromium 140 for the 3-D viewer).</li>
+    </ul>
+
+    <h3>Corrected</h3>
+    <ul>
+      <li><code>ivregress</code>: the Durbin test of endogeneity was computed with a first stage on the excluded instruments only; it now uses all the instruments.</li>
+      <li>DAAP <code>ipov</code> with a poverty line derived from the distribution (<code>opl()</code>): the standard errors left out the variability of the estimated line; they now include it and equal DASP&rsquo;s. <code>bip</code>: the standard errors use the exact derivative with respect to the boundary. DAAP now computes in double precision throughout, so a single-precision weight (as stored in some <code>.dta</code> files) no longer changes the results.</li>
+      <li>Conditions: with <code>count</code>, <code>summarize</code>, <code>keep</code>, <code>drop</code>, <code>list</code> and many other commands, <code>if x != 0</code> counted the observations where <code>x</code> is missing, and <code>missing(x)</code>, <code>!missing(x)</code>, <code>x == .</code> or a scalar in the condition failed. Every command now reads its condition as <code>generate</code> does: a missing result leaves the observation out. <code>drop if missing(x)</code> and <code>drop in a/b</code> now work, and <code>recode</code> honours <code>in</code>.</li>
+      <li>Text in commands: a quoted text containing <code>in</code> or <code>if</code> (<code>gen a = "come in 2 days"</code>) was read as a qualifier &mdash; only observation 2 was filled, without an error; several spaces in a text were merged; <code>!</code>, <code>^</code> or <code>== .</code> inside a text were rewritten (<code>"Hi!"</code> was stored as <code>Hi~</code>). Texts are now kept as written.</li>
+      <li><code>substr()</code>, <code>word()</code>, <code>strpos()</code>, <code>subinstr()</code>, <code>abbrev()</code>, <code>regexm()</code> and <code>regexr()</code> accept arguments that vary by observation, such as <code>substr(email, strpos(email, "@") + 1, 99)</code>; <code>substr()</code> without a length runs to the end of the text.</li>
+      <li><code>quietly</code> and <code>capture</code> in front of <code>local</code> now work, and commands that read their own text (<code>timer</code>, <code>note</code>, <code>set</code>&hellip;) no longer see these prefixes.</li>
+      <li>Exported <code>.dta</code> files open in Stata SE and BE: they were written in format 119, which only Stata/MP reads. <b>File &rarr; Export &rarr; Stata</b> asks for a file name (it wrote <code>stata.dta</code> without asking).</li>
+      <li>The 3-D viewer ended with a crash each time its window was closed (Windows recorded an application error); it now closes cleanly, and a 3-D graph drawn just after closing it no longer needs a second click.</li>
+      <li>Windows: a graph drawn from a help example now opens in front of the help window (it opened behind it); <b>Help &rarr; About</b> no longer opens a second window when asked again; the start-up screen no longer jumps to another size and place while AURA loads.</li>
+    </ul>
+
+    <div class="change"><b>Behaviour changes:</b>
+      <ul>
+        <li><code>in</code> counts the observations of the whole dataset, before <code>if</code>: <code>list x if region == 1 in 1/100</code> lists the observations of region 1 among the first 100 (it listed the first 100 observations of region 1).</li>
+        <li>One rule for the type of a variable in <code>replace</code>, <code>generate &hellip; if</code> and <code>recode</code>: numbers widen (an integer variable that receives 1.5 becomes decimal), true/false values become 0/1, and text and numbers do not mix &mdash; such a command is refused with a <em>type mismatch</em> error, where it used to create a column mixing both. The text targets of <code>recode</code> are stored without their quotes.</li>
+        <li>CSV import reads decimal numbers exactly: a file holding <code>0.30000000000000004</code> gives that value, not 0.3.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="release" id="v1.02">
+    <div class="rel-head">
+      <h2>AURA 1.02</h2>
+      <span class="rel-date">Released 21/10/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.02">Download 1.02 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>Help &rarr; Check for Updates&hellip;</b> (also in Help &rarr; About) tells you whether a newer AURA is available and offers to open its download page. AURA contacts GitHub only when you click; nothing is downloaded or installed automatically.</li>
+    </ul>
+
+    <h3>Corrected</h3>
+    <ul>
+      <li><code>summarize</code> with a weight: the standard deviation is now reported; the stored results <code>r()</code> are the weighted values shown in the table (they were unweighted); <code>detail</code> now honours the weight (it was ignored). <code>r(sum_w)</code> is always stored, and with <code>detail</code> also <code>r(p1)</code>&hellip;<code>r(p99)</code>, <code>r(skewness)</code> and <code>r(kurtosis)</code>. The formulas for each weight type are in <code>help summarize</code>; frequency weights give the results of the data with each row repeated.</li>
+      <li><code>egen pctile()</code> accepted a weight and ignored it; the weight is now applied.</li>
+      <li><code>collapse</code> and <code>egen</code>: weighted standard deviations, variances and percentiles follow the same conventions as <code>summarize</code> (a frequency-weighted standard deviation now equals that of the repeated data).</li>
+      <li>Weights that cannot be used are refused with a message: negative frequency or analytic weights, non-integer frequency weights.</li>
+      <li>Tables: two-way <code>tabulate</code> (its row, column and cell percentages now carry totals), <code>describe</code>, <code>range</code> and <code>compare</code> use the same table layout as the rest of AURA, and <code>codebook</code>, <code>svydes</code>, <code>inspect</code> and <code>help</code> draw continuous rules. Survey tables (<code>svy:</code>) no longer show a stray blank header line.</li>
+      <li>DAAP: the <em>t</em> column is shown with 4 decimals, and the &ldquo;Statistical Inferences&rdquo; block of <code>test()</code> is drawn like the tables above it.</li>
+    </ul>
+
+    <p class="change"><b>Behaviour change:</b> the percentiles of <code>summarize, detail</code> now come from the empirical distribution (with 20 observations, the 1% percentile is the smallest value, without interpolation), and the skewness and kurtosis are the moment ratios, without small-sample correction; the kurtosis equals 3 for a normal distribution (it was the excess kurtosis). The percentiles of <code>egen pctile()</code>, <code>egen iqr()</code> and <code>collapse (p#)</code> use the same definition; medians do not change.</p>
+  </article>
+
+  <article class="release" id="v1.01">
+    <div class="rel-head">
+      <h2>AURA 1.01</h2>
+      <span class="rel-date">Released 20/10/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.01">Download 1.01 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>Survey bootstrap.</b> <code>bootstrap</code> gains <code>method(raowu|naive|bayes)</code> and a <code>svy</code> option: PSUs are drawn within the strata of <code>svyset</code> and each replicate is carried by the sampling weight. Rao&ndash;Wu is the default, so standard errors stay right even with few PSUs per stratum; a calibrated Bayesian bootstrap is also available. A command that ignores the sampling weight is refused instead of giving a wrong standard error.</li>
+      <li><b>Easier reading in the help and the guides:</b> spaced paragraphs, a comfortable line width and aligned lists. Commands in the guides are clickable and open their help in a new tab.</li>
+      <li><b>Help &rarr; About</b> now shows the release date.</li>
+    </ul>
+
+    <h3>Faster</h3>
+    <ul>
+      <li><code>hidja</code> bootstrap standard errors: about 30&times; faster (200 replications on 8,478 households: 2 min 40 s &rarr; about 5 s).</li>
+      <li>Exact kernel density (<code>ipola</code> der/ip, <code>dpolas</code>, <code>dpolag</code>, <code>dipola</code>): 15&ndash;27&times; faster, and no longer slows down quadratically with the sample size.</li>
+      <li>3-D graphs open much faster, and the viewer comes to the front for each new graph.</li>
+    </ul>
+
+    <h3>Corrected</h3>
+    <ul>
+      <li><code>hidja</code> and <code>ipola egr</code>: the design bootstrap now uses Rao&ndash;Wu. The previous scheme understated standard errors when strata have few PSUs (by up to 29% with 2 PSUs per stratum). <code>ipola egr</code> follows <code>set seed</code>.</li>
+      <li><code>dtcpov</code> (Jalan&ndash;Ravallion): the bootstrap bias correction now reports standard errors; the standard error of the analytically corrected chronic component uses its own household values; the Bias row has one sign convention (naive &minus; corrected).</li>
+      <li><code>hidja</code>: <em>t</em> and <em>P&gt;|t|</em> are shown for the decomposition components only.</li>
+      <li><code>bootstrap</code> errors now reach the script editor&rsquo;s Problems panel and the log.</li>
+      <li><code>cprogtb</code> help, example 3: it drew one curve per value of net income.</li>
+      <li>Help window: the redundant Help menu was removed and the menu shortcuts are aligned.</li>
+      <li>Installing over an earlier version now removes the program files that version no longer ships (a retired command stayed usable). Your settings, scripts and packages in <code>~/AURA</code> are kept.</li>
+    </ul>
+
+    <p class="change"><b>Behaviour change:</b> the default bootstrap method is now Rao&ndash;Wu. Use <code>method(naive)</code> to reproduce results from AURA 1.00.</p>
+  </article>
+
+  <article class="release" id="v1.0">
+    <div class="rel-head">
+      <h2>AURA 1.00</h2>
+      <span class="rel-date">Released 21/07/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.0">Download 1.00 &rarr;</a>
+    </div>
+    <p class="first">First public release.</p>
+  </article>
+  </div>
+</section>
