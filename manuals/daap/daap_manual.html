@@ -231,10 +231,105 @@ window.MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg-full.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-#site-toc { position: fixed; top: 0; left: 0; bottom: 0; width: 300px; overflow-y: auto;
-  background: #f6f8fb; border-right: 1px solid #dde3ea; padding: 1rem .8rem 2.5rem;
-  font: 14px/1.4 Inter, "Segoe UI", sans-serif; box-sizing: border-box; z-index: 50; }
+.site-head {
+    --bg: #ffffff;
+    --soft: #f3f6fa;
+    --band: #dfeaf6;
+    --ink: #1c2633;
+    --muted: #556270;
+    --faint: #7d8897;
+    --line: #e2e8f0;
+    --navy: #0b3d6e;
+    --blue: #1f6fb5;
+    --blue-hi: #185c98;
+    --gold: #b9821a;
+    --gold-hi: #a37216;
+    --act: #0b57e8;
+    --act-hi: #0846c0;
+    --announce: #0b3d6e;
+    --announce-fg: #ffffff;
+    --shadow: 0 10px 30px rgba(15, 35, 60, .16), 0 2px 6px rgba(15, 35, 60, .08);
+    --code-bg: #0f1b2d;
+    --code-fg: #dce6f2;
+    --font-head: Manrope, Inter, system-ui, sans-serif;
+    --font-sans: Inter, system-ui, "Segoe UI", sans-serif;
+    --font-mono: "Cascadia Code", Consolas, ui-monospace, monospace;
+    --maxw: 1200px;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 16px; }
+  @media (min-width: 700px) { .wrap { padding: 0 32px; } }
+/* ── announcement ribbon ─────────────────────────────────────────── */
+  .announce { background: var(--announce); color: var(--announce-fg); font-size: 15px; }
+  .announce .wrap { display: flex; align-items: center; justify-content: center; gap: .9rem;
+                    min-height: 44px; padding-top: .45rem; padding-bottom: .45rem; text-align: center; }
+  .announce a { color: #ffffff; font-weight: 600; white-space: nowrap; }
+  .announce button { background: none; border: 0; color: inherit; font-size: 22px; line-height: 1;
+                     cursor: pointer; padding: 0 .2rem; opacity: .8; }
+  .announce.gone { display: none; }
+  .announce .short { display: none; }
+  @media (max-width: 700px) { .announce .long { display: none; } .announce .short { display: inline; } }
+
+  /* ── header ───────────────────────────────────────────────────────── */
+  header.top { position: sticky; top: 0; z-index: 20; background: var(--bg);
+               border-bottom: 1px solid var(--line); }
+  header.top .wrap { display: flex; align-items: center; gap: 2rem; height: 68px; }
+  .brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; color: var(--navy); }
+  .brand .mark { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center;
+                 background: linear-gradient(135deg, #112d4e, #3f72af); color: #fff;
+                 font: 700 19px/1 var(--font-head); }
+  .brand b { font: 700 21px/1 var(--font-head); letter-spacing: .02em; }
+  nav.main { flex: 1; }
+  nav.main > ul { list-style: none; margin: 0; padding: 0; display: flex; gap: .4rem; }
+  nav.main li { position: relative; }
+  nav.main .top-link { display: block; padding: .7rem .8rem; color: var(--ink); text-decoration: none;
+                       font-weight: 500; font-size: 16px; border-radius: 6px; background: none; border: 0;
+                       font-family: var(--font-sans); cursor: pointer; }
+  nav.main .top-link:hover, nav.main li:focus-within > .top-link { color: var(--act); }
+  nav.main .drop { display: none; position: absolute; top: 100%; left: 0; min-width: 270px;
+                   background: var(--bg); border: 1px solid var(--line); border-radius: 10px;
+                   box-shadow: var(--shadow); padding: .6rem; z-index: 30; }
+  nav.main li:hover > .drop, nav.main li:focus-within > .drop { display: block; }
+  nav.main .drop a { display: block; padding: .55rem .7rem; border-radius: 6px; color: var(--ink);
+                     text-decoration: none; font-size: 15px; }
+  nav.main .drop a small { display: block; color: var(--muted); font-size: 13px; margin-top: 1px; }
+  nav.main .drop a:hover { background: var(--soft); color: var(--act); }
+  .burger { display: none; background: none; border: 0; font-size: 26px; color: var(--navy);
+            cursor: pointer; padding: .2rem .4rem; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+         font: 600 16px/1 var(--font-sans); text-decoration: none; border-radius: 6px;
+         padding: 1rem 1.6rem; border: 2px solid transparent; cursor: pointer; }
+  .btn-gold { background: var(--act); color: #fff; border-radius: 4px; font-weight: 500; }
+  .btn-gold:hover { background: var(--act-hi); }
+  .btn-line { border-color: var(--act); color: var(--act); background: transparent;
+              border-radius: 4px; font-weight: 500; }
+  .btn-line:hover { background: var(--soft); }
+  .btn-small { padding: .6rem 1rem; font-size: 15px; }
+  @media (max-width: 900px) {
+    .burger { display: block; order: 3; }
+    header.top .wrap { justify-content: space-between; gap: .8rem; }
+    nav.main { display: none; position: absolute; top: 68px; left: 0; right: 0; background: var(--bg);
+               border-bottom: 1px solid var(--line); padding: .5rem 16px 1rem; }
+    nav.main.open { display: block; }
+    nav.main > ul { flex-direction: column; gap: 0; }
+    nav.main .drop { display: block; position: static; box-shadow: none; border: 0; padding: 0 0 .4rem .8rem;
+                     min-width: 0; }
+    nav.main .drop a small { display: none; }
+  }
+nav.main .top-link.on { color: var(--act); }
+
+body.site-manual { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+html { scroll-padding-top: 84px; }
+.site-head { font-family: var(--font-sans); font-size: 17px; line-height: 1.6; }
+header.site-head { color: var(--ink); }
+.mlayout { display: flex; align-items: flex-start; }
+.mbody { flex: 1; min-width: 0; max-width: 820px; margin: 2.2rem auto 4rem; padding: 0 1.4rem; }
+#site-toc { position: sticky; top: 68px; height: calc(100vh - 68px); width: 300px; flex: none;
+  overflow-y: auto; background: #f6f8fb; border-right: 1px solid #dde3ea;
+  padding: 1rem .8rem 2.5rem; font: 14px/1.4 Inter, "Segoe UI", sans-serif; z-index: 15; }
 #site-toc .toc-title { font-weight: 700; color: #0b3d6e; margin: .2rem .35rem .5rem; }
 #site-toc .toc-title a { color: #0b3d6e; text-decoration: none; }
 #site-toc ul { list-style: none; margin: 0; padding: 0; }
@@ -247,20 +342,75 @@ window.MathJax = {
 #site-toc a.on { background: #dbe7f6; color: #0b3d6e; }
 #site-toc .n { color: #7a869a; margin-right: .3rem; font-weight: 500; }
 #toc-toggle { display: none; }
-@media (min-width: 1100px) { body { margin-left: 340px !important; } }
 @media (max-width: 1099px) {
-  #site-toc { width: min(300px, 86vw); transform: translateX(-100%); transition: transform .2s;
+  #site-toc { position: fixed; top: 0; left: 0; bottom: 0; height: auto; width: min(300px, 86vw);
+    z-index: 50; transform: translateX(-100%); transition: transform .2s;
     box-shadow: 0 0 24px rgba(0, 0, 0, .18); }
   #site-toc.open { transform: none; }
+  .mbody { padding: 0 1rem; margin-top: 1.4rem; }
   #toc-toggle { display: block; position: fixed; right: 14px; bottom: 14px; z-index: 60;
     background: #0b57e8; color: #fff; border: 0; border-radius: 20px; padding: .55rem 1.05rem;
     font: 600 14px Inter, "Segoe UI", sans-serif; box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
     cursor: pointer; }
 }
-@media print { #site-toc, #toc-toggle { display: none; } body { margin-left: auto !important; } }
+@media print { .site-head, #site-toc, #toc-toggle { display: none !important; } }
 </style>
 </head>
-<body><div style="font:500 14px/1.4 Inter,Segoe UI,sans-serif;background:#0b3d6e;color:#fff;padding:.55rem 1rem"><a href="../../index.html" style="color:#fff;font-weight:700;text-decoration:none">AURA</a> &nbsp;·&nbsp; <a href="../../learn.html#manuals" style="color:#fff">Guides and manuals</a></div><nav id="site-toc" aria-label="Contents"><p class="toc-title"><a href="#">The DAAP Reference Manual — Theory &amp; Implementation</a></p><ul><li class="l1"><a href="#introduction"><span class="n">1</span>Introduction</a></li><li class="l2"><a href="#why-daap-in-aura"><span class="n">1.1</span>Why DAAP in AURA</a></li><li class="l2"><a href="#how-to-read-this-manual"><span class="n">1.2</span>How to read this manual</a></li><li class="l2"><a href="#installing-and-loading-daap"><span class="n">1.3</span>Installing and loading DAAP</a></li><li class="l2"><a href="#data-and-the-survey-design"><span class="n">1.4</span>Data and the survey design</a></li><li class="l2"><a href="#main-variables-for-distributive-analysis"><span class="n">1.5</span>Main variables for distributive analysis</a></li><li class="l2"><a href="#invoking-commands-and-accessing-help"><span class="n">1.6</span>Invoking commands and accessing help</a></li><li class="l2"><a href="#one-or-two-distributions"><span class="n">1.7</span>One or two distributions</a></li><li class="l1"><a href="#foundations"><span class="n">2</span>Foundations</a></li><li class="l2"><a href="#notation-and-the-sampling-framework"><span class="n">2.1</span>Notation and the sampling framework</a></li><li class="l2"><a href="#design-based-inference"><span class="n">2.2</span>Design-based inference</a></li><li class="l2"><a href="#shared-estimation-primitives"><span class="n">2.3</span>Shared estimation primitives</a></li><li class="l1"><a href="#inequality"><span class="n">3</span>Inequality</a></li><li class="l2"><a href="#ineq"><span class="n">3.1</span>Inequality indices — ineq</a></li><li class="l2"><a href="#clorenz"><span class="n">3.2</span>Lorenz and concentration curves — clorenz</a></li><li class="l1"><a href="#multidimensional-inequality"><span class="n">4</span>Multidimensional inequality</a></li><li class="l2"><a href="#imdi"><span class="n">4.1</span>Multidimensional inequality — imdi</a></li><li class="l1"><a href="#progressivity"><span class="n">5</span>Progressivity</a></li><li class="l2"><a href="#iprog"><span class="n">5.1</span>Progressivity indices — iprog</a></li><li class="l2"><a href="#cprog"><span class="n">5.2</span>Progressivity curves — cprog</a></li><li class="l1"><a href="#redistribution"><span class="n">6</span>Redistribution</a></li><li class="l2"><a href="#hidja"><span class="n">6.1</span>Horizontal inequity — hidja</a></li><li class="l1"><a href="#polarization"><span class="n">7</span>Polarization</a></li><li class="l2"><a href="#ipola"><span class="n">7.1</span>Polarization indices — ipola</a></li><li class="l1"><a href="#poverty"><span class="n">8</span>Poverty</a></li><li class="l2"><a href="#ipov"><span class="n">8.1</span>Poverty indices — ipov</a></li><li class="l2"><a href="#cfgt"><span class="n">8.2</span>FGT curves — cfgt</a></li><li class="l2"><a href="#cpoverty"><span class="n">8.3</span>Poverty-gap curves — cpoverty</a></li><li class="l1"><a href="#multidimensional-poverty"><span class="n">9</span>Multidimensional poverty</a></li><li class="l2"><a href="#imdpov"><span class="n">9.1</span>Multidimensional poverty indices — imdpov</a></li><li class="l2"><a href="#imoda"><span class="n">9.2</span>Multiple Overlapping Deprivation Analysis — imoda</a></li><li class="l1"><a href="#pro-poor-growth"><span class="n">10</span>Pro-poor growth</a></li><li class="l2"><a href="#ipropoor"><span class="n">10.1</span>Pro-poor indices — ipropoor</a></li><li class="l2"><a href="#gicur"><span class="n">10.2</span>Growth incidence curve — gicur</a></li><li class="l2"><a href="#cpropoorp"><span class="n">10.3</span>Pro-poor curves: the primal approach — cpropoorp</a></li><li class="l2"><a href="#cpropoord"><span class="n">10.4</span>Pro-poor curves: the dual approach — cpropoord</a></li><li class="l1"><a href="#poverty-and-targeting-policies"><span class="n">11</span>Poverty and targeting policies</a></li><li class="l2"><a href="#itargetg"><span class="n">11.1</span>Targeting by population groups — itargetg</a></li><li class="l2"><a href="#ogtpr"><span class="n">11.2</span>Optimal group targeting with a fixed budget — ogtpr</a></li><li class="l2"><a href="#itargetg2d"><span class="n">11.3</span>Bi-dimensional targeting by group — itargetg2d</a></li><li class="l2"><a href="#itargetc"><span class="n">11.4</span>Targeting by income components — itargetc</a></li><li class="l1"><a href="#poverty-elasticities"><span class="n">12</span>Poverty elasticities</a></li><li class="l2"><a href="#efgtgr"><span class="n">12.1</span>FGT elasticity with respect to growth — efgtgr</a></li><li class="l2"><a href="#efgtineq"><span class="n">12.2</span>FGT elasticity with respect to inequality — efgtineq</a></li><li class="l2"><a href="#efgtgd"><span class="n">12.3</span>Growth elasticity by alternative approaches — efgtgd</a></li><li class="l2"><a href="#efgtid"><span class="n">12.4</span>Inequality elasticity by alternative approaches — efgtid</a></li><li class="l2"><a href="#efgtwb"><span class="n">12.5</span>Elasticity to within- and between-group inequality — efgtwb</a></li><li class="l2"><a href="#efgtc"><span class="n">12.6</span>Elasticity to within- and between-source inequality — efgtc</a></li><li class="l2"><a href="#references-20"><span class="n">12.7</span>References</a></li><li class="l1"><a href="#decomposition"><span class="n">13</span>Decomposition</a></li><li class="l2"><a href="#dfgtpg"><span class="n">13.1</span>FGT poverty by population subgroups — dfgtpg</a></li><li class="l2"><a href="#dfgts"><span class="n">13.2</span>FGT poverty by income sources — the Shapley split — dfgts</a></li><li class="l2"><a href="#dfgtgr"><span class="n">13.3</span>Growth and redistribution decomposition of poverty change — dfgtgr</a></li><li class="l2"><a href="#dfgtg2d"><span class="n">13.4</span>Sectoral decomposition of poverty change — dfgtg2d</a></li><li class="l2"><a href="#dtcpov"><span class="n">13.5</span>Transient and chronic poverty — dtcpov</a></li><li class="l2"><a href="#dmdafg"><span class="n">13.6</span>Alkire-Foster multidimensional poverty by population subgroups — dmdafg</a></li><li class="l2"><a href="#dmdafs"><span class="n">13.7</span>Alkire-Foster multidimensional poverty by dimensions — the Shapley split — dmdafs</a></li><li class="l2"><a href="#dentropyg"><span class="n">13.8</span>Generalised entropy by population subgroups — dentropyg</a></li><li class="l2"><a href="#diginig"><span class="n">13.9</span>Gini by population subgroups — diginig</a></li><li class="l2"><a href="#diginis"><span class="n">13.10</span>Gini by income sources — diginis</a></li><li class="l2"><a href="#dsineqg"><span class="n">13.11</span>Inequality indices by population subgroups — the Shapley split — dsineqg</a></li><li class="l2"><a href="#dsineqs"><span class="n">13.12</span>Inequality indices by income sources — the Shapley split — dsineqs</a></li><li class="l2"><a href="#rbdineq"><span class="n">13.13</span>Regression-based decomposition of inequality — rbdineq</a></li><li class="l2"><a href="#dpolag"><span class="n">13.14</span>DER polarization by population groups — dpolag</a></li><li class="l2"><a href="#dpolas"><span class="n">13.15</span>DER polarization by income sources — dpolas</a></li><li class="l2"><a href="#dprogress"><span class="n">13.16</span>Progressivity decomposition by tax sources — dprogress</a></li><li class="l1"><a href="#dominance"><span class="n">14</span>Dominance</a></li><li class="l2"><a href="#dompov"><span class="n">14.1</span>Poverty dominance — dompov</a></li><li class="l2"><a href="#domineq"><span class="n">14.2</span>Inequality dominance — domineq</a></li><li class="l2"><a href="#dombdpov"><span class="n">14.3</span>Bi-dimensional poverty dominance — dombdpov</a></li><li class="l2"><a href="#cdomc"><span class="n">14.4</span>Consumption dominance curves — cdomc</a></li><li class="l2"><a href="#cdomc2d"><span class="n">14.5</span>Difference / ratio between consumption dominance curves — cdomc2d</a></li><li class="l1"><a href="#distributive-tools"><span class="n">15</span>Distributive tools</a></li><li class="l2"><a href="#imean"><span class="n">15.1</span>Survey means — imean</a></li><li class="l2"><a href="#iprop"><span class="n">15.2</span>Population shares — iprop</a></li><li class="l2"><a href="#cdensity"><span class="n">15.3</span>Density curves — cdensity</a></li><li class="l2"><a href="#cdf"><span class="n">15.4</span>Cumulative distribution and FGT curves — cdf</a></li><li class="l2"><a href="#cquantile"><span class="n">15.5</span>Quantile curves — cquantile</a></li><li class="l2"><a href="#quinsh"><span class="n">15.6</span>Income shares by quantile group — quinsh</a></li><li class="l2"><a href="#cnpe"><span class="n">15.7</span>Non-parametric regression — cnpe</a></li><li class="l2"><a href="#sjdensity"><span class="n">15.8</span>Joint density and distribution surfaces — sjdensity</a></li><li class="l2"><a href="#datest"><span class="n">15.9</span>Hypothesis test on an estimate — datest</a></li><li class="l2"><a href="#ungroup"><span class="n">15.10</span>Disaggregating grouped data — ungroup</a></li><li class="l1"><a href="#benefit-analysis"><span class="n">16</span>Benefit analysis</a></li><li class="l2"><a href="#bian"><span class="n">16.1</span>Average benefit incidence — bian</a></li><li class="l2"><a href="#imbi"><span class="n">16.2</span>Marginal benefit incidence — imbi</a></li></ul></nav><button id="toc-toggle" type="button" aria-controls="site-toc" aria-expanded="false">Contents</button>
+<body class="site-manual">
+<div class="announce site-head" id="announce">
+  <div class="wrap">
+    <span class="long"><b>AURA 1.7</b> — demand systems with DESYCO, quantile groups of equal weight, new panel estimators, LaTeX tables that compile.</span>
+    <span class="short"><b>AURA 1.7</b> is out.</span>
+    <a href="../../release-notes.html#v1.7">See what's new &rarr;</a>
+    <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
+  </div>
+</div>
+
+<header class="top site-head">
+  <div class="wrap">
+    <a class="brand" href="../../index.html"><span class="mark">A</span><b>AURA</b></a>
+    <nav class="main" id="menu" aria-label="Main">
+      <ul>
+        <li><a class="top-link" href="../../features.html">Features</a>
+          <div class="drop">
+            <a href="../../features.html#data">Data management<small>Workspace, merge, reshape, by groups</small></a>
+            <a href="../../features.html#estimation">Estimation<small>Regression, panel, IV, post-estimation</small></a>
+            <a href="../../features.html#tables">Tables of results<small>esttab: screen, LaTeX, Word, HTML</small></a>
+            <a href="../../features.html#survey">Survey data<small>Designs and their standard errors</small></a>
+            <a href="../../features.html#graphics">Graphics<small>The Graph Editor, merged figures, 3-D</small></a>
+            <a href="../../features.html#scripts">Scripts and reproducibility<small>Loops, macros, logs with graphs</small></a>
+            <a href="../../features.html#extend">Extend AURA<small>Modules, dialog boxes, AI assistant</small></a>
+          </div></li>
+        <li><a class="top-link" href="../../packages.html">Packages</a>
+          <div class="drop">
+            <a href="../../packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
+            <a href="../../packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="../../packages.html#desyco">DESYCO<small>Demand systems and elasticities</small></a>
+            <a href="../../packages.html#more">More packages<small>Install, update, publish your own</small></a>
+          </div></li>
+        <li><a class="top-link on" href="../../learn.html">Learn</a>
+          <div class="drop">
+            <a href="../../commands.html">Command reference<small>Every command, searchable</small></a>
+            <a href="../../learn.html#guides">User and Developer guides<small>Read them online</small></a>
+            <a href="../../learn.html#manuals">Manuals<small>DAAP, SUBSIM and DESYCO</small></a>
+            <a href="../../release-notes.html">Release notes</a>
+          </div></li>
+        <li><a class="top-link" href="../../download.html">Download</a></li>
+        <li><a class="top-link" href="../../about.html">About</a>
+          <div class="drop">
+            <a href="../../about.html">The project</a>
+            <a href="../../about.html#cite">How to cite</a>
+            <a href="../../about.html#licence">Licence</a>
+            <a href="../../about.html#contact">Report a problem</a>
+          </div></li>
+      </ul>
+    </nav>
+    <button class="burger" type="button" aria-label="Menu" aria-controls="menu"
+            onclick="document.getElementById('menu').classList.toggle('open')">&#9776;</button>
+    <a class="btn btn-gold btn-small" href="../../download.html">Download</a>
+  </div>
+</header>
+<div class="mlayout"><nav id="site-toc" aria-label="Contents"><p class="toc-title"><a href="#">The DAAP Reference Manual — Theory &amp; Implementation</a></p><ul><li class="l1"><a href="#introduction"><span class="n">1</span>Introduction</a></li><li class="l2"><a href="#why-daap-in-aura"><span class="n">1.1</span>Why DAAP in AURA</a></li><li class="l2"><a href="#how-to-read-this-manual"><span class="n">1.2</span>How to read this manual</a></li><li class="l2"><a href="#installing-and-loading-daap"><span class="n">1.3</span>Installing and loading DAAP</a></li><li class="l2"><a href="#data-and-the-survey-design"><span class="n">1.4</span>Data and the survey design</a></li><li class="l2"><a href="#main-variables-for-distributive-analysis"><span class="n">1.5</span>Main variables for distributive analysis</a></li><li class="l2"><a href="#invoking-commands-and-accessing-help"><span class="n">1.6</span>Invoking commands and accessing help</a></li><li class="l2"><a href="#one-or-two-distributions"><span class="n">1.7</span>One or two distributions</a></li><li class="l1"><a href="#foundations"><span class="n">2</span>Foundations</a></li><li class="l2"><a href="#notation-and-the-sampling-framework"><span class="n">2.1</span>Notation and the sampling framework</a></li><li class="l2"><a href="#design-based-inference"><span class="n">2.2</span>Design-based inference</a></li><li class="l2"><a href="#shared-estimation-primitives"><span class="n">2.3</span>Shared estimation primitives</a></li><li class="l1"><a href="#inequality"><span class="n">3</span>Inequality</a></li><li class="l2"><a href="#ineq"><span class="n">3.1</span>Inequality indices — ineq</a></li><li class="l2"><a href="#clorenz"><span class="n">3.2</span>Lorenz and concentration curves — clorenz</a></li><li class="l1"><a href="#multidimensional-inequality"><span class="n">4</span>Multidimensional inequality</a></li><li class="l2"><a href="#imdi"><span class="n">4.1</span>Multidimensional inequality — imdi</a></li><li class="l1"><a href="#progressivity"><span class="n">5</span>Progressivity</a></li><li class="l2"><a href="#iprog"><span class="n">5.1</span>Progressivity indices — iprog</a></li><li class="l2"><a href="#cprog"><span class="n">5.2</span>Progressivity curves — cprog</a></li><li class="l1"><a href="#redistribution"><span class="n">6</span>Redistribution</a></li><li class="l2"><a href="#hidja"><span class="n">6.1</span>Horizontal inequity — hidja</a></li><li class="l1"><a href="#polarization"><span class="n">7</span>Polarization</a></li><li class="l2"><a href="#ipola"><span class="n">7.1</span>Polarization indices — ipola</a></li><li class="l1"><a href="#poverty"><span class="n">8</span>Poverty</a></li><li class="l2"><a href="#ipov"><span class="n">8.1</span>Poverty indices — ipov</a></li><li class="l2"><a href="#cfgt"><span class="n">8.2</span>FGT curves — cfgt</a></li><li class="l2"><a href="#cpoverty"><span class="n">8.3</span>Poverty-gap curves — cpoverty</a></li><li class="l1"><a href="#multidimensional-poverty"><span class="n">9</span>Multidimensional poverty</a></li><li class="l2"><a href="#imdpov"><span class="n">9.1</span>Multidimensional poverty indices — imdpov</a></li><li class="l2"><a href="#imoda"><span class="n">9.2</span>Multiple Overlapping Deprivation Analysis — imoda</a></li><li class="l1"><a href="#pro-poor-growth"><span class="n">10</span>Pro-poor growth</a></li><li class="l2"><a href="#ipropoor"><span class="n">10.1</span>Pro-poor indices — ipropoor</a></li><li class="l2"><a href="#gicur"><span class="n">10.2</span>Growth incidence curve — gicur</a></li><li class="l2"><a href="#cpropoorp"><span class="n">10.3</span>Pro-poor curves: the primal approach — cpropoorp</a></li><li class="l2"><a href="#cpropoord"><span class="n">10.4</span>Pro-poor curves: the dual approach — cpropoord</a></li><li class="l1"><a href="#poverty-and-targeting-policies"><span class="n">11</span>Poverty and targeting policies</a></li><li class="l2"><a href="#itargetg"><span class="n">11.1</span>Targeting by population groups — itargetg</a></li><li class="l2"><a href="#ogtpr"><span class="n">11.2</span>Optimal group targeting with a fixed budget — ogtpr</a></li><li class="l2"><a href="#itargetg2d"><span class="n">11.3</span>Bi-dimensional targeting by group — itargetg2d</a></li><li class="l2"><a href="#itargetc"><span class="n">11.4</span>Targeting by income components — itargetc</a></li><li class="l1"><a href="#poverty-elasticities"><span class="n">12</span>Poverty elasticities</a></li><li class="l2"><a href="#efgtgr"><span class="n">12.1</span>FGT elasticity with respect to growth — efgtgr</a></li><li class="l2"><a href="#efgtineq"><span class="n">12.2</span>FGT elasticity with respect to inequality — efgtineq</a></li><li class="l2"><a href="#efgtgd"><span class="n">12.3</span>Growth elasticity by alternative approaches — efgtgd</a></li><li class="l2"><a href="#efgtid"><span class="n">12.4</span>Inequality elasticity by alternative approaches — efgtid</a></li><li class="l2"><a href="#efgtwb"><span class="n">12.5</span>Elasticity to within- and between-group inequality — efgtwb</a></li><li class="l2"><a href="#efgtc"><span class="n">12.6</span>Elasticity to within- and between-source inequality — efgtc</a></li><li class="l2"><a href="#references-20"><span class="n">12.7</span>References</a></li><li class="l1"><a href="#decomposition"><span class="n">13</span>Decomposition</a></li><li class="l2"><a href="#dfgtpg"><span class="n">13.1</span>FGT poverty by population subgroups — dfgtpg</a></li><li class="l2"><a href="#dfgts"><span class="n">13.2</span>FGT poverty by income sources — the Shapley split — dfgts</a></li><li class="l2"><a href="#dfgtgr"><span class="n">13.3</span>Growth and redistribution decomposition of poverty change — dfgtgr</a></li><li class="l2"><a href="#dfgtg2d"><span class="n">13.4</span>Sectoral decomposition of poverty change — dfgtg2d</a></li><li class="l2"><a href="#dtcpov"><span class="n">13.5</span>Transient and chronic poverty — dtcpov</a></li><li class="l2"><a href="#dmdafg"><span class="n">13.6</span>Alkire-Foster multidimensional poverty by population subgroups — dmdafg</a></li><li class="l2"><a href="#dmdafs"><span class="n">13.7</span>Alkire-Foster multidimensional poverty by dimensions — the Shapley split — dmdafs</a></li><li class="l2"><a href="#dentropyg"><span class="n">13.8</span>Generalised entropy by population subgroups — dentropyg</a></li><li class="l2"><a href="#diginig"><span class="n">13.9</span>Gini by population subgroups — diginig</a></li><li class="l2"><a href="#diginis"><span class="n">13.10</span>Gini by income sources — diginis</a></li><li class="l2"><a href="#dsineqg"><span class="n">13.11</span>Inequality indices by population subgroups — the Shapley split — dsineqg</a></li><li class="l2"><a href="#dsineqs"><span class="n">13.12</span>Inequality indices by income sources — the Shapley split — dsineqs</a></li><li class="l2"><a href="#rbdineq"><span class="n">13.13</span>Regression-based decomposition of inequality — rbdineq</a></li><li class="l2"><a href="#dpolag"><span class="n">13.14</span>DER polarization by population groups — dpolag</a></li><li class="l2"><a href="#dpolas"><span class="n">13.15</span>DER polarization by income sources — dpolas</a></li><li class="l2"><a href="#dprogress"><span class="n">13.16</span>Progressivity decomposition by tax sources — dprogress</a></li><li class="l1"><a href="#dominance"><span class="n">14</span>Dominance</a></li><li class="l2"><a href="#dompov"><span class="n">14.1</span>Poverty dominance — dompov</a></li><li class="l2"><a href="#domineq"><span class="n">14.2</span>Inequality dominance — domineq</a></li><li class="l2"><a href="#dombdpov"><span class="n">14.3</span>Bi-dimensional poverty dominance — dombdpov</a></li><li class="l2"><a href="#cdomc"><span class="n">14.4</span>Consumption dominance curves — cdomc</a></li><li class="l2"><a href="#cdomc2d"><span class="n">14.5</span>Difference / ratio between consumption dominance curves — cdomc2d</a></li><li class="l1"><a href="#distributive-tools"><span class="n">15</span>Distributive tools</a></li><li class="l2"><a href="#imean"><span class="n">15.1</span>Survey means — imean</a></li><li class="l2"><a href="#iprop"><span class="n">15.2</span>Population shares — iprop</a></li><li class="l2"><a href="#cdensity"><span class="n">15.3</span>Density curves — cdensity</a></li><li class="l2"><a href="#cdf"><span class="n">15.4</span>Cumulative distribution and FGT curves — cdf</a></li><li class="l2"><a href="#cquantile"><span class="n">15.5</span>Quantile curves — cquantile</a></li><li class="l2"><a href="#quinsh"><span class="n">15.6</span>Income shares by quantile group — quinsh</a></li><li class="l2"><a href="#cnpe"><span class="n">15.7</span>Non-parametric regression — cnpe</a></li><li class="l2"><a href="#sjdensity"><span class="n">15.8</span>Joint density and distribution surfaces — sjdensity</a></li><li class="l2"><a href="#datest"><span class="n">15.9</span>Hypothesis test on an estimate — datest</a></li><li class="l2"><a href="#ungroup"><span class="n">15.10</span>Disaggregating grouped data — ungroup</a></li><li class="l1"><a href="#benefit-analysis"><span class="n">16</span>Benefit analysis</a></li><li class="l2"><a href="#bian"><span class="n">16.1</span>Average benefit incidence — bian</a></li><li class="l2"><a href="#imbi"><span class="n">16.2</span>Marginal benefit incidence — imbi</a></li></ul></nav><div class="mbody">
 <header id="title-block-header">
 <h1 class="title">The DAAP Reference Manual — Theory &amp;
 Implementation</h1>
@@ -5786,6 +5936,19 @@ Analysis Using a Single Cross-section of Data</em>. World Bank.</li>
 spending reforms, and the timing of program capture. <em>World Bank
 Economic Review</em>, 13(2), 257–273.</li>
 </ul>
+</div></div>
+<button id="toc-toggle" type="button" aria-controls="site-toc" aria-expanded="false">Contents</button>
+<script>
+  function hideAnnounce() {
+    document.getElementById("announce").classList.add("gone");
+    try { localStorage.setItem("aura-announce-hidden", "1.7"); } catch (e) {}
+  }
+  try {
+    if (localStorage.getItem("aura-announce-hidden") === "1.7") {
+      document.getElementById("announce").classList.add("gone");
+    }
+  } catch (e) {}
+</script>
 <script>
 (function () {
   var toc = document.getElementById("site-toc"), btn = document.getElementById("toc-toggle");
