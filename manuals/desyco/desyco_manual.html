@@ -231,8 +231,36 @@ window.MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg-full.js"></script>
+<style>
+#site-toc { position: fixed; top: 0; left: 0; bottom: 0; width: 300px; overflow-y: auto;
+  background: #f6f8fb; border-right: 1px solid #dde3ea; padding: 1rem .8rem 2.5rem;
+  font: 14px/1.4 Inter, "Segoe UI", sans-serif; box-sizing: border-box; z-index: 50; }
+#site-toc .toc-title { font-weight: 700; color: #0b3d6e; margin: .2rem .35rem .5rem; }
+#site-toc .toc-title a { color: #0b3d6e; text-decoration: none; }
+#site-toc ul { list-style: none; margin: 0; padding: 0; }
+#site-toc li { margin: .08rem 0; }
+#site-toc li.l1 { margin-top: .5rem; font-weight: 600; }
+#site-toc li.l2 { padding-left: 1.05rem; font-size: 13.5px; }
+#site-toc a { color: #33415c; text-decoration: none; display: block; padding: .14rem .35rem;
+  border-radius: 4px; }
+#site-toc a:hover { background: #e7edf5; }
+#site-toc a.on { background: #dbe7f6; color: #0b3d6e; }
+#site-toc .n { color: #7a869a; margin-right: .3rem; font-weight: 500; }
+#toc-toggle { display: none; }
+@media (min-width: 1100px) { body { margin-left: 340px !important; } }
+@media (max-width: 1099px) {
+  #site-toc { width: min(300px, 86vw); transform: translateX(-100%); transition: transform .2s;
+    box-shadow: 0 0 24px rgba(0, 0, 0, .18); }
+  #site-toc.open { transform: none; }
+  #toc-toggle { display: block; position: fixed; right: 14px; bottom: 14px; z-index: 60;
+    background: #0b57e8; color: #fff; border: 0; border-radius: 20px; padding: .55rem 1.05rem;
+    font: 600 14px Inter, "Segoe UI", sans-serif; box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+    cursor: pointer; }
+}
+@media print { #site-toc, #toc-toggle { display: none; } body { margin-left: auto !important; } }
+</style>
 </head>
-<body><div style="font:500 14px/1.4 Inter,Segoe UI,sans-serif;background:#0b3d6e;color:#fff;padding:.55rem 1rem"><a href="../../index.html" style="color:#fff;font-weight:700;text-decoration:none">AURA</a> &nbsp;·&nbsp; <a href="../../learn.html#manuals" style="color:#fff">Guides and manuals</a></div>
+<body><div style="font:500 14px/1.4 Inter,Segoe UI,sans-serif;background:#0b3d6e;color:#fff;padding:.55rem 1rem"><a href="../../index.html" style="color:#fff;font-weight:700;text-decoration:none">AURA</a> &nbsp;·&nbsp; <a href="../../learn.html#manuals" style="color:#fff">Guides and manuals</a></div><nav id="site-toc" aria-label="Contents"><p class="toc-title"><a href="#">DESYCO — Demand Systems of Consumers</a></p><ul><li class="l1"><a href="#introduction"><span class="n">1</span>Introduction</a></li><li class="l2"><a href="#why"><span class="n">1.1</span>Why estimate a demand system</a></li><li class="l2"><a href="#history"><span class="n">1.2</span>A short history of demand systems</a></li><li class="l2"><a href="#desyco-in-aura"><span class="n">1.3</span>DESYCO in AURA</a></li><li class="l2"><a href="#conventions"><span class="n">1.4</span>Conventions common to the commands</a></li><li class="l2"><a href="#notation"><span class="n">1.5</span>Notation</a></li><li class="l2"><a href="#example-data"><span class="n">1.6</span>The example data</a></li><li class="l1"><a href="#single"><span class="n">2</span>Single-equation demand models</a></li><li class="l2"><a href="#single-when"><span class="n">2.1</span>When to use it</a></li><li class="l2"><a href="#single-models"><span class="n">2.2</span>The models</a></li><li class="l2"><a href="#single-data"><span class="n">2.3</span>What the survey records</a></li><li class="l2"><a href="#single-variance"><span class="n">2.4</span>Estimation and variance</a></li><li class="l2"><a href="#single-first"><span class="n">2.5</span>A first estimation</a></li><li class="l2"><a href="#single-compare"><span class="n">2.6</span>The four models on the same data</a></li><li class="l2"><a href="#single-nonbuyers"><span class="n">2.7</span>The households that do not buy</a></li><li class="l2"><a href="#single-uvm"><span class="n">2.8</span>Deaton’s model</a></li><li class="l2"><a href="#single-graph"><span class="n">2.9</span>The graph of the elasticities by group</a></li><li class="l2"><a href="#single-welcom"><span class="n">2.10</span>The modules sids and tobelas</a></li><li class="l2"><a href="#single-reporting"><span class="n">2.11</span>Reporting the results</a></li><li class="l2"><a href="#single-dialog"><span class="n">2.12</span>The dialog box</a></li><li class="l2"><a href="#single-validation"><span class="n">2.13</span>Validation</a></li><li class="l2"><a href="#single-stored"><span class="n">2.14</span>Stored results</a></li><li class="l1"><a href="#les"><span class="n">3</span>The linear expenditure system and the Cobb-Douglas demands</a></li><li class="l2"><a href="#les-when"><span class="n">3.1</span>When to use it</a></li><li class="l2"><a href="#les-models"><span class="n">3.2</span>The models</a></li><li class="l2"><a href="#les-estimation"><span class="n">3.3</span>Estimation and variance</a></li><li class="l2"><a href="#les-first"><span class="n">3.4</span>A first estimation</a></li><li class="l2"><a href="#les-demog"><span class="n">3.5</span>The characteristics</a></li><li class="l2"><a href="#les-cd"><span class="n">3.6</span>The Cobb-Douglas demands</a></li><li class="l2"><a href="#les-household"><span class="n">3.7</span>The elasticities of each household</a></li><li class="l2"><a href="#les-reporting"><span class="n">3.8</span>Reporting the results</a></li><li class="l2"><a href="#les-dialog"><span class="n">3.9</span>The dialog box</a></li><li class="l2"><a href="#les-validation"><span class="n">3.10</span>Validation</a></li><li class="l2"><a href="#les-stored"><span class="n">3.11</span>Stored results</a></li><li class="l1"><a href="#translog"><span class="n">4</span>The translog demand system</a></li><li class="l2"><a href="#translog-when"><span class="n">4.1</span>When to use it</a></li><li class="l2"><a href="#translog-models"><span class="n">4.2</span>The models</a></li><li class="l2"><a href="#translog-estimation"><span class="n">4.3</span>Estimation and variance</a></li><li class="l2"><a href="#translog-first"><span class="n">4.4</span>A first estimation</a></li><li class="l2"><a href="#translog-gen"><span class="n">4.5</span>The generalized translog and the characteristics</a></li><li class="l2"><a href="#translog-tests"><span class="n">4.6</span>Testing the models</a></li><li class="l2"><a href="#translog-household"><span class="n">4.7</span>The elasticities of each household</a></li><li class="l2"><a href="#translog-reporting"><span class="n">4.8</span>Reporting, the dialog box and the stored results</a></li><li class="l1"><a href="#aids"><span class="n">5</span>AIDS and QUAIDS</a></li><li class="l2"><a href="#aids-when"><span class="n">5.1</span>When to use it</a></li><li class="l2"><a href="#aids-model"><span class="n">5.2</span>The model</a></li><li class="l2"><a href="#aids-estimation"><span class="n">5.3</span>Estimation</a></li><li class="l2"><a href="#aids-variance"><span class="n">5.4</span>Variance</a></li><li class="l2"><a href="#aids-first"><span class="n">5.5</span>A first estimation</a></li><li class="l2"><a href="#aids-diagnostics"><span class="n">5.6</span>Diagnostics</a></li><li class="l2"><a href="#aids-selection-practice"><span class="n">5.7</span>The households that do not buy, in practice</a></li><li class="l2"><a href="#aids-engel"><span class="n">5.8</span>Engel curves</a></li><li class="l2"><a href="#aids-reporting"><span class="n">5.9</span>Reporting the results</a></li><li class="l2"><a href="#aids-dialog"><span class="n">5.10</span>The dialog box</a></li><li class="l2"><a href="#aids-earlier"><span class="n">5.11</span>Earlier programs</a></li><li class="l2"><a href="#aids-validation"><span class="n">5.12</span>Validation</a></li><li class="l2"><a href="#aids-stored"><span class="n">5.13</span>Stored results</a></li><li class="l1"><a href="#easi"><span class="n">6</span>The exact affine Stone index demand system (EASI)</a></li><li class="l2"><a href="#easi-when"><span class="n">6.1</span>When to use it</a></li><li class="l2"><a href="#easi-model"><span class="n">6.2</span>The model</a></li><li class="l2"><a href="#easi-estimation"><span class="n">6.3</span>Estimation</a></li><li class="l2"><a href="#easi-variance"><span class="n">6.4</span>Variance</a></li><li class="l2"><a href="#easi-first"><span class="n">6.5</span>A first estimation</a></li><li class="l2"><a href="#easi-diagnostics"><span class="n">6.6</span>Diagnostics</a></li><li class="l2"><a href="#easi-selection-practice"><span class="n">6.7</span>The households that do not buy, in practice</a></li><li class="l2"><a href="#easi-engel"><span class="n">6.8</span>Engel curves</a></li><li class="l2"><a href="#easi-reporting"><span class="n">6.9</span>Reporting the results</a></li><li class="l2"><a href="#easi-dialog"><span class="n">6.10</span>The dialog box</a></li><li class="l2"><a href="#easi-compat"><span class="n">6.11</span>The R package easi: compat</a></li><li class="l2"><a href="#easi-validation"><span class="n">6.12</span>Validation</a></li><li class="l2"><a href="#easi-stored"><span class="n">6.13</span>Stored results</a></li><li class="l1"><a href="#duvm"><span class="n">7</span>Unit values: Deaton’s model</a></li><li class="l2"><a href="#duvm-when"><span class="n">7.1</span>When to use it</a></li><li class="l2"><a href="#duvm-model"><span class="n">7.2</span>The model</a></li><li class="l2"><a href="#duvm-estimation"><span class="n">7.3</span>Estimation</a></li><li class="l2"><a href="#duvm-variance"><span class="n">7.4</span>Variance</a></li><li class="l2"><a href="#duvm-first"><span class="n">7.5</span>A first estimation</a></li><li class="l2"><a href="#duvm-diagnostics"><span class="n">7.6</span>Diagnostics</a></li><li class="l2"><a href="#duvm-selection-practice"><span class="n">7.7</span>The selection correction in practice</a></li><li class="l2"><a href="#duvm-engel"><span class="n">7.8</span>Engel curves</a></li><li class="l2"><a href="#duvm-groups"><span class="n">7.9</span>Groups of households</a></li><li class="l2"><a href="#duvm-reporting"><span class="n">7.10</span>Reporting the results</a></li><li class="l2"><a href="#duvm-dialog"><span class="n">7.11</span>The dialog box</a></li><li class="l2"><a href="#duvm-compat"><span class="n">7.12</span>Deaton’s published code: compat</a></li><li class="l2"><a href="#duvm-validation"><span class="n">7.13</span>Validation</a></li><li class="l2"><a href="#duvm-stored"><span class="n">7.14</span>Stored results</a></li><li class="l1"><a href="#symbols">List of symbols</a></li><li class="l1"><a href="#references">References</a></li></ul></nav><button id="toc-toggle" type="button" aria-controls="site-toc" aria-expanded="false">Contents</button>
 <header id="title-block-header">
 <h1 class="title">DESYCO — Demand Systems of Consumers: User Manual</h1>
 </header>
@@ -8224,5 +8252,35 @@ Econometrics</em> 68(1), 115–132.</p>
 Todd (2014). Predicting the effects of sugar-sweetened beverage taxes on
 food and beverage demand in a large demand system. <em>American Journal
 of Agricultural Economics</em> 96(1), 1–25.</p>
+<script>
+(function () {
+  var toc = document.getElementById("site-toc"), btn = document.getElementById("toc-toggle");
+  function show(open) { toc.classList.toggle("open", open); btn.setAttribute("aria-expanded", open); }
+  btn.addEventListener("click", function () { show(!toc.classList.contains("open")); });
+  toc.addEventListener("click", function (e) {
+    if (e.target.closest("a") && window.innerWidth < 1100) show(false);
+  });
+  var links = {};
+  toc.querySelectorAll("li a").forEach(function (a) { links[a.getAttribute("href").slice(1)] = a; });
+  var heads = [].slice.call(document.querySelectorAll("h1[id], h2[id]"))
+                .filter(function (h) { return links[h.id]; });
+  var current = null;
+  function spy() {
+    var cur = null;
+    for (var i = 0; i < heads.length; i++) {
+      if (heads[i].getBoundingClientRect().top < 120) cur = heads[i]; else break;
+    }
+    if (cur === current) return;
+    if (current) links[current.id].classList.remove("on");
+    current = cur;
+    if (!cur) return;
+    var a = links[cur.id], r = a.getBoundingClientRect(), t = toc.getBoundingClientRect();
+    a.classList.add("on");
+    if (r.top < t.top + 40 || r.bottom > t.bottom - 20) a.scrollIntoView({block: "center"});
+  }
+  window.addEventListener("scroll", spy, {passive: true});
+  spy();
+})();
+</script>
 </body>
 </html>
