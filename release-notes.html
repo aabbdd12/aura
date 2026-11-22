@@ -15,9 +15,9 @@
 
 <div class="announce" id="announce">
   <div class="wrap">
-    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
-    <span class="short"><b>AURA 1.6</b> is out.</span>
-    <a href="release-notes.html#v1.6">See what's new &rarr;</a>
+    <span class="long"><b>AURA 1.7</b> — demand systems with DESYCO, quantile groups of equal weight, new panel estimators, LaTeX tables that compile.</span>
+    <span class="short"><b>AURA 1.7</b> is out.</span>
+    <a href="release-notes.html#v1.7">See what's new &rarr;</a>
     <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
   </div>
 </div>
@@ -41,13 +41,14 @@
           <div class="drop">
             <a href="packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
             <a href="packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="packages.html#desyco">DESYCO<small>Demand systems and elasticities</small></a>
             <a href="packages.html#more">More packages<small>Install, update, publish your own</small></a>
           </div></li>
         <li><a class="top-link on" href="learn.html">Learn</a>
           <div class="drop">
             <a href="commands.html">Command reference<small>Every command, searchable</small></a>
             <a href="learn.html#guides">User and Developer guides<small>Read them online</small></a>
-            <a href="learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="learn.html#manuals">Manuals<small>DAAP, SUBSIM and DESYCO</small></a>
             <a href="release-notes.html">Release notes</a>
           </div></li>
         <li><a class="top-link" href="download.html">Download</a></li>
@@ -77,6 +78,70 @@
 
 <section class="block">
   <div class="wrap" style="max-width:960px">
+<article class="release" id="v1.7">
+    <div class="rel-head">
+      <h2>AURA 1.7</h2>
+      <span class="rel-date">Released 22/11/2026</span>
+      <a class="rel-dl" href="https://github.com/aabbdd12/aura/releases/tag/v1.7">Download 1.7 &rarr;</a>
+    </div>
+
+    <h3>New</h3>
+    <ul>
+      <li><b>DESYCO: demand systems.</b> A package of AURA (<b>Statistics &rarr; DESYCO</b>) to estimate how the demand of households responds to prices and income — the price and income elasticities that SUBSIM takes:
+        <ul>
+          <li><code>sedemand</code>: single-equation demand — log-log, Working-Leser (with a quadratic term), two-part (probit or logit for buying, then the quantity), and the unit-value model of one good; quantity, value or budget share as input; market prices or unit values; the elasticities by group (income groups, areas), and their graph;</li>
+          <li><code>eles</code>: the linear expenditure system and the Cobb-Douglas system; <code>etranslog</code>: the translog and the generalized translog;</li>
+          <li><code>equaids</code>: AIDS and QUAIDS with the demographic scaling, and the households that do not buy (prices filled in, correction for the selection);</li>
+          <li><code>easi</code>: the Exact Affine Stone Index demand system;</li>
+          <li><code>duvm</code>: the unit-value model of several goods (quality, measurement error, clusters);</li>
+          <li>for all: the elasticities of households, individuals or the market, with their standard errors — robust, clustered, from the survey design, or by a bootstrap of the whole procedure; <code>predict</code> of each household's shares and elasticities; <code>estat engel</code> (the Engel curves), <code>test</code> and <code>lincom</code>; a check of the data at the head of each estimation, and diagnostics before estimating (<code>equaidsdiag</code>, <code>easidiag</code>, <code>duvmdiag</code>);</li>
+          <li>tables with significance stars, saved to Word, LaTeX, HTML or Excel (<code>saveres()</code>); dialog boxes; a user manual (<code>desycomanual</code>).</li>
+        </ul></li>
+      <li><b>Panel data (<code>xtreg</code>):</b> random effects by maximum likelihood (<code>mle</code>) and the population-averaged model (<code>pa</code>); with fixed effects, two-way clustering (<code>vce(cluster v1 v2)</code>) and Driscoll-Kraay standard errors (<code>vce(dkraay kernel [#])</code>); <code>predict</code> after <code>xtreg</code> (<code>xb</code>, <code>stdp</code>, <code>ue</code>, <code>u</code>, <code>e</code>, <code>xbu</code>; <code>mu</code> and <code>rate</code> after <code>pa</code>), <code>test</code> and <code>lincom</code>.</li>
+      <li><b>Percentiles and quantile groups:</b> <code>pctile</code>, <code>xtile</code> and <code>_pctile</code>, weighted or not, with their dialog boxes (<b>Data &rarr; Variables</b>). <code>xtile &hellip;, proportions</code> gives the share of each observation in each group, so that every group — quintile, decile — weighs exactly the same, the observations at a cut point shared between two groups. The shares form one categorical variable, saved with the data, which <code>tabulate</code>, <code>tabstat</code> and the survey estimators take.</li>
+      <li><b>A weight may be an expression</b>, for every command: <code>[aw=hhsize*sweight]</code> counts each household with its members.</li>
+      <li><b>Survey estimators (<code>svy: mean</code>, <code>total</code>, <code>ratio</code>, <code>proportion</code>):</b>
+        <ul>
+          <li><code>over()</code>: one estimate per group of categorical variables, with the covariances between the groups; <code>wover()</code>: groups given by shares (those of <code>xtile &hellip;, proportions</code>), and <code>subpop(q == 1)</code> for one of them; a variable between 0 and 1 in <code>subpop()</code> is a fractional domain;</li>
+          <li>standard errors that take into account that the cut points of quantile groups are estimated (<code>fixed</code> takes them as given);</li>
+          <li><code>nquantiles(#)</code>: the groups of equal weight of the estimated variable itself, with exact standard errors (with <code>ratio</code>, of the ratio of each observation);</li>
+          <li><code>units(var)</code>: each observation counts <code>var</code> units — the people of a household, adult equivalents, hectares;</li>
+          <li><code>dec(#)</code>: the number of decimals of the table;</li>
+          <li>the dialog box in four tabs (Main, Over, if/in, Results), which the help examples open.</li>
+        </ul></li>
+      <li><b>The files written are links:</b> every command that writes a file gives its full path, which the Results window turns into a link — a Word or Excel file opens in its program, an html log in the AURA Viewer, a <code>.aurg</code> graph again in AURA.</li>
+      <li><b>LaTeX files that compile:</b> a table written by <code>esttab</code> or by <code>estimates table, export()</code> to a <code>.tex</code> file is a whole document — the article class and the packages the table uses.</li>
+      <li><b>The help window</b> shows a contents panel (☰) beside the long pages: their sections and their groups of options.</li>
+    </ul>
+
+    <h3>Fixed &mdash; results that change</h3>
+    <ul>
+      <li><b>Expressions computed the short integers of a <code>.dta</code> file in their storage type,</b> so that a product could overflow without a word: <code>hhsize*sweight</code> came out negative, <code>hhsize + 120</code> gave −119, and <code>count if hhsize*sweight &gt; 40000</code> miscounted. Every expression now computes in double precision, also on the <code>float</code> variables (the logarithm of a <code>float</code> variable was wrong in the seventh digit).</li>
+      <li><b>The survey estimators ignored <code>over()</code>, and any option they did not know,</b> without a word: <code>over()</code> now gives the estimates by group, and an unknown option is refused.</li>
+      <li><b><code>tabulate</code> summed <code>float</code> weights in single precision:</b> 3014.5544 instead of 3014.5545.</li>
+      <li><b>A LaTeX table broke</b> on a <code>%</code>, <code>&amp;</code> or <code>#</code> in a title, a label or a note: they are now written <code>\%</code>, <code>\&amp;</code> and <code>\#</code>.</li>
+      <li><b><code>cpropoord</code>, <code>cpropoorp</code> and <code>gicur</code> did not say where they wrote their file.</b></li>
+      <li><b>The <code>collapse</code> dialog box,</b> filled from a command, did not read its <code>if</code>.</li>
+    </ul>
+
+    <h3>Changes to know</h3>
+    <ul>
+      <li><b><code>esttab using file.tex</code> writes a whole document</b> that compiles as it is; <code>nopage</code> writes the table alone, to <code>\input</code> in a document of your own (it was the default). <code>estimates table, export(file.tex)</code> writes a whole document too.</li>
+      <li><b>The options of the survey estimators are checked:</b> a misspelled option is refused instead of being ignored.</li>
+      <li><b>A weight written as a single name must be a variable:</b> <code>[aw=wt]</code> without a variable <code>wt</code> stops the command, r(111).</li>
+      <li><b><code>tabulate</code> writes a whole value stored as a decimal without its decimals:</b> <code>1</code>, no longer <code>1.0</code>.</li>
+      <li><b>Clicking a help example</b> prepares its data without showing the messages of the preparation.</li>
+    </ul>
+
+    <h3>For developers</h3>
+    <ul>
+      <li><code>core.saved_files.full(path)</code> gives the full path for the message of a written file; the Results window links it.</li>
+      <li><code>core.fractional</code> holds the groupings of <code>xtile &hellip;, proportions</code> (<code>register</code>, <code>lookup</code>, <code>shares</code>, <code>members</code>, <code>group_share</code>), saved in the <code>.aura</code> file and copied by the Workspace.</li>
+      <li>A weight written as an expression is computed by the engine into a column named as written, dropped after the command; <code>core.weights.values(df, name, session)</code> computes it again after an estimation.</li>
+      <li>DESYCO lives in <code>desyco/</code> — its engines, commands, dialog boxes and manual — beside <code>daap/</code> and <code>subsim/</code>. Free software under the GNU General Public License v3.0-or-later.</li>
+    </ul>
+  </article>
+
 <article class="release" id="v1.6">
     <div class="rel-head">
       <h2>AURA 1.6</h2>
@@ -473,7 +538,7 @@
     </div>
     <div class="legal">
       <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
-      <span>AURA 1.6 · <a href="release-notes.html">release notes</a></span>
+      <span>AURA 1.7 · <a href="release-notes.html">release notes</a></span>
     </div>
   </div>
 </footer>
@@ -481,10 +546,10 @@
 <script>
   function hideAnnounce() {
     document.getElementById("announce").classList.add("gone");
-    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+    try { localStorage.setItem("aura-announce-hidden", "1.7"); } catch (e) {}
   }
   try {
-    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+    if (localStorage.getItem("aura-announce-hidden") === "1.7") {
       document.getElementById("announce").classList.add("gone");
     }
   } catch (e) {}

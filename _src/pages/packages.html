@@ -1,11 +1,11 @@
-<!-- title: Packages — AURA | description: DAAP for poverty and inequality analysis and SUBSIM for price and subsidy reforms come with AURA; more packages install with one command. | nav: packages | out: packages.html -->
+<!-- title: Packages — AURA | description: DAAP for poverty and inequality analysis, SUBSIM for price and subsidy reforms and DESYCO for demand systems come with AURA; more packages install with one command. | nav: packages | out: packages.html -->
 
 <section class="page-head">
   <div class="wrap">
     <p class="eyebrow">Packages</p>
     <h1>Complete methods, in the box</h1>
-    <p>Two packages come with AURA, each with its commands, dialog boxes, help and user manual: DAAP for distributive analysis and SUBSIM for price reforms. Others install with one command.</p>
-    <nav class="subnav" aria-label="Sections"><a href="#daap">DAAP</a><a href="#subsim">SUBSIM</a><a href="#more">More packages</a></nav>
+    <p>Three packages come with AURA, each with its commands, dialog boxes, help and user manual: DAAP for distributive analysis, SUBSIM for price reforms and DESYCO for demand systems. Others install with one command.</p>
+    <nav class="subnav" aria-label="Sections"><a href="#daap">DAAP</a><a href="#subsim">SUBSIM</a><a href="#desyco">DESYCO</a><a href="#more">More packages</a></nav>
   </div>
 </section>
 
@@ -79,7 +79,46 @@
   </div>
 </section>
 
-<section class="block" id="more">
+<section class="block" id="desyco">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="eyebrow">DESYCO · Demand systems of consumers</p>
+        <h2>How demand responds to prices and income</h2>
+        <p>DESYCO estimates the demand of households for goods — from a single equation to complete demand systems — and their price and income elasticities, the inputs of SUBSIM's simulations. Each model takes the households that do not buy, the design of the survey and the standard errors of the elasticities into account: robust, clustered, from the design, or by a bootstrap of the whole procedure. <b>Statistics → DESYCO</b> opens a dialog box for every command; <span class="k">desycomanual</span> opens its user manual.</p>
+      </div>
+      <img src="images/desyco-box.png" alt="The dialog box of equaids: budget shares, prices, total expenditure and the model." loading="lazy">
+    </div>
+    <div class="tiles" style="margin-top:40px">
+      <div class="tile"><h3>Single equation</h3><p>Log-log, Working-Leser, two-part (to buy, then how much) and the unit-value model of one good; quantity, value or budget share; the elasticities by group, with their graph.</p>
+        <div class="chips"><span class="chip">sedemand</span></div></div>
+      <div class="tile"><h3>LES and translog</h3><p>The linear expenditure system and the Cobb-Douglas system; the translog and the generalized translog.</p>
+        <div class="chips"><span class="chip">eles</span><span class="chip">etranslog</span></div></div>
+      <div class="tile"><h3>AIDS and QUAIDS</h3><p>With the demographic scaling; the households that do not buy: their prices filled in, a correction for the selection.</p>
+        <div class="chips"><span class="chip">equaids</span><span class="chip">equaidsdiag</span></div></div>
+      <div class="tile"><h3>EASI</h3><p>The Exact Affine Stone Index demand system: Engel curves of any shape, demographics in the shares.</p>
+        <div class="chips"><span class="chip">easi</span><span class="chip">easidiag</span></div></div>
+      <div class="tile"><h3>Unit values</h3><p>The unit-value model of several goods: the quality of what is bought, measurement error, the prices of the cluster.</p>
+        <div class="chips"><span class="chip">duvm</span><span class="chip">duvmdiag</span></div></div>
+      <div class="tile"><h3>After the estimation</h3><p>The elasticities of households, individuals or the market; each household's shares and elasticities; the Engel curves; tables with stars to Word, LaTeX, HTML or Excel.</p>
+        <div class="chips"><span class="chip">predict</span><span class="chip">estat engel</span><span class="chip">desycomanual</span></div></div>
+    </div>
+    <div class="cards" style="margin-top:40px">
+      <div class="card">
+        <img src="images/desyco-engel.png" alt="Engel curves of five goods estimated by QUAIDS, with their 95% confidence bands." loading="lazy">
+        <h3>Engel curves</h3>
+        <p><span class="k">estat engel</span> draws the budget share of each good along total expenditure, with its confidence band; <span class="k">addobserved</span> adds the observed shares, smoothed.</p>
+      </div>
+      <div class="card">
+        <img src="images/desyco-elasticities.png" alt="Price and expenditure elasticities of the demand for corn by area and income quintile, with their bands." loading="lazy">
+        <h3>Elasticities by group</h3>
+        <p><span class="k">sedemand</span> gives the price and expenditure elasticities of each group — areas, income quintiles — beside those of the whole population, with their confidence bands.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="more">
   <div class="wrap split">
     <div>
       <p class="eyebrow">More packages</p>

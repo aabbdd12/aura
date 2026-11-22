@@ -17,6 +17,7 @@ MATHJAX = "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg-full.js"
 MANUALS = (
     ("daap/technotes/daap_manual.html", "manuals/daap/daap_manual.html", None),
     ("subsim/technotes/subsim_manual.html", "manuals/subsim/subsim_manual.html", "subsim/technotes/figures"),
+    ("desyco/technotes/desyco_manual.html", "manuals/desyco/desyco_manual.html", "desyco/technotes/figures"),
 )
 BAR = ('<div style="font:500 14px/1.4 Inter,Segoe UI,sans-serif;background:#0b3d6e;color:#fff;'
        'padding:.55rem 1rem"><a href="../../index.html" style="color:#fff;font-weight:700;'

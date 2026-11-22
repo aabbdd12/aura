@@ -15,9 +15,9 @@
 
 <div class="announce" id="announce">
   <div class="wrap">
-    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
-    <span class="short"><b>AURA 1.6</b> is out.</span>
-    <a href="release-notes.html#v1.6">See what's new &rarr;</a>
+    <span class="long"><b>AURA 1.7</b> — demand systems with DESYCO, quantile groups of equal weight, new panel estimators, LaTeX tables that compile.</span>
+    <span class="short"><b>AURA 1.7</b> is out.</span>
+    <a href="release-notes.html#v1.7">See what's new &rarr;</a>
     <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
   </div>
 </div>
@@ -41,13 +41,14 @@
           <div class="drop">
             <a href="packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
             <a href="packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="packages.html#desyco">DESYCO<small>Demand systems and elasticities</small></a>
             <a href="packages.html#more">More packages<small>Install, update, publish your own</small></a>
           </div></li>
         <li><a class="top-link" href="learn.html">Learn</a>
           <div class="drop">
             <a href="commands.html">Command reference<small>Every command, searchable</small></a>
             <a href="learn.html#guides">User and Developer guides<small>Read them online</small></a>
-            <a href="learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="learn.html#manuals">Manuals<small>DAAP, SUBSIM and DESYCO</small></a>
             <a href="release-notes.html">Release notes</a>
           </div></li>
         <li><a class="top-link" href="download.html">Download</a></li>
@@ -100,7 +101,7 @@ tabstat exppc size, by(zone) stats(mean sd p50)</pre>
     <div>
       <p class="eyebrow">Estimation</p>
       <h2>Regression, panel and instrumental variables — with their tests</h2>
-      <p>Linear regression, logit, probit and poisson; fixed, random and between effects with the Hausman test; two-stage least squares, LIML and GMM. Robust and clustered standard errors, weights, factor variables and interactions (<span class="k">i.zone</span>, <span class="k">c.size#c.size</span>), collinear variables left out with a note. After the estimation: <span class="k">predict</span>, <span class="k">margins</span>, <span class="k">test</span>, <span class="k">lincom</span>, <span class="k">nlcom</span>.</p>
+      <p>Linear regression, logit, probit and poisson; fixed, random and between effects, random effects by maximum likelihood and the population-averaged model, with the Hausman test; two-stage least squares, LIML and GMM. Robust and clustered standard errors — in two dimensions, or Driscoll-Kraay, for panels —, weights (also as expressions), factor variables and interactions (<span class="k">i.zone</span>, <span class="k">c.size#c.size</span>), collinear variables left out with a note. After the estimation: <span class="k">predict</span>, <span class="k">margins</span>, <span class="k">test</span>, <span class="k">lincom</span>, <span class="k">nlcom</span>.</p>
       <pre class="code">regress lexp size i.zone c.size#c.size, vce(cluster psu)
 logit poor size i.zone [pw=weight]
 predict p_poor
@@ -118,7 +119,7 @@ hausman fe .</pre>
     <div>
       <p class="eyebrow">Tables of results</p>
       <h2>Models side by side, ready for the paper</h2>
-      <p><span class="k">eststo</span> stores the models, <span class="k">esttab</span> writes them side by side: coefficients with stars, standard errors or t statistics, the statistics you choose, variable labels. To the screen, or to a file in LaTeX, HTML, RTF for Word, CSV or Markdown. <span class="k">estpost</span> turns summaries and tabulations into tables of the same kind.</p>
+      <p><span class="k">eststo</span> stores the models, <span class="k">esttab</span> writes them side by side: coefficients with stars, standard errors or t statistics, the statistics you choose, variable labels. To the screen, or to a file in LaTeX (a document that compiles as it is), HTML, RTF for Word, CSV or Markdown. <span class="k">estpost</span> turns summaries and tabulations into tables of the same kind.</p>
       <pre class="code">eststo: regress lexp size
 eststo: regress lexp size i.zone
 esttab, se star(* 0.10 ** 0.05 *** 0.01) label
@@ -149,10 +150,11 @@ esttab using "models.rtf", replace</pre>
     <div>
       <p class="eyebrow">Survey data</p>
       <h2>The design of the survey, in every standard error</h2>
-      <p>Declare the strata, primary sampling units and weights once with <span class="k">svyset</span> — a <span class="k">.dta</span> file brings its own design. <span class="k">svy:</span> then gives means, totals, ratios, proportions and regressions with linearized standard errors, by subpopulation if needed; <span class="k">bootstrap</span> resamples the design.</p>
+      <p>Declare the strata, primary sampling units and weights once with <span class="k">svyset</span> — a <span class="k">.dta</span> file brings its own design. <span class="k">svy:</span> then gives means, totals, ratios, proportions and regressions with linearized standard errors, by subpopulation or by group if needed — also by quantile groups of exactly equal weight, the estimated cut points taken into account in the standard errors; <span class="k">bootstrap</span> resamples the design.</p>
       <pre class="code">svyset psu [pw=weight], strata(strata)
 svy: mean exppc size
 svy: proportion poor
+svy: mean exppc, over(zone) nquantiles(5)
 svy, subpop(zone == 1): regress lexp size</pre>
     </div>
     <pre class="code" aria-label="The output of svy: mean">Survey: Mean estimation
@@ -235,7 +237,7 @@ log close</pre>
     </div>
     <div class="legal">
       <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
-      <span>AURA 1.6 · <a href="release-notes.html">release notes</a></span>
+      <span>AURA 1.7 · <a href="release-notes.html">release notes</a></span>
     </div>
   </div>
 </footer>
@@ -243,10 +245,10 @@ log close</pre>
 <script>
   function hideAnnounce() {
     document.getElementById("announce").classList.add("gone");
-    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+    try { localStorage.setItem("aura-announce-hidden", "1.7"); } catch (e) {}
   }
   try {
-    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+    if (localStorage.getItem("aura-announce-hidden") === "1.7") {
       document.getElementById("announce").classList.add("gone");
     }
   } catch (e) {}

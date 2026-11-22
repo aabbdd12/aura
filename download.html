@@ -15,9 +15,9 @@
 
 <div class="announce" id="announce">
   <div class="wrap">
-    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
-    <span class="short"><b>AURA 1.6</b> is out.</span>
-    <a href="release-notes.html#v1.6">See what's new &rarr;</a>
+    <span class="long"><b>AURA 1.7</b> — demand systems with DESYCO, quantile groups of equal weight, new panel estimators, LaTeX tables that compile.</span>
+    <span class="short"><b>AURA 1.7</b> is out.</span>
+    <a href="release-notes.html#v1.7">See what's new &rarr;</a>
     <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
   </div>
 </div>
@@ -41,13 +41,14 @@
           <div class="drop">
             <a href="packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
             <a href="packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="packages.html#desyco">DESYCO<small>Demand systems and elasticities</small></a>
             <a href="packages.html#more">More packages<small>Install, update, publish your own</small></a>
           </div></li>
         <li><a class="top-link" href="learn.html">Learn</a>
           <div class="drop">
             <a href="commands.html">Command reference<small>Every command, searchable</small></a>
             <a href="learn.html#guides">User and Developer guides<small>Read them online</small></a>
-            <a href="learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="learn.html#manuals">Manuals<small>DAAP, SUBSIM and DESYCO</small></a>
             <a href="release-notes.html">Release notes</a>
           </div></li>
         <li><a class="top-link on" href="download.html">Download</a></li>
@@ -78,12 +79,12 @@
 <section class="block">
   <div class="wrap get">
     <div class="dlcard">
-      <h3>AURA 1.6 for Windows</h3>
-      <p class="os">Windows 10 / 11 · 64-bit · AURA-1.6-Setup.exe · 248 MB · <a href="release-notes.html#v1.6">what's new</a></p>
-      <a class="btn btn-gold" href="https://github.com/aabbdd12/aura/releases/latest/download/AURA-1.6-Setup.exe">Download the installer</a>
+      <h3>AURA 1.7 for Windows</h3>
+      <p class="os">Windows 10 / 11 · 64-bit · AURA-1.7-Setup.exe · 252 MB · <a href="release-notes.html#v1.7">what's new</a></p>
+      <a class="btn btn-gold" href="https://github.com/aabbdd12/aura/releases/latest/download/AURA-1.7-Setup.exe">Download the installer</a>
       <ul>
         <li>Python, the scientific libraries, the help, example datasets, the guides and the manuals included</li>
-        <li>The DAAP and SUBSIM packages and the AURA Viewer included</li>
+        <li>The DAAP, SUBSIM and DESYCO packages and the AURA Viewer included</li>
         <li>No administrator rights needed: it installs for you, or for all users if you choose</li>
       </ul>
       <p class="note"><b>First launch on a new PC?</b> Windows may show a SmartScreen notice for a new, unsigned download — click <b>More info</b>, then <b>Run anyway</b>. It is expected for free, independently published software.</p>
@@ -129,7 +130,7 @@
     </div>
     <div class="legal">
       <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
-      <span>AURA 1.6 · <a href="release-notes.html">release notes</a></span>
+      <span>AURA 1.7 · <a href="release-notes.html">release notes</a></span>
     </div>
   </div>
 </footer>
@@ -137,10 +138,10 @@
 <script>
   function hideAnnounce() {
     document.getElementById("announce").classList.add("gone");
-    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+    try { localStorage.setItem("aura-announce-hidden", "1.7"); } catch (e) {}
   }
   try {
-    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+    if (localStorage.getItem("aura-announce-hidden") === "1.7") {
       document.getElementById("announce").classList.add("gone");
     }
   } catch (e) {}

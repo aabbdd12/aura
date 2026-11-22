@@ -15,9 +15,9 @@
 
 <div class="announce" id="announce">
   <div class="wrap">
-    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
-    <span class="short"><b>AURA 1.6</b> is out.</span>
-    <a href="release-notes.html#v1.6">See what's new &rarr;</a>
+    <span class="long"><b>AURA 1.7</b> — demand systems with DESYCO, quantile groups of equal weight, new panel estimators, LaTeX tables that compile.</span>
+    <span class="short"><b>AURA 1.7</b> is out.</span>
+    <a href="release-notes.html#v1.7">See what's new &rarr;</a>
     <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
   </div>
 </div>
@@ -41,13 +41,14 @@
           <div class="drop">
             <a href="packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
             <a href="packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="packages.html#desyco">DESYCO<small>Demand systems and elasticities</small></a>
             <a href="packages.html#more">More packages<small>Install, update, publish your own</small></a>
           </div></li>
         <li><a class="top-link" href="learn.html">Learn</a>
           <div class="drop">
             <a href="commands.html">Command reference<small>Every command, searchable</small></a>
             <a href="learn.html#guides">User and Developer guides<small>Read them online</small></a>
-            <a href="learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="learn.html#manuals">Manuals<small>DAAP, SUBSIM and DESYCO</small></a>
             <a href="release-notes.html">Release notes</a>
           </div></li>
         <li><a class="top-link" href="download.html">Download</a></li>
@@ -82,7 +83,7 @@
       <p class="eyebrow">The project</p>
       <h2>Concise commands, an open foundation</h2>
       <p>AURA's command language is inspired in part by established statistical software — concise syntax, <span class="k">if</span> / <span class="k">in</span> / weight clauses, stored results — but AURA is its own design, computed with the libraries researchers already trust: pandas, NumPy, SciPy, statsmodels, linearmodels and matplotlib.</p>
-      <p>It brings together the everyday work of applied analysis and complete packages for distributive analysis (DAAP) and price-reform simulation (SUBSIM), with a dialog box for every command and every action written as a command, so that the analysis can be run again.</p>
+      <p>It brings together the everyday work of applied analysis and complete packages for distributive analysis (DAAP), price-reform simulation (SUBSIM) and demand systems (DESYCO), with a dialog box for every command and every action written as a command, so that the analysis can be run again.</p>
       <p>AURA is written by Dr. Abdelkrim Araar.</p>
     </div>
     <div>
@@ -108,7 +109,7 @@
   title  = {AURA: Applied Unified Research Analytics},
   author = {Araar, Abdelkrim},
   year   = {2026},
-  note   = {Version 1.6, GPL-3.0-or-later},
+  note   = {Version 1.7, GPL-3.0-or-later},
   url    = {https://aabbdd12.github.io/aura/}
 }</pre>
   </div>
@@ -153,7 +154,7 @@
     </div>
     <div class="legal">
       <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
-      <span>AURA 1.6 · <a href="release-notes.html">release notes</a></span>
+      <span>AURA 1.7 · <a href="release-notes.html">release notes</a></span>
     </div>
   </div>
 </footer>
@@ -161,10 +162,10 @@
 <script>
   function hideAnnounce() {
     document.getElementById("announce").classList.add("gone");
-    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+    try { localStorage.setItem("aura-announce-hidden", "1.7"); } catch (e) {}
   }
   try {
-    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+    if (localStorage.getItem("aura-announce-hidden") === "1.7") {
       document.getElementById("announce").classList.add("gone");
     }
   } catch (e) {}

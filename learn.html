@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Learn — AURA</title>
-<meta name="description" content="Learn AURA: the command reference, the User and Developer guides, the DAAP and SUBSIM manuals, and the release notes.">
+<meta name="description" content="Learn AURA: the command reference, the User and Developer guides, the DAAP, SUBSIM and DESYCO manuals, and the release notes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
@@ -15,9 +15,9 @@
 
 <div class="announce" id="announce">
   <div class="wrap">
-    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
-    <span class="short"><b>AURA 1.6</b> is out.</span>
-    <a href="release-notes.html#v1.6">See what's new &rarr;</a>
+    <span class="long"><b>AURA 1.7</b> — demand systems with DESYCO, quantile groups of equal weight, new panel estimators, LaTeX tables that compile.</span>
+    <span class="short"><b>AURA 1.7</b> is out.</span>
+    <a href="release-notes.html#v1.7">See what's new &rarr;</a>
     <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
   </div>
 </div>
@@ -41,13 +41,14 @@
           <div class="drop">
             <a href="packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
             <a href="packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="packages.html#desyco">DESYCO<small>Demand systems and elasticities</small></a>
             <a href="packages.html#more">More packages<small>Install, update, publish your own</small></a>
           </div></li>
         <li><a class="top-link on" href="learn.html">Learn</a>
           <div class="drop">
             <a href="commands.html">Command reference<small>Every command, searchable</small></a>
             <a href="learn.html#guides">User and Developer guides<small>Read them online</small></a>
-            <a href="learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="learn.html#manuals">Manuals<small>DAAP, SUBSIM and DESYCO</small></a>
             <a href="release-notes.html">Release notes</a>
           </div></li>
         <li><a class="top-link" href="download.html">Download</a></li>
@@ -86,7 +87,7 @@
       </div>
       <div class="card">
         <h3>Release notes</h3>
-        <p>What each version added and corrected, from the first release to AURA 1.6.</p>
+        <p>What each version added and corrected, from the first release to AURA 1.7.</p>
         <a class="more" href="release-notes.html">Read the release notes &rarr;</a>
       </div>
     </div>
@@ -131,7 +132,7 @@
     <div class="head">
       <p class="eyebrow">Manuals</p>
       <h2>The manuals of the packages</h2>
-      <p>The methods, their formulas and their commands, with worked examples. In AURA, <span class="k">daapmanual</span> and <span class="k">subsimmanual</span> open them.</p>
+      <p>The methods, their formulas and their commands, with worked examples. In AURA, <span class="k">daapmanual</span>, <span class="k">subsimmanual</span> and <span class="k">desycomanual</span> open them.</p>
     </div>
     <div class="cards">
       <div class="card">
@@ -143,6 +144,11 @@
         <h3>SUBSIM manual</h3>
         <p>Price schedules, the direct and indirect effects of a reform, the measures of well-being, the dialog boxes and worked examples.</p>
         <a class="more" href="manuals/subsim/subsim_manual.html">Read the SUBSIM manual &rarr;</a>
+      </div>
+      <div class="card">
+        <h3>DESYCO manual</h3>
+        <p>Single-equation demand, the LES and the translog, AIDS and QUAIDS, EASI and unit values: the models, their estimators, the elasticities and their standard errors, with worked examples.</p>
+        <a class="more" href="manuals/desyco/desyco_manual.html">Read the DESYCO manual &rarr;</a>
       </div>
     </div>
   </div>
@@ -162,7 +168,7 @@
     </div>
     <div class="legal">
       <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
-      <span>AURA 1.6 · <a href="release-notes.html">release notes</a></span>
+      <span>AURA 1.7 · <a href="release-notes.html">release notes</a></span>
     </div>
   </div>
 </footer>
@@ -170,10 +176,10 @@
 <script>
   function hideAnnounce() {
     document.getElementById("announce").classList.add("gone");
-    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+    try { localStorage.setItem("aura-announce-hidden", "1.7"); } catch (e) {}
   }
   try {
-    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+    if (localStorage.getItem("aura-announce-hidden") === "1.7") {
       document.getElementById("announce").classList.add("gone");
     }
   } catch (e) {}

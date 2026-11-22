@@ -15,9 +15,9 @@
 
 <div class="announce" id="announce">
   <div class="wrap">
-    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
-    <span class="short"><b>AURA 1.6</b> is out.</span>
-    <a href="../release-notes.html#v1.6">See what's new &rarr;</a>
+    <span class="long"><b>AURA 1.7</b> — demand systems with DESYCO, quantile groups of equal weight, new panel estimators, LaTeX tables that compile.</span>
+    <span class="short"><b>AURA 1.7</b> is out.</span>
+    <a href="../release-notes.html#v1.7">See what's new &rarr;</a>
     <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
   </div>
 </div>
@@ -41,13 +41,14 @@
           <div class="drop">
             <a href="../packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
             <a href="../packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="../packages.html#desyco">DESYCO<small>Demand systems and elasticities</small></a>
             <a href="../packages.html#more">More packages<small>Install, update, publish your own</small></a>
           </div></li>
         <li><a class="top-link on" href="../learn.html">Learn</a>
           <div class="drop">
             <a href="../commands.html">Command reference<small>Every command, searchable</small></a>
             <a href="../learn.html#guides">User and Developer guides<small>Read them online</small></a>
-            <a href="../learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="../learn.html#manuals">Manuals<small>DAAP, SUBSIM and DESYCO</small></a>
             <a href="../release-notes.html">Release notes</a>
           </div></li>
         <li><a class="top-link" href="../download.html">Download</a></li>
@@ -69,7 +70,7 @@
 <main>
 <div class="wrap docs">
 <nav class="toc" aria-label="Contents">
-<a class="l2" href="#version-16-applied-unified-research-analytics">Version 1.6 — Applied Unified Research Analytics</a>
+<a class="l2" href="#version-17-applied-unified-research-analytics">Version 1.7 — Applied Unified Research Analytics</a>
 <a class="l2" href="#introduction">Introduction</a>
 <a class="l2" href="#1-what-is-aura">1. What is AURA?</a>
 <a class="l3" href="#purpose">Purpose</a>
@@ -87,12 +88,14 @@
 <a class="l3" href="#keyboard-shortcuts-in-the-command-box">Keyboard shortcuts in the command box</a>
 <a class="l3" href="#right-click-menu-on-results-window">Right-click menu on Results window</a>
 <a class="l3" href="#numbers-in-tables">Numbers in tables</a>
+<a class="l3" href="#links-to-the-files-written">Links to the files written</a>
 <a class="l2" href="#4-command-language">4. Command Language</a>
 <a class="l3" href="#general-syntax">General syntax</a>
 <a class="l3" href="#options-syntax">Options syntax</a>
 <a class="l3" href="#common-abbreviations">Common abbreviations</a>
 <a class="l3" href="#if-conditions">if conditions</a>
 <a class="l3" href="#in-range">in range</a>
+<a class="l3" href="#weights">Weights</a>
 <a class="l2" href="#5-data-management">5. Data Management</a>
 <a class="l3" href="#loading-data">Loading data</a>
 <a class="l3" href="#the-aura-format">The .aura format</a>
@@ -131,6 +134,7 @@
 <a class="l3" href="#describe">describe</a>
 <a class="l3" href="#codebook">codebook</a>
 <a class="l3" href="#summarize">summarize</a>
+<a class="l3" href="#percentiles-and-quantile-groups-pctile-xtile-_pctile">Percentiles and quantile groups — pctile, xtile, _pctile</a>
 <a class="l3" href="#tabulate">tabulate</a>
 <a class="l3" href="#tabstat">tabstat</a>
 <a class="l3" href="#correlate">correlate</a>
@@ -191,6 +195,7 @@
 <a class="l2" href="#16-survey-data-analysis">16. Survey Data Analysis</a>
 <a class="l3" href="#declaring-the-design">Declaring the design</a>
 <a class="l3" href="#survey-estimators">Survey estimators</a>
+<a class="l3" href="#groups-over-quantile-groups-and-wover">Groups: over(), quantile groups and wover()</a>
 <a class="l3" href="#nonlinear-combinations-nlcom">Nonlinear combinations — nlcom</a>
 <a class="l3" href="#nonlinear-expressions-of-survey-means-nlexp">Nonlinear expressions of survey means — nlexp</a>
 <a class="l2" href="#17-macros-scalars-and-matrices">17. Macros, Scalars and Matrices</a>
@@ -236,7 +241,7 @@
 </nav>
 <article class="doc">
 <h1 id="aura-user-guide">AURA User Guide</h1>
-<h2 id="version-16-applied-unified-research-analytics">Version 1.6 — Applied Unified Research Analytics</h2>
+<h2 id="version-17-applied-unified-research-analytics">Version 1.7 — Applied Unified Research Analytics</h2>
 <hr />
 <h2 id="introduction">Introduction</h2>
 <p><strong>AURA</strong> — <em>Applied Unified Research Analytics</em> — is a Python-native workbench for
@@ -321,7 +326,7 @@ AURA is a protocol and a platform. Developers write <code>.auru</code> modules i
 </ul>
 <h3 id="install-and-launch">Install and launch</h3>
 <ol>
-<li>Download <code>AURA-1.6-Setup.exe</code> from the AURA website (the <strong>Download</strong> button) or the GitHub release, and run it — a per-user install, no administrator rights needed.</li>
+<li>Download <code>AURA-1.7-Setup.exe</code> from the AURA website (the <strong>Download</strong> button) or the GitHub release, and run it — a per-user install, no administrator rights needed.</li>
 <li>Launch <strong>AURA</strong> from the Start-menu or desktop shortcut.</li>
 </ol>
 <p>On a fresh PC, Windows may show a SmartScreen notice for a new, unsigned download — click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
@@ -446,6 +451,12 @@ significant digits (<code>5.99e+15</code>, <code>4.60e-31</code>), so the column
 that is not 0 but would show as 0.000000 is written in scientific notation too,
 except in a column of four decimals or fewer (a p-value of 0.0000). <code>display</code> and
 <code>esttab</code> keep their own formats.</p>
+<h3 id="links-to-the-files-written">Links to the files written</h3>
+<p>A command that writes a file — <code>esttab using</code>, <code>estimates table, export()</code>, the
+<code>saveres()</code> and <code>xls()</code> options, <code>graph save</code> and <code>graph export</code>, <code>save</code>, <code>export</code>,
+<code>log using</code> — gives its full path in its message. Click the path to open the file: a Word
+or Excel file in its program, an html log in the AURA Viewer; a <code>.aurg</code> graph opens again
+in AURA (<code>graph use</code>).</p>
 <hr />
 <h2 id="4-command-language">4. Command Language</h2>
 <h3 id="general-syntax">General syntax</h3>
@@ -614,6 +625,17 @@ the whole design stays for the standard errors. <code>bootstrap: command if …<
 among the selected observations only. <code>if</code> and <code>in</code> come before the comma:
 written among the options (<code>summarize wage, detail if female == 1</code>) they are
 refused, r(198).</p>
+<h3 id="weights">Weights</h3>
+<p>A weight comes after <code>if</code> and <code>in</code>, in brackets: <code>[aweight=w]</code>, <code>[fweight=w]</code>,
+<code>[pweight=w]</code> or <code>[iweight=w]</code> (<code>aw</code>, <code>fw</code>, <code>pw</code>, <code>iw</code> for short). Each command accepts
+the weights that make sense for it; its help page says which. An observation whose weight
+is missing or zero is left out.</p>
+<p>The weight may be an expression, computed for the command:</p>
+<pre><code>summarize pc_current_inc [aw=hhsize*sweight]     each household counted with its members
+tabulate rururb [fw=hhsize*sweight]
+</code></pre>
+<p>A single name must be a variable: <code>[aw=wt]</code> with no variable <code>wt</code> stops the command,
+r(111).</p>
 <hr />
 <h2 id="5-data-management">5. Data Management</h2>
 <h3 id="loading-data">Loading data</h3>
@@ -702,6 +724,10 @@ the quotes — <code>recode region (1 = "north") (2/3 = "south")</code> turns <c
 text variable — and a numeric variable becomes text only when every non-missing
 value receives a text; otherwise the command is refused and says how many
 values are left without one.</p>
+<p><strong>Precision.</strong> An expression computes in double precision, whatever the storage of its
+variables: a <code>float</code> variable, or a short integer of a <code>.dta</code> file (<code>byte</code>, <code>int</code>,
+<code>long</code>), is read as a double, so that <code>hhsize*sweight</code> never overflows and <code>x + 0.1</code>
+keeps its digits.</p>
 <h3 id="extended-generate-egen">Extended generate — <code>egen</code></h3>
 <p><code>egen</code> extends <code>generate</code> with group statistics, ranks, and row-wise operations. It dispatches over a fixed library of functions:</p>
 <pre><code>egen newvar = function(args) [if cond] [, by(groupvars) p(N)]
@@ -1309,6 +1335,26 @@ bysort id (year): generate lag = wage[_n-1]    previous year, same id
 </code></pre>
 <p><code>help by</code> lists what each command does with the groups and which ones refuse the
 prefix (the graphs, which have <code>over()</code> / <code>by()</code>, and <code>in</code>).</p>
+<h3 id="percentiles-and-quantile-groups-pctile-xtile-_pctile">Percentiles and quantile groups — <code>pctile</code>, <code>xtile</code>, <code>_pctile</code></h3>
+<pre><code>use &quot;data/mexico_2014_cereals.dta&quot;, clear
+_pctile pc_current_inc [aw=sweight], percentiles(10 50 90)
+display r(r1) &quot;  &quot; r(r2) &quot;  &quot; r(r3)
+pctile cut = pc_current_inc [aw=sweight], nquantiles(10)
+xtile qh = pc_current_inc [aw=sweight], nquantiles(5)
+xtile qi = pc_current_inc [aw=hhsize*sweight], nquantiles(5)
+</code></pre>
+<p><code>_pctile</code> leaves the percentiles in <code>r(r1)</code>, <code>r(r2)</code>…; <code>pctile</code> writes them in the first
+observations of a new variable (here the nine cut points of the deciles); <code>xtile</code> gives
+each observation the number of its group. The weight chooses the population:
+<code>[aw=sweight]</code> gives quintiles of households, <code>[aw=hhsize*sweight]</code> quintiles of
+individuals. An observation at a cut point goes to the lower group, so that a group cut
+whole weighs about a fifth, not exactly. With <code>proportions</code>, <code>xtile</code> gives instead the
+share of each observation in each group, and the groups weigh exactly a fifth:</p>
+<pre><code>xtile q = pc_current_inc [aw=hhsize*sweight], nquantiles(5) proportions
+</code></pre>
+<p><code>q1</code> … <code>q5</code> hold the shares (1 or 0, a fraction at a cut point) and form one categorical
+variable, <code>q</code>, saved with the data: <code>tabulate</code>, <code>tabstat</code> and the survey estimators
+(<code>wover(q)</code>, <code>subpop(q == 1)</code>) take it. The dialog boxes are under <strong>Data &gt; Variables</strong>.</p>
 <h3 id="tabulate">tabulate</h3>
 <pre><code>tabulate sex
 tab sex region
@@ -1318,6 +1364,12 @@ tab sex, generate(sx)       → sx1, sx2: 1 for each level, 0 for the other
 </code></pre>
 <p>Options may be abbreviated as far as they stay distinct: <code>tab sex, m</code>, <code>sum x, d</code>,
 <code>reg y x, r</code>, <code>vce(cl psu)</code>.</p>
+<p>A grouping made by <code>xtile …, proportions</code> is tabulated like a categorical variable: an
+observation counts in each group for its share, and in a cell of a two-way table for the
+product of its shares. The frequencies need not be whole numbers; a note under the table
+says so. <code>chi2</code> is refused: the test assumes that each observation is in one cell.</p>
+<pre><code>tabulate q rururb [fw=sweight]     households in each quintile of individuals, by area
+</code></pre>
 <h3 id="tabstat">tabstat</h3>
 <p>A table of statistics for several variables, for the whole sample or by group. The
 statistics are those of <code>summarize</code> (and <code>summarize, detail</code> for the percentiles).</p>
@@ -1325,6 +1377,10 @@ statistics are those of <code>summarize</code> (and <code>summarize, detail</cod
 tabstat wage educ, stats(n mean sd p50)
 tabstat wage educ, by(region) stats(mean sd)   → each region, then the total
 tabstat wage educ [aw=weight], stats(mean q) columns(statistics)
+</code></pre>
+<p><code>by()</code> may name a grouping made by <code>xtile …, proportions</code>: each observation counts in each
+group for its share (times its weight), and the groups add up to the total.</p>
+<pre><code>tabstat wcorn [aw=sweight], by(q) stats(n mean)
 </code></pre>
 <h3 id="correlate">correlate</h3>
 <pre><code>correlate wage educ exper
@@ -1569,6 +1625,14 @@ esttab ., cells(&quot;mu_1 mu_2 b(star) t&quot;)       a difference of means
 </code></pre>
 <p><code>help esttab</code> lists the options (formats, stars, statistics, labels, files);
 <code>help estadd</code> and <code>help estpost</code> the others.</p>
+<p>A LaTeX file is a whole document that compiles as it is: the article class and the
+packages the table uses (booktabs, longtable). <code>nopage</code> writes the table alone, to
+<code>\input</code> in a document of your own; <code>fragment</code>, its rows only. The characters <code>%</code>, <code>&amp;</code> and
+<code>#</code> of a title, a label or a note are written <code>\%</code>, <code>\&amp;</code> and <code>\#</code>. <code>estimates table,
+export(file.tex)</code> writes a whole document too.</p>
+<pre><code>esttab using table1.tex, replace booktabs     a document, ready to compile
+esttab using table1.tex, replace nopage       the table alone
+</code></pre>
 <h3 id="logit-probit-poisson">logit / probit / poisson</h3>
 <pre><code>logit depvar indepvars [if] [in] [, noconstant robust]
 probit depvar indepvars [if] [in] [, noconstant robust]
@@ -1615,10 +1679,40 @@ hausman fixed .
 </code></pre>
 <p>A large chi2 says the random-effects assumption fails. The estimators, the variance
 components and the Hausman test are those of the linearmodels library.</p>
+<p>Two more estimators, and two more kinds of standard errors:</p>
+<pre><code>xtreg profit size rd, mle                             random effects, maximum likelihood
+xtreg profit size rd, pa                              population-averaged
+xtreg profit size rd, fe vce(cluster region sector)   two-way clustering
+xtreg profit size rd, fe vce(dkraay bartlett 2)       Driscoll-Kraay
+</code></pre>
+<ul>
+<li><strong><code>mle</code></strong> — random effects estimated by maximum likelihood (the mixed model of
+  statsmodels), with the likelihood-ratio test that <code>sigma_u</code> is zero; <code>sigma_u</code>,
+  <code>sigma_e</code> and <code>rho</code> come without standard errors. No weights, no <code>vce()</code>.</li>
+<li><strong><code>pa</code></strong> — the population-averaged model: GEE with the same correlation between any
+  two observations of a unit (statsmodels); <code>vce(robust)</code> gives the sandwich estimator.
+  No weights.</li>
+<li><strong><code>vce(cluster v1 v2)</code></strong>, with <code>fe</code> — standard errors robust to correlation within
+  the groups of either variable; each panel lies within one group of each.</li>
+<li><strong><code>vce(dkraay kernel [#])</code></strong>, with <code>fe</code> — Driscoll-Kraay standard errors, robust to
+  correlation across the panels and over time; the kernel is <code>bartlett</code>, <code>parzen</code> or
+  <code>quadraticspectral</code>, # the number of lags (by default the number of periods minus 2).
+  The time variable must be declared.</li>
+</ul>
+<p>After <code>xtreg</code>, <code>predict</code> gives <code>xb</code> (the default), <code>stdp</code>, <code>ue</code> (the combined residual),
+<code>u</code> (the unit effect), <code>e</code> (the idiosyncratic error) and <code>xbu</code> (<code>xb</code> plus <code>u</code>) — <code>u</code>,
+<code>e</code> and <code>xbu</code> on the estimation sample only; after <code>pa</code>, <code>mu</code> (the default), <code>rate</code>,
+<code>xb</code> and <code>stdp</code>. <code>test</code> and <code>lincom</code> use <code>e(b)</code> and <code>e(V)</code>: an F test (t) after <code>fe</code> and
+<code>be</code>, a chi2 (z) otherwise.</p>
+<pre><code>predict uhat, u
+test size rd
+lincom size + rd
+</code></pre>
 <p><code>indepvars</code> accept the same factor syntax as <code>regress</code> (<code>i.var</code>, <code>2.var</code>,
 <code>c.x#i.g</code>, <code>c.x##i.g</code>, <code>c.age#c.age</code>). Options: <code>i(panelvar)</code> (name the panel
 inline; overrides <code>xtset</code>), <code>t(timevar)</code>, <code>vce(robust)</code> (cluster by panel) /
-<code>vce(cluster v)</code> (not with <code>be</code>), <code>level(#)</code>, <code>[aweight=var]</code>, <code>[pweight=var]</code>,
+<code>vce(cluster v [v2])</code> / <code>vce(dkraay kernel [#])</code> (not with <code>be</code>), <code>level(#)</code>,
+<code>[aweight=var]</code>, <code>[pweight=var]</code>,
 <code>[fweight=var]</code> (not with <code>be</code>). Any other option is refused.</p>
 <h3 id="instrumental-variables-ivregress">Instrumental variables — <code>ivregress</code></h3>
 <p>When a regressor is <strong>endogenous</strong> (correlated with the error — chosen jointly with
@@ -2574,6 +2668,10 @@ pkg install packagename, replace   reinstall/update
 pkg list                    list installed packages
 pkg uninstall packagename   remove a package
 </code></pre>
+<p>Three packages come with AURA, each with its menu under <strong>Statistics</strong>, its help pages
+and its own manual: DAAP, distributive analysis (<code>daapmanual</code>); SUBSIM, subsidy and price
+reforms (<code>subsimmanual</code>); DESYCO, demand systems (<code>desycomanual</code>). This guide does not
+cover them.</p>
 <h3 id="authoring-a-module-with-ai">Authoring a module with AI</h3>
 <p>AURA can help you <strong>write a new command</strong> (a <em>module</em>) with a large language
 model, and it stays <strong>provider-agnostic</strong>: Claude, Gemini, OpenAI, a free tier
@@ -2639,6 +2737,8 @@ a dedicated window with:</p>
 <li>color-coded sections (Description / Syntax / Options / Examples / ...)</li>
 <li>clickable cross-references (<code>{help:other_command}</code>) and external URLs</li>
 <li>Ctrl+F search, Back navigation, Esc to close</li>
+<li>a contents panel (☰) beside the page, open by itself on a long page: its sections and
+  its groups of options, a click away</li>
 </ul>
 <h3 id="running-the-examples">Running the examples</h3>
 <p>The examples on a help page are not just text to read — most pages can <strong>run
@@ -2709,6 +2809,100 @@ svy, level(90): mean income
 </code></pre>
 <p>Each posts <code>e(b)</code> (point estimates), <code>e(V)</code> (the full covariance matrix),
 <code>e(names)</code> and <code>e(df_r)</code> (design df = #PSUs − #strata). See <code>help svy</code>.</p>
+<h3 id="groups-over-quantile-groups-and-wover">Groups: <code>over()</code>, quantile groups and <code>wover()</code></h3>
+<p><code>over(varlist)</code> gives one estimate per group of categorical variables, each group a
+subpopulation (the whole design kept), with the covariance between the groups in <code>e(V)</code>:</p>
+<pre><code>svy: mean wcorn, over(rururb)
+</code></pre>
+<p>Quantile groups (quartiles, quintiles, deciles) are made by <code>xtile</code>. Cut whole, a group
+weighs only about a fifth: the household at a cut point goes wholly to one side. With the
+option <code>proportions</code>, <code>xtile</code> gives instead the share of each observation in each group —
+1 or 0, a fraction for the observations at a cut point — so that each group weighs exactly a
+fifth. The share variables form one categorical variable, saved with the data, that
+<code>wover()</code> takes. The weight chooses the population: <code>[aw=sweight]</code> gives quintiles of
+households, <code>[aw=hhsize*sweight]</code> quintiles of individuals (a weight may be an expression).
+On the Mexican cereals of the help (<code>auru/data</code>):</p>
+<pre><code>use &quot;data/mexico_2014_cereals.dta&quot;, clear
+xtile q = pc_current_inc [aw=hhsize*sweight], nquantiles(5) proportions
+gen double wind = hhsize*sweight
+svyset psu [pweight=wind], strata(strata)
+svy: mean pc_current_inc, wover(q)
+svy: mean wcorn, over(rururb) wover(q)
+svy, subpop(q == 1): mean wcorn
+</code></pre>
+<p>The second line crosses the areas and the quintiles; the third estimates on the first
+quintile alone.</p>
+<p><strong>Standard errors.</strong> The cut points of the quintiles are estimated: another sample would
+give other cut points, hence other groups. <code>wover()</code> and <code>subpop(q == k)</code> take it into
+account (the influence function of the quantile, Beach and Davidson 1983); <code>wover(q, fixed)</code>
+takes the cut points as given, as a categorical <code>over()</code> does. The mean income per head by
+quintile of income per head:</p>
+<table>
+<thead>
+<tr>
+<th>Quintile</th>
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Std. err., cut points fixed</th>
+<th style="text-align: right;">Std. err., cut points estimated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align: right;">1,016.6</td>
+<td style="text-align: right;">10.5</td>
+<td style="text-align: right;">17.5</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align: right;">1,746.3</td>
+<td style="text-align: right;">5.6</td>
+<td style="text-align: right;">19.9</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align: right;">2,496.3</td>
+<td style="text-align: right;">6.4</td>
+<td style="text-align: right;">27.2</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align: right;">3,773.0</td>
+<td style="text-align: right;">12.0</td>
+<td style="text-align: right;">47.9</td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align: right;">10,725.4</td>
+<td style="text-align: right;">478.3</td>
+<td style="text-align: right;">516.8</td>
+</tr>
+</tbody>
+</table>
+<p>A bootstrap of the design that ranks the data again in every replication gives 15.3, 19.2,
+26.2, 45.2 and 518. The difference does not fade in a larger sample: the error on a cut
+point, like the error on a mean, falls with the square root of the sample size. It is large
+when the variable follows the ranking near the cut points — the income of a narrow middle
+quintile moves with its bounds — and nil when it does not (the age of the household head,
+whose standard errors do not change). Groups defined by a known threshold (a poverty line
+given in advance, an area) have no cut point to estimate.</p>
+<p><strong>Groups of the estimated variable itself — <code>nquantiles()</code>.</strong> <code>svy: mean y,
+nquantiles(5)</code> makes the five groups of exactly equal weight of <code>y</code> itself, ranked with the
+weight of the design, and gives the mean of each: no <code>xtile</code>, and the correction for the
+cut points is exact. <code>units(var)</code> counts each observation <code>var</code> times (the people of a
+household, adult equivalents, hectares): the weight of the design is multiplied by <code>var</code>
+for this estimation alone. The quintiles of individuals above, from the design of the
+households:</p>
+<pre><code>svyset psu [pweight=sweight], strata(strata)
+svy: mean pc_current_inc, units(hhsize) nquantiles(5)
+svy: ratio hh_current_inc/hhsize, nquantiles(5)
+</code></pre>
+<p>The two estimations give the same estimates and standard errors as <code>wover(q)</code> above: a
+ratio is ranked by the ratio of each observation, weighted by its denominator. <code>dec(#)</code>
+sets the number of decimals of the table. In the dialog box (<strong>Statistics &gt; Survey Data
+Analysis</strong>), the tab <strong>Over</strong> offers the three kinds of groups: categorical variables
+(<code>over()</code>), group weights (<code>wover()</code>) and groups of the variable itself (<code>nquantiles()</code>).</p>
+<p><code>pctile</code> and <code>_pctile</code> give the percentiles themselves; see <code>help pctile</code>.</p>
 <h3 id="nonlinear-combinations-nlcom">Nonlinear combinations — <code>nlcom</code></h3>
 <p><code>nlcom</code> computes a (possibly nonlinear) function of the posted estimates with a
 delta-method standard error (numeric Jacobian):</p>
@@ -3889,6 +4083,10 @@ developing a module.</p>
 <td>Add results to estimates</td>
 </tr>
 <tr>
+<td><code>estat</code></td>
+<td>Statistics after an estimation</td>
+</tr>
+<tr>
 <td><code>estimates</code></td>
 <td>Store models and build comparison tables</td>
 </tr>
@@ -4133,6 +4331,10 @@ developing a module.</p>
 <td>Reorder variables in the dataset</td>
 </tr>
 <tr>
+<td><code>pctile</code></td>
+<td>Percentiles and quantile groups (pctile, xtile, _pctile)</td>
+</tr>
+<tr>
 <td><code>pie</code></td>
 <td>Pie chart of category shares</td>
 </tr>
@@ -4375,7 +4577,7 @@ developing a module.</p>
 </tbody>
 </table>
 <hr />
-<p><em>AURA v1.6 — User Guide</em>
+<p><em>AURA v1.7 — User Guide</em>
 <em>For module development, see the AURA Developer Guide.</em></p>
 </article>
 </div>
@@ -4394,7 +4596,7 @@ developing a module.</p>
     </div>
     <div class="legal">
       <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
-      <span>AURA 1.6 · <a href="../release-notes.html">release notes</a></span>
+      <span>AURA 1.7 · <a href="../release-notes.html">release notes</a></span>
     </div>
   </div>
 </footer>
@@ -4402,10 +4604,10 @@ developing a module.</p>
 <script>
   function hideAnnounce() {
     document.getElementById("announce").classList.add("gone");
-    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+    try { localStorage.setItem("aura-announce-hidden", "1.7"); } catch (e) {}
   }
   try {
-    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+    if (localStorage.getItem("aura-announce-hidden") === "1.7") {
       document.getElementById("announce").classList.add("gone");
     }
   } catch (e) {}

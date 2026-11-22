@@ -15,9 +15,9 @@
 
 <div class="announce" id="announce">
   <div class="wrap">
-    <span class="long"><b>AURA 1.6</b> — price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, merged graphs, print previews.</span>
-    <span class="short"><b>AURA 1.6</b> is out.</span>
-    <a href="release-notes.html#v1.6">See what's new &rarr;</a>
+    <span class="long"><b>AURA 1.7</b> — demand systems with DESYCO, quantile groups of equal weight, new panel estimators, LaTeX tables that compile.</span>
+    <span class="short"><b>AURA 1.7</b> is out.</span>
+    <a href="release-notes.html#v1.7">See what's new &rarr;</a>
     <button type="button" aria-label="Close the announcement" onclick="hideAnnounce()">&times;</button>
   </div>
 </div>
@@ -41,13 +41,14 @@
           <div class="drop">
             <a href="packages.html#daap">DAAP<small>Poverty and inequality analysis</small></a>
             <a href="packages.html#subsim">SUBSIM<small>Price and subsidy reforms</small></a>
+            <a href="packages.html#desyco">DESYCO<small>Demand systems and elasticities</small></a>
             <a href="packages.html#more">More packages<small>Install, update, publish your own</small></a>
           </div></li>
         <li><a class="top-link" href="learn.html">Learn</a>
           <div class="drop">
             <a href="commands.html">Command reference<small>Every command, searchable</small></a>
             <a href="learn.html#guides">User and Developer guides<small>Read them online</small></a>
-            <a href="learn.html#manuals">Manuals<small>DAAP and SUBSIM</small></a>
+            <a href="learn.html#manuals">Manuals<small>DAAP, SUBSIM and DESYCO</small></a>
             <a href="release-notes.html">Release notes</a>
           </div></li>
         <li><a class="top-link" href="download.html">Download</a></li>
@@ -99,11 +100,11 @@
 <div class="wrap feature">
   <div class="panel">
     <div>
-      <h2>Introducing AURA 1.6</h2>
-      <p>Simulate the effects of price and subsidy reforms with SUBSIM, edit any graph with the mouse — every part has its own window —, merge graphs into a figure sized for a page, and print logs and graphs through a preview.</p>
-      <a class="btn btn-line" href="release-notes.html#v1.6">See what's new</a>
+      <h2>Introducing AURA 1.7</h2>
+      <p>Estimate demand systems and their elasticities with DESYCO, cut quantile groups of exactly equal weight and estimate on them with the survey design, fit panel models by maximum likelihood or GEE, and write LaTeX tables that compile as they are.</p>
+      <a class="btn btn-line" href="release-notes.html#v1.7">See what's new</a>
     </div>
-    <img src="images/graph-editor.png" alt="The Graph Editor: the graph in the centre, its Quick Options on the left, the Objects tree on the right.">
+    <img src="images/desyco-engel.png" alt="Engel curves of five goods estimated by QUAIDS with DESYCO, with their 95% confidence bands.">
   </div>
 </div>
 
@@ -138,6 +139,7 @@
       <a class="tile" href="features.html#survey"><h3>Survey data</h3><p><span class="k">svyset</span> designs and design-based standard errors for means, totals, ratios, proportions and regression.</p></a>
       <a class="tile" href="packages.html#daap"><h3>Poverty and inequality</h3><p>The DAAP package: FGT, Gini and Lorenz, polarization, pro-poor growth, dominance and decompositions.</p></a>
       <a class="tile" href="packages.html#subsim"><h3>Price reforms</h3><p>The SUBSIM package: direct and indirect effects of price and subsidy reforms on well-being, poverty and revenue.</p></a>
+      <a class="tile" href="packages.html#desyco"><h3>Demand and elasticities</h3><p>The DESYCO package: single-equation demand, LES, translog, AIDS, QUAIDS, EASI and unit values, with the standard errors of the elasticities.</p></a>
       <a class="tile" href="features.html#graphics"><h3>Graphics</h3><p>Publication graphs edited with the mouse, merged into figures, copied to Word as vector drawings; interactive 3-D surfaces.</p></a>
       <a class="tile" href="features.html#data"><h3>Data management</h3><p>A workspace of several datasets: <span class="k">merge</span>, <span class="k">reshape</span>, <span class="k">collapse</span>, <span class="k">by</span> groups, labels and formats.</p></a>
       <a class="tile" href="features.html#scripts"><h3>Scripts that re-run</h3><p><span class="k">.aur</span> scripts with loops, macros and matrices, logs with their graphs, and every menu action written as a command.</p></a>
@@ -149,7 +151,7 @@
   <div class="wrap">
     <div class="head">
       <p class="eyebrow">Included packages</p>
-      <h2>Two complete packages, in the box</h2>
+      <h2>Three complete packages, in the box</h2>
     </div>
     <div class="cards">
       <div class="card">
@@ -163,6 +165,12 @@
         <h3>SUBSIM — price and subsidy reforms</h3>
         <p>What a reform of prices and subsidies does to households: well-being, poverty, inequality, quantities and public revenue, directly and through the economy.</p>
         <a class="more" href="packages.html#subsim">Discover SUBSIM &rarr;</a>
+      </div>
+      <div class="card">
+        <img src="images/desyco-elasticities.png" alt="DESYCO: price and expenditure elasticities of the demand for corn by area and income quintile." loading="lazy">
+        <h3>DESYCO — demand systems</h3>
+        <p>How the demand of households responds to prices and income, from a single equation to complete systems, with the standard errors of the elasticities.</p>
+        <a class="more" href="packages.html#desyco">Discover DESYCO &rarr;</a>
       </div>
     </div>
   </div>
@@ -185,10 +193,10 @@
 <div class="wrap feature" style="margin-top:64px">
   <div class="panel">
     <div>
-      <h2>Get AURA 1.6</h2>
-      <p>Windows 10 / 11, 64-bit · one installer of 248 MB · free and open.</p>
+      <h2>Get AURA 1.7</h2>
+      <p>Windows 10 / 11, 64-bit · one installer of 252 MB · free and open.</p>
       <div class="cta">
-        <a class="btn btn-gold" href="https://github.com/aabbdd12/aura/releases/latest/download/AURA-1.6-Setup.exe">Download the installer</a>
+        <a class="btn btn-gold" href="https://github.com/aabbdd12/aura/releases/latest/download/AURA-1.7-Setup.exe">Download the installer</a>
         <a class="btn btn-line" href="download.html">Installation notes</a>
       </div>
     </div>
@@ -198,7 +206,7 @@
   title  = {AURA: Applied Unified Research Analytics},
   author = {Araar, Abdelkrim},
   year   = {2026},
-  note   = {Version 1.6, GPL-3.0-or-later}
+  note   = {Version 1.7, GPL-3.0-or-later}
 }</pre>
     </div>
   </div>
@@ -218,7 +226,7 @@
     </div>
     <div class="legal">
       <span>© 2026 Dr. Abdelkrim Araar · Free software under the GNU General Public License v3.0 or later.</span>
-      <span>AURA 1.6 · <a href="release-notes.html">release notes</a></span>
+      <span>AURA 1.7 · <a href="release-notes.html">release notes</a></span>
     </div>
   </div>
 </footer>
@@ -226,10 +234,10 @@
 <script>
   function hideAnnounce() {
     document.getElementById("announce").classList.add("gone");
-    try { localStorage.setItem("aura-announce-hidden", "1.6"); } catch (e) {}
+    try { localStorage.setItem("aura-announce-hidden", "1.7"); } catch (e) {}
   }
   try {
-    if (localStorage.getItem("aura-announce-hidden") === "1.6") {
+    if (localStorage.getItem("aura-announce-hidden") === "1.7") {
       document.getElementById("announce").classList.add("gone");
     }
   } catch (e) {}

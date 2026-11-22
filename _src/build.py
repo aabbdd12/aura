@@ -22,10 +22,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.dirname(HERE)
 
 CONFIG = {
-    "version": "1.6",
-    "size": "248 MB",
-    "announce": "price and subsidy reforms with SUBSIM, a graph editor that works with the mouse, "
-                "merged graphs, print previews.",
+    "version": "1.7",
+    "size": "252 MB",
+    "announce": "demand systems with DESYCO, quantile groups of equal weight, new panel estimators, "
+                "LaTeX tables that compile.",
 }
 CONFIG["installer"] = f"AURA-{CONFIG['version']}-Setup.exe"
 CONFIG["installer_url"] = ("https://github.com/aabbdd12/aura/releases/latest/download/"

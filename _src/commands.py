@@ -18,7 +18,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 AURA = sys.argv[1] if len(sys.argv) > 1 else r"C:\dev_aura"
 ORDER = ["Data & variables", "Explore & summarize", "Estimation & tests", "Survey", "Graphics",
          "Programming & results", "System & help", "Distributive analysis (DAAP)",
-         "Price reforms (SUBSIM)"]
+         "Price reforms (SUBSIM)", "Demand systems (DESYCO)"]
 
 
 def pages():
