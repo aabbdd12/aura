@@ -98,7 +98,10 @@ TOC_JS = """<script>
     if (!cur) return;
     var a = links[cur.id], r = a.getBoundingClientRect(), t = toc.getBoundingClientRect();
     a.classList.add("on");
-    if (r.top < t.top + 40 || r.bottom > t.bottom - 20) a.scrollIntoView({block: "center"});
+    /* only the column scrolls: scrollIntoView would move the page too, and stop the page on its
+       way to a section a link asked for */
+    if (r.top < t.top + 40 || r.bottom > t.bottom - 20)
+      toc.scrollTop += (r.top + r.height / 2) - (t.top + t.height / 2);
   }
   window.addEventListener("scroll", spy, {passive: true});
   spy();
@@ -168,7 +171,8 @@ def contents(text):
                      f'{html.escape(label, quote=False)}</a></li>')
     title = re.search(r"<title>(.*?)</title>", text, re.DOTALL)
     name = title.group(1).split(":")[0].strip() if title else "Contents"
-    return (f'<nav id="site-toc" aria-label="Contents"><p class="toc-title">'
+    # data-aura-aside: the symbol boxes of the manual (AURA's tools/symbol_popup.py) keep out of it
+    return (f'<nav id="site-toc" data-aura-aside aria-label="Contents"><p class="toc-title">'
             f'<a href="#">{name}</a></p><ul>' + "".join(items) + "</ul></nav>"), len(items)
 
 
